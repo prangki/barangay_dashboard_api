@@ -283,7 +283,7 @@ namespace webapi.App.Aggregates.Common
             o.LOC_BRGY_NM = data["LOC_BRGY_NM"].Str();
             o.LOC_SIT = data["LOC_SIT"].Str();
             o.SIT_NM = textInfo.ToUpper(textInfo.ToLower(data["SIT_NM"].Str()));
-            //o.TTL_USR = Convert.ToInt32(data["TTL_USR"].Str());
+            o.TTL_USR = Convert.ToInt32(data["TTL_USR"].Str());
 
             o.LDR_TYP_NM = data["LDR_TYP_NM"].Str();
             o.FRST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FRST_NM"].Str()));
@@ -314,6 +314,10 @@ namespace webapi.App.Aggregates.Common
             o.OCCPTN = data["OCCPTN"].Str();
             o.SKLLS = data["SKLLS"].Str();
             o.USR_NM = data["USR_NM"].Str();
+            o.Age = data["AGE"].Str();
+            o.WDisability = (data["WDISABILITY"].Str()=="") ? 0 : Convert.ToInt32(data["WDISABILITY"].Str());
+            o.TypeDisability = data["TYPE_DISABILITY"].Str();
+            o.RegisterVoter = (data["REGISTERVOTER"].Str()=="") ? 0 : Convert.ToInt32(data["REGISTERVOTER"].Str());
 
             return o;
         }

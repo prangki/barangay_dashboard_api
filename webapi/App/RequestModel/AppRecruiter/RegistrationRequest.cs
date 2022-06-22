@@ -87,6 +87,9 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string RefGroupID;
         public string RefLDRID;
         public int isEmployed;
+        public int WDisability;
+        public string TypeDisability;
+        public int RegisterVoter;
     }
     public class DateRangeModel
     {

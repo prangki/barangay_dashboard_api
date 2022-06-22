@@ -67,7 +67,7 @@ namespace webapi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IServiceScopeFactory ssf, IHostingEnvironment env, ImgService imgService, Pusher pusher)
+        public void Configure(IApplicationBuilder app, IServiceScopeFactory ssf, IHostingEnvironment env, PDFService pdfservice, ReportService reportservice, ImgService imgService, Pusher pusher)
         {
             // default code
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();

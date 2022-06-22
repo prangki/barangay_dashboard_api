@@ -18,7 +18,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     public interface ISTLMembershipRepository
     {
         Task<(Results result, String message, String AcctID)> MembershipAsync(STLMembership membership, bool isUpdate = false);
-        Task<(Results result, object account)> LoadAccount(string plid, string pgrpid);
+        Task<(Results result, object account)> LoadAccount(string search);
+        Task<(Results result, object account)> LoadAccountSearch(string search);
         Task<(Results result, object account)> LoadAccountAccess();
         Task<(Results result, object access)> LoadUserAccess(string userid);
         Task<(Results result, object account)> LoadMasterList();
@@ -91,12 +92,26 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 return (Results.Success, results);
             return (Results.Null, null);
         }
-        public async Task<(Results result, object account)> LoadAccount(string plid, string pgrpid)
+        public async Task<(Results result, object account)> LoadAccount(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDABDB03", new Dictionary<string, object>()
             {
-                {"parmplid",plid},
-                {"parmpgrpid",pgrpid }
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object account)> LoadAccountSearch(string search)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDABDB08", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", search }
             });
             if (results != null)
                 return (Results.Success, results);

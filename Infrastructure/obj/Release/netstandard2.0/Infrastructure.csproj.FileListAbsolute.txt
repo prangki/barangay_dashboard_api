@@ -172,3 +172,13 @@ D:\Project\API_Project\Barangay_API\Infrastructure\obj\Release\netstandard2.0\In
 D:\Project\API_Project\Barangay_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.csproj.CoreCompileInputs.cache
 D:\Project\API_Project\Barangay_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.dll
 D:\Project\API_Project\Barangay_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.pdb
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\bin\Release\netstandard2.0\Infrastructure.deps.json
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\bin\Release\netstandard2.0\Infrastructure.dll
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\bin\Release\netstandard2.0\Infrastructure.pdb
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.AssemblyInfoInputs.cache
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.AssemblyInfo.cs
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.csproj.CoreCompileInputs.cache
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.dll
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.pdb
+D:\SourceTree_Dashboard\ESAT_Developer\Barangay_Dashboard_API\Infrastructure\obj\Release\netstandard2.0\Infrastructure.csproj.AssemblyReference.cache

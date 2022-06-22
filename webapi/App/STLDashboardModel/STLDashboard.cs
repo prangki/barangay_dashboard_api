@@ -159,4 +159,81 @@ namespace webapi.App.STLDashboardModel
         public string Row_Num_To;
         public string Search;
     }
+
+    public class Memorandum
+    {
+        public string MemoId;
+        public string BrgyCode;
+        public string MemorandumNo;
+        public string MemorandumURL;
+        public string Attachment;
+        public string Subject;
+    }
+    public class DocumentType
+    {
+        public string DocTypeID;
+        public string DocTypeNM;
+        public string BrgyCode;
+        public int Category;
+        public string iDocRequirements;
+    }
+    public class BarangayOfficial 
+    {
+        public string Userid;
+        public string BarangayPositionID;
+        public string Committee;
+        public string TermStart;
+        public string TermEnd;
+        public string RankNo;
+        public string BrgyOfficialID;
+    }
+    public class RequestDocument
+    {
+        public string ReqDocID;
+        public string DoctypeID;
+        public string BusinessName;
+        public string BusinessAddress;
+        public string Purpose;
+        public string Type;
+        public string BusinessOwnerAddress;
+        public string BusinessOwnerName;
+        public string RequestorNM;
+        public string RequestorID;
+        public string Attachment;
+        public string CTCNo;
+        public string ORNO;
+        public string Amount;
+        public string STATUS;
+        public string ApplicationDate;
+        public string URLAttachment;
+        public string URL_DocPath;
+        public string CategoryID;
+        public string Category_Document;
+        public string BizReport;
+        public string IssuedDate;
+        public string ControlNo;
+
+    }
+    public class Blotter
+    {
+        public string PL_ID;
+        public string PGRP_ID;
+        public string BarangayCaseNo;
+        public string ComplainantsName;
+        public string RespondentsName;
+        public string RegionCode;
+        public string ProvinceCode;
+        public string MunicipalCode;
+        public string BrgyCode;
+        public string PurokOrSitio;
+        public string BarangayCaptain;
+        public string BarangaySecretary;
+        public string Accusations;
+        public string PlaceOfIncedent;
+        public string Witness;
+        public string DateTimeOfIncedent;
+        public string NarrativeOfIncedent;
+        public string ModifiedBy;
+        public string DTModified;
+    }
 }

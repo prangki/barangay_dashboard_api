@@ -22,6 +22,16 @@ namespace webapi.App.RequestModel.Common
         public String Type;
         public String ID;
         public String Schedule;
+        public string REF_GRP_ID;
+        public string Userid;
+        public string PL_ID;
+        public string PGRP_ID;
+        public string OTP;
+        public string MOB_NO;
+        public string DONO_ID;
+        public string BrgyCode;
+        public string num_row;
+        public string DocTypeID;
 
         public DateTime? TransactionDt;
         public DateTime? FromDt;
@@ -106,5 +116,6 @@ namespace webapi.App.RequestModel.Common
             filter.IsOverall = (filter.IsAll || filter.Type.Str().IsEmpty());
             return true;
         }
+
     }
 }

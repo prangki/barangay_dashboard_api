@@ -12288,11 +12288,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\API_Project\\Barangay_API\\webapi\\webapi.csproj",
+      "projectUniqueName": "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\webapi\\webapi.csproj",
       "projectName": "webapi",
-      "projectPath": "D:\\Project\\API_Project\\Barangay_API\\webapi\\webapi.csproj",
+      "projectPath": "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\webapi\\webapi.csproj",
       "packagesPath": "C:\\Users\\esatp\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\API_Project\\Barangay_API\\webapi\\obj\\",
+      "outputPath": "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\webapi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -12318,11 +12318,11 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "D:\\Project\\API_Project\\Barangay_API\\Comm\\Comm.csproj": {
-              "projectPath": "D:\\Project\\API_Project\\Barangay_API\\Comm\\Comm.csproj"
+            "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\Comm\\Comm.csproj": {
+              "projectPath": "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\Comm\\Comm.csproj"
             },
-            "D:\\Project\\API_Project\\Barangay_API\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "D:\\Project\\API_Project\\Barangay_API\\Infrastructure\\Infrastructure.csproj"
+            "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }

@@ -97,9 +97,18 @@ namespace webapi.Controllers.STLPartylistMembership.Features
 
         [HttpPost]
         [Route("memberaccount")]
-        public async Task<IActionResult> Task0f(string plid, string pgrpid)
+        public async Task<IActionResult> Task0f(string search)
         {
-            var result = await _repo.LoadAccount(plid, pgrpid);
+            var result = await _repo.LoadAccount(search);
+            if (result.result == Results.Success)
+                return Ok(result.account);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("householdaccount")]
+        public async Task<IActionResult> Task01(string search)
+        {
+            var result = await _repo.LoadAccountSearch(search);
             if (result.result == Results.Success)
                 return Ok(result.account);
             return NotFound();

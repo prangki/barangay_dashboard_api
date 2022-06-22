@@ -223,7 +223,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmsrch",search }
             });
             if (result != null)
-                return (Results.Success, result);
+                return (Results.Success, SubscriberDto.Get_GroupLeaderAccount(result));
             return (Results.Null, null);
         }
 
@@ -295,6 +295,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmprfpic",leader.ImageUrl },
                 {"parmImgUrl",leader.ImageUrl },
                 {"parmsignature",leader.SignatureURL },
+                {"parmwithdisability",leader.WDisability },
+                {"parmtypedisability",leader.TypeDisability },
+                {"parmregistervoter",leader.RegisterVoter },
 
                 //4
                 {"parmusertype",leader.AccountType },
@@ -313,7 +316,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 else if (ResultCode == "2")
                     return (Results.Failed, "Invalid Mobile Number");
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Mobile Number already exist");
+                    return (Results.Failed, "Username already exist");
                 else if (ResultCode == "4")
                     return (Results.Failed, "You are already Member of this Group");
                 else if (ResultCode == "5")
@@ -360,6 +363,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmprfpic",mem.ImageUrl },
                 {"parmImgUrl",mem.ImageUrl },
                 {"parmsignature",mem.SignatureURL },
+                {"parmwithdisability",mem.WDisability },
+                {"parmtypedisability",mem.TypeDisability },
+                {"parmregistervoter",mem.RegisterVoter },
 
                 {"parmusertype",mem.AccountType },
                 {"parmusername",mem.Username },

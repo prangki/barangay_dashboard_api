@@ -54,7 +54,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.PartyListController
         }
         private String Servername()
         {
-            string conString = _config.GetConnectionString("MLM01");
+            string conString = _config.GetConnectionString("MLM04");
             DbConnection con = new SqlConnection(conString);
             string strServername = con.Database;
             return strServername;

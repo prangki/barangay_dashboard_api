@@ -6,8 +6,11 @@ namespace webapi.App.RequestModel.Feature
     public class ReportAProblemRequest
     {
         public String TicketNo;
+        public string TransactionNo;
+        public String Sitio;
         public String Subject;
         public String Body;
+        public String CorrectiveAction;
         public List<String> Attachments;
         public String iAttachments;
         public String SenderAccount;
