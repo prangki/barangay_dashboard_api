@@ -140,7 +140,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmwithdependent", membership.WChildren },
                 {"parmwithdisability",membership.WDisability },
                 {"parmtypedisability",membership.TypeDisability },
-                {"@parmparentresidebrgy", membership.ParentResideBrgy },
+                {"parmparentresidebrgy", membership.ParentResideBrgy },
 
                 {"parmhouseno", membership.HouseNo },
                 {"parmhousehold", membership.HouseholdNo },

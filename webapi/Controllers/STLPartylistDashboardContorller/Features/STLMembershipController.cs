@@ -78,7 +78,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
 
         [HttpPost]
-        [Route("membership/edit")]
+        [Route("registration/edit")]
         public async Task<IActionResult> Task0c1([FromBody] STLMembership request)
         {
             //var valresult = await validity(request);
