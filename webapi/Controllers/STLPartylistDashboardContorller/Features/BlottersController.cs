@@ -185,6 +185,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("blotter/summon/getallresidents")]
+        public async Task<IActionResult> GetAllResidents()
+        {
+            var result = await _repo.GetAllResidents();
+            if (result.result == Results.Success)
+                return Ok(result.residents);
+            return NotFound();
+        }
+
         private async Task<(Results result, string message)> validityReport(Blotter request)
         {
             if (request == null)
