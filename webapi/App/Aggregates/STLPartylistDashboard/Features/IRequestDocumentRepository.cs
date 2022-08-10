@@ -24,6 +24,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message, String reqdocid)> UpdateRequestBrgyClearanceAsync(RequestDocument request);
         Task<(Results result, String message)> PrintRequestDocumentAsync(RequestDocument request);
         Task<(Results result, object reqdoc)> LoadRequestDocument(FilterRequest request);
+        Task<(Results result, object reqdoc)> LoadIssuesConcernAttachment(RequestDocument request);
+        Task<(Results result, String message)> ReceivedRequestDocument(RequestDocument request);
+        Task<(Results result, object purpose)> LoadPurpose();
+        Task<(Results result, object bizname)> LoadBusinessName();
+        Task<(Results result, object bizowner)> LoadBusinessOwner();
+        Task<(Results result, object businesstype)> LoadBusinessType(string businessname);
     }
     public class RequestDocumentRepository:IRequestDocumentRepository
     {
@@ -43,7 +49,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmdoctypeid", request.DoctypeID },
-                {"@parmcategorydocument", request.Category_Document },
+                {"parmcategorydocument", request.Category_Document },
                 {"parmpapplicationdate", request.ApplicationDate },
                 {"parmbizname", request.BusinessName},
                 {"parmbizaddress",request.BusinessAddress },
@@ -53,6 +59,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmrequestorid", request.RequestorID },
                 {"parmrequestorname", request.RequestorNM },
                 {"parmcategory", request.CategoryID },
+                {"parmotherdocument", request.OTRDocumentType },
+                {"parmxattchmnt",request.iAttachments },
+                {"parmisfree", request.isFree },
                 {"parmoptrid",account.USR_ID },
             }).FirstOrDefault();
             if (result != null)
@@ -75,6 +84,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
+                {"parmstatus",request.Status },
                 {"parmrownum", request.num_row},
                 {"parmsearch", request.Search}
             });
@@ -101,11 +111,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmrequestorid", request.RequestorID },
                 {"parmrequestorname", request.RequestorNM },
                 {"parmcategory", request.CategoryID },
+                {"parmotherdocument", request.OTRDocumentType },
                 {"parmattahcment",request.URLAttachment },
+                {"parmIsPaid", request.isPaid },
                 {"parmctcno", request.CTCNo },
                 {"parmorno", request.ORNO },
                 {"parmamount", request.Amount },
                 {"parmstatus", request.STATUS },
+                {"parmxattchmnt",request.iAttachments },
+                {"parmisfree", request.isFree },
                 {"parmoptrid",account.USR_ID },
             }).FirstOrDefault();
             if (result != null)
@@ -113,9 +127,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save",request.ReqDocID);
+                {
+                    request.ReqDocID = row["REQ_DOC_ID"].Str();
+                    return (Results.Success, "Successfully save", request.ReqDocID);
+                }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check Details, Please try again", null);
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Check Payment Detials, Please try again", null);
                 else if (ResultCode == "3")
                     return (Results.Failed, "Requested Document already exist, Please try again", null);
             }
@@ -159,7 +178,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmrequestorname", request.RequestorNM },
                 {"parmpurpose", request.Purpose },
                 {"parmcategory", request.CategoryID },
+                {"parmotherdocument", request.OTRDocumentType },
                 {"parmattahcment",request.URLAttachment },
+                {"parmxattchmnt",request.iAttachments },
+                {"parmisfree", request.isFree },
                 {"parmoptrid",account.USR_ID },
             }).FirstOrDefault();
             if (result != null)
@@ -167,7 +189,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
+                {
+                    request.ReqDocID = row["REQ_DOC_ID"].Str();
                     return (Results.Success, "Successfully save", request.ReqDocID);
+                }
+                    
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check Details, Please try again", null);
                 else if (ResultCode == "3")
@@ -190,11 +216,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmrequestorname", request.RequestorNM },
                 {"parmpurpose", request.Purpose },
                 {"parmcategory", request.CategoryID },
+                {"parmotherdocument", request.OTRDocumentType },
                 {"parmattahcment",request.URLAttachment },
+                {"parmxattchmnt",request.iAttachments },
                 {"parmctcno", request.CTCNo },
                 {"parmorno", request.ORNO },
                 {"parmamount", request.Amount },
                 {"parmstatus", request.STATUS },
+                {"parmisfree", request.isFree },
                 {"parmoptrid",account.USR_ID },
             }).FirstOrDefault();
             if (result != null)
@@ -209,6 +238,99 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "Requested Document already exist, Please try again", null);
             }
             return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, object reqdoc)> LoadIssuesConcernAttachment(RequestDocument request)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_REQDOCATTM", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmreqdocid", request.ReqDocID}
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetAttachementReqDocAttmList(result.Read<dynamic>(), 100));
+            else
+                return (Results.Success, STLSubscriberDto.GetAttachementReqDocAttmList(result.Read<dynamic>(), 100));
+
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ReceivedRequestDocument(RequestDocument request)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_REQ_DOC0G", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmreqdocid",request.ReqDocID },
+                {"parmdateappointment", request.AppointmentDate },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object purpose)> LoadPurpose()
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_PURPOSE0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetPurposeList(result.Read<dynamic>(), 1000));
+
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object bizname)> LoadBusinessName()
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_BUSINESS0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetBusinessNameList(result.Read<dynamic>(), 1000));
+
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object bizowner)> LoadBusinessOwner()
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_BUSINESSOWNER0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetBusinessOwnerList(result.Read<dynamic>(), 1000));
+
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object businesstype)> LoadBusinessType(string businessname)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_BUSINESS0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbusinessname",businessname }
+
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetBusinessTypeList(result.Read<dynamic>(), 1000));
+
+            return (Results.Null, null);
+
         }
     }
 }

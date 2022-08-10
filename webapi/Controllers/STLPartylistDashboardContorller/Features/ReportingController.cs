@@ -36,6 +36,33 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
         [HttpPost]
+        [Route("household")]
+        public async Task<IActionResult> Household(AcctStatistic acct)
+        {
+            var result = await _repo.Household(acct);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("householdmember")]
+        public async Task<IActionResult> HouseholdMember(AcctStatistic acct)
+        {
+            var result = await _repo.MemberPerHousehold(acct);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("report/agebracket")]
+        public async Task<IActionResult> AgeBracket(AcctStatistic acct)
+        {
+            var result = await _repo.AgeBracket(acct);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+        [HttpPost]
         [Route("accountstatisticmember")]
         public async Task<IActionResult> StatisticMember(AcctStatistic acct)
         {

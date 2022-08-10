@@ -11,6 +11,7 @@ using webapi.App.Model.User;
 using webapi.App.Aggregates.Common.Dto;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using System.Globalization;
+using webapi.App.RequestModel.Common;
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
@@ -28,6 +29,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> AssignedAccess(string userid, string access);
         Task<(Results result, String message)> UpdateValidityAccount(ValidityAccount request);
         Task<(Results result, string message)> ChangeAccounttype(ChangeAccountType request);
+        Task<(Results result, object parent)> Load_Parent(FilterRequest request);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -79,6 +81,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (results != null)
                 return (Results.Success, SubscriberDto.GetMasterList1(results, 100));
+                //return (Results.Success, results);
             return (Results.Null, null);
         }
         public async Task<(Results result, object account)> LoadAccountAccess()
@@ -123,40 +126,74 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             var results = _repo.DSpQueryMultiple("dbo.spfn_BDABDBCAACBB02", new Dictionary<string, object>()
             {
-                {"parmplid",membership.PLID },
-                {"parmpgrpid",membership.PGRPID },
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
                 {"parmfnm", textInfo.ToTitleCase(membership.Firstname) },
                 {"parmlnm",textInfo.ToTitleCase(membership.Lastname) },
                 {"parmmnm",textInfo.ToTitleCase(membership.Middlename) },
                 {"parmnnm",textInfo.ToTitleCase(membership.Nickname) },
-                {"parmmobno",membership.MobileNumber },
-                {"parmgender",membership.Gender },
-                {"parmmstastus",membership.MaritalStatus },
-                {"parmemladd",membership.EmailAddress },
-                {"parmhmeadd",textInfo.ToTitleCase(membership.HomeAddress) },
-                {"parmprsntadd",textInfo.ToTitleCase(membership.PresentAddress) },
+                {"parmregistervoter",membership.RegisterVoter },
                 {"parmprecentno", membership.PrecentNumber},
                 {"parmclusterno", membership.ClusterNumber },
-                {"parmsquenceno", membership.SequnceNumber },
+                {"parmmobno",membership.MobileNumber },
+                {"parmemladd",membership.EmailAddress },
+                {"parmwithdependent", membership.WChildren },
+                {"parmwithdisability",membership.WDisability },
+                {"parmtypedisability",membership.TypeDisability },
+                {"@parmparentresidebrgy", membership.ParentResideBrgy },
+
+                {"parmhouseno", membership.HouseNo },
+                {"parmhousehold", membership.HouseholdNo },
+                {"parmfamily", membership.Family },
+
+                {"parmbldType",textInfo.ToTitleCase(membership.BloodType) },
+                {"parmbdate",membership.BirthDate },
+                {"parmplaceofbirth" , membership.PlaceOfBirth },
+                {"parmgender",membership.Gender },
+                {"parmmstastus",membership.MaritalStatus },
+                {"parmpartnerid", membership.PartnerID },
+                {"parmntnlty",textInfo.ToTitleCase(membership.Nationality) },
+                {"parmctznshp",textInfo.ToTitleCase(membership.Citizenship) },
+                {"parmoccptn",textInfo.ToTitleCase(membership.Occupation) },
+                {"parmsklls",textInfo.ToTitleCase(membership.Skills) },
+                {"parmheight", membership.Height },
+                {"parmweight", membership.Weight },
+                {"parmlivingwithparent", membership.LivingWParent },
+
                 {"parmreg",membership.Region },
                 {"parmprov",membership.Province },
                 {"parmmun",membership.Municipality },
                 {"parmbrgy",membership.Barangay },
                 {"parmsitio",membership.Sitio },
-                {"parmbdate",membership.BirthDate },
-                {"parmctznshp",textInfo.ToTitleCase(membership.Citizenship) },
-                {"parmbldType",textInfo.ToTitleCase(membership.BloodType) },
-                {"parmntnlty",textInfo.ToTitleCase(membership.Nationality) },
-                {"parmoccptn",textInfo.ToTitleCase(membership.Occupation) },
-                {"parmsklls",textInfo.ToTitleCase(membership.Skills) },
+                {"parmhmeadd",textInfo.ToTitleCase(membership.HomeAddress) },
+                {"parmprsntadd",textInfo.ToTitleCase(membership.PresentAddress) },
+
+                {"parmfr_id", membership.FR_ID },
+                {"parmmo_id", membership.MO_ID },
+                {"parmfr_firstname", membership.FrFirstName },
+                {"parmfr_middlename", membership.FrMiddleInitial },
+                {"parmfr_lastname", membership.FrLastname },
+                {"parmfr_address", membership.FrAddress },
+                {"parmfr_contactno", membership.FrContactNo },
+                {"parmfr_email", membership.FrEmail },
+                {"parmmo_firstname", membership.MoFirstname },
+                {"parmmo_middlename", membership.MoMiddleInitial },
+                {"parmmo_lastname", membership.MoLastname },
+                {"parmmo_address", membership.MoAddress },
+                {"parmmo_contactno", membership.MoContactNo },
+                {"parmmo_email", membership.MoEmail },
+
+                {"parmchildren", membership.iChildren },
+                {"parmeducationattainment", membership.iEducationalAttainment },
+                {"parmvalidgovernmentid", membership.iValidGovernmentID },
+                {"parmorganization", membership.iOrganization },
+                {"parmemployementhistory", membership.iEmployement },
+
                 {"parmprfpic",membership.ImageUrl },
                 {"parmImgUrl",membership.ImageUrl },
                 {"parmsignature",membership.SignatureURL },
-                {"parmusertype",membership.AccountType },
-                {"parmEmployed",membership.isEmployed },
 
                 {"parmusername",membership.Username },
-                {"parmpassword",membership.Userpassword },
                 {"parmusrid",(isUpdate?membership.Userid:"") },
                 {"parmoptrid",account.USR_ID },
             }).ReadSingleOrDefault();
@@ -171,7 +208,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 else if (ResultCode == "3")
                     return (Results.Failed, "Mobile Number already exist", null);
                 else if (ResultCode == "4")
-                    return (Results.Failed, "You are already Member of this Group", null);
+                    return (Results.Failed, "You are already Register", null);
                 else if (ResultCode == "5")
                     return (Results.Failed, "Username already exist", null);
             }
@@ -254,5 +291,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, object parent)> Load_Parent(FilterRequest request)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBPAR", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbrgy",request.BrgyCode },
+                {"parmgndr",request.Gender }
+            });
+            if (results != null)
+                return (Results.Success, SubscriberDto.GetParentList(results, 100));
+            return (Results.Null, null);
+        }
     }
 }

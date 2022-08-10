@@ -498,6 +498,9 @@ namespace webapi.App.Aggregates.Common
             o.USR_ID = data["USR_ID"].Str();
             o.ACT_ID = data["ACT_ID"].Str();
             o.ACT_TYP = data["ACT_TYP"].Str();
+            o.HouseNo = data["HSENO_ID"].Str();
+            o.HouseholdNo = data["HHLD_ID"].Str();
+            o.Family = data["FAM_ID"].Str();
             o.FRST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FRST_NM"].Str()));
             o.MDL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["MDL_NM"].Str()));
             o.LST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["LST_NM"].Str()));
@@ -506,11 +509,14 @@ namespace webapi.App.Aggregates.Common
             o.MOB_NO = data["MOB_NO"].Str();
             o.EML_ADD = data["EML_ADD"].Str();
             o.USR_NM = data["USR_NM"].Str();
+            o.Height = data["HEIGHT"].Str();
+            o.Weight = data["WEIGHT"].Str();
             o.PRCNT_NO = data["PRCNT_NO"].Str();
             o.CLSTR_NO = data["CLSTR_NO"].Str();
             o.SEQUENCE_NO = data["SEQUENCE_NO"].Str();
             o.HM_ADDR = textInfo.ToTitleCase(textInfo.ToLower(data["HM_ADDR"].Str()));
             o.PRSNT_ADDR = textInfo.ToTitleCase(textInfo.ToLower(data["PRSNT_ADDR"].Str()));
+            o.PartnerID = data["PTNR_ID"].Str();
             o.LOC_REG = data["LOC_REG"].Str();
             o.LOC_REG_NM = data["LOC_REG_NM"].Str();
             o.LOC_PROV = data["LOC_PROV"].Str();
@@ -528,14 +534,76 @@ namespace webapi.App.Aggregates.Common
             o.CTZNSHP = data["CTZNSHP"].Str();
             o.IMG_URL = data["IMG_URL"].Str();
             o.BRT_DT = data["BRT_DT"].Str();
+            o.PlaceOfBirth = data["PLC_BRT"].Str();
             o.BLD_TYP = data["BLD_TYP"].Str();
             o.NATNLTY = textInfo.ToTitleCase(textInfo.ToLower(data["NATNLTY"].Str()));
             o.OCCPTN = textInfo.ToTitleCase(textInfo.ToLower(data["OCCPTN"].Str()));
             o.SKLLS = textInfo.ToTitleCase(textInfo.ToLower(data["SKLLS"].Str()));
             o.PRF_PIC = data["PRF_PIC"].Str();
+            o.FrFirstName = data["FR_FRST_NM"].Str();
+            o.FrMiddleInitial = data["FR_MI_NM"].Str();
+            o.FrLastname = data["FR_LST_NM"].Str();
+            o.FrFullName = data["FR_FLL_NM"].Str();
+            o.FrContactNo = data["FR_MOB_NO"].Str();
+            o.FrEmail = data["FR_EML_ADD"].Str();
+            o.MoFirstname = data["MOM_FRST_NM"].Str();
+            o.MoMiddleInitial = data["MOM_MI_NM"].Str();
+            o.MoLastname = data["MOM_LST_NM"].Str();
+            o.MoFullName = data["MOM_FLL_NM"].Str();
+            o.MoContactNo = data["MOM_MOB_NO"].Str();
+            o.MoEmail = data["MOM_EML_ADD"].Str();
             o.isEmployed = data["isEmployed"].Str();
             o.SIGNATUREID = data["SIGNATUREID"].Str();
             o.S_BLCK = Convert.ToBoolean((data["S_BLCK"].Str() == "0") ? 0 : 1);
+            o.Age = data["AGE"].Str();
+            o.WDisability = (data["WDISABILITY"].Str() == "") ? 0 : Convert.ToInt32(data["WDISABILITY"].Str());
+            o.TypeDisability = data["TYPE_DISABILITY"].Str();
+            o.RegisterVoter = (data["REGISTERVOTER"].Str() == "") ? 0 : Convert.ToInt32(data["REGISTERVOTER"].Str());
+            o.WChildren = (data["WDependent"].Str() == "") ? 0 : Convert.ToInt32(data["WDependent"].Str());
+            o.LivingWParent = (data["LivingWParent"].Str() == "") ? 0 : Convert.ToInt32(data["LivingWParent"].Str());
+            o.ParentResideBrgy = (data["Parent_Reside_Brgy"].Str() == "") ? 0 : Convert.ToInt32(data["Parent_Reside_Brgy"].Str());
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetParentList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetParent_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetParent_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_Parent_List(e));
+        }
+        public static IDictionary<string, object> Get_Parent_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.USR_ID = data["USR_ID"].Str();
+            o.ACT_ID = data["ACT_ID"].Str();
+            o.ACT_TYP = data["ACT_TYP"].Str();
+            o.HouseNo = data["HSENO_ID"].Str();
+            o.HouseHold = data["HHLD_ID"].Str();
+            o.Family = data["FAM_ID"].Str();
+            o.FRST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FRST_NM"].Str()));
+            o.MDL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["MDL_NM"].Str()));
+            o.LST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["LST_NM"].Str()));
+            o.NCK_NM = textInfo.ToTitleCase(textInfo.ToLower(data["NCK_NM"].Str()));
+            o.FLL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.BRT_DT = data["BRT_DT"].Str();
+            o.Age = data["AGE"].Str();
             return o;
         }
 
@@ -560,6 +628,42 @@ namespace webapi.App.Aggregates.Common
                 o.FulldateDisplay = $"{o.DateDisplay} {o.TimeDisplay}";
             }
             catch { }
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetAllGovenmentValidIDList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllGovenmentValidID_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllGovenmentValidID_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllGovenmentValidID_List(e));
+        }
+        public static IDictionary<string, object> Get_AllGovenmentValidID_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.ID = data["ID"].Str();
+            o.GoventmentID_NM = data["GOVERNMENTID"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.SEQ_NO = data["SEQ_NO"].Str();
+            o.GovValID = data["GOVVAL_ID"].Str();
+            o.GovernmentID_NO = data["GOVVAL_ID_NO"].Str();
+            o.Attachment = data["ATTACHMENT"].Str();
             return o;
         }
     }

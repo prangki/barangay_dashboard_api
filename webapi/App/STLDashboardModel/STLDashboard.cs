@@ -133,6 +133,8 @@ namespace webapi.App.STLDashboardModel
         public string Mun;
         public string Brgy;
         public string Sitio;
+        public int AgeFrom;
+        public int AgeTo;
 
     }
     public class TextBlasting
@@ -175,6 +177,7 @@ namespace webapi.App.STLDashboardModel
         public string DocTypeNM;
         public string BrgyCode;
         public int Category;
+        public string DocContent;
         public string iDocRequirements;
     }
     public class BarangayOfficial 
@@ -199,7 +202,8 @@ namespace webapi.App.STLDashboardModel
         public string BusinessOwnerName;
         public string RequestorNM;
         public string RequestorID;
-        public string Attachment;
+        public List<String >Attachment;
+        public String iAttachments;
         public string CTCNo;
         public string ORNO;
         public string Amount;
@@ -212,6 +216,10 @@ namespace webapi.App.STLDashboardModel
         public string BizReport;
         public string IssuedDate;
         public string ControlNo;
+        public string AppointmentDate;
+        public string OTRDocumentType;
+        public string isPaid;
+        public string isFree;
 
     }
     public class Blotter
@@ -229,11 +237,14 @@ namespace webapi.App.STLDashboardModel
         public string BarangayCaptain;
         public string BarangaySecretary;
         public string Accusations;
-        public string PlaceOfIncedent;
+        public string PlaceOfIncident;
         public string Witness;
-        public string DateTimeOfIncedent;
-        public string NarrativeOfIncedent;
+        public string DateTimeOfIncident;
+        public string NarrativeOfIncident;
         public string ModifiedBy;
         public string DTModified;
+        public string ReportPath;
+        public string Docname;
+        public string SummonDate;
     }
 }

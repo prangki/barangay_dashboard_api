@@ -122,6 +122,157 @@ namespace webapi.App.Aggregates.Common.Dto
             return o;
         }
 
+        public static IEnumerable<dynamic> GetAttachementReqDocAttmList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAttachementReqDocAttm_List(data);
+            var count = items.Count();
+            if (count >= limit)
+            {
+                var o = items.Last();
+                var filter = (o.NextFilter = Dynamic.Object);
+                items = items.Take(count - 1).Concat(new[] { o });
+                filter.NextFilter = o.num_row;
+            }
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAttachementReqDocAttm_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AttachementReqDocAttm_List(e));
+        }
+        public static IDictionary<string, object> Get_AttachementReqDocAttm_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["CompID"].Str();
+            o.GroupID = data["GroupId"].Str();
+            o.SequenceNo = data["SequenceNo"].Str();
+            o.AttachmentNo = data["AttachmentNo"].Str();
+            o.RequestDocumentID = data["RequestDocumentID"].Str();
+            o.Attachment = data["Attachment"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetPurposeList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetPurpose_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetPurpose_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_Purpose_List(e));
+        }
+        public static IDictionary<string, object> Get_Purpose_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["PL_ID"].Str();
+            o.PGRPID = data["PGRP_ID"].Str();
+            o.Purpose = data["Purpose"].Str();
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetBusinessNameList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBusinessName_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBusinessName_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BusinessName_List(e));
+        }
+        public static IDictionary<string, object> Get_BusinessName_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["PL_ID"].Str();
+            o.PGRPID = data["PGRP_ID"].Str();
+            o.Businessname = data["Businessname"].Str();
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetBusinessOwnerList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBusinessOwner_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBusinessOwner_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BusinessOwner_List(e));
+        }
+        public static IDictionary<string, object> Get_BusinessOwner_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["PL_ID"].Str();
+            o.PGRPID = data["PGRP_ID"].Str();
+            o.Businessowner = data["Businessowner"].Str();
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetBusinessTypeList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBusinessType_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBusinessType_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BusinessType_List(e));
+        }
+        public static IDictionary<string, object> Get_BusinessType_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["PL_ID"].Str();
+            o.PGRPID = data["PGRP_ID"].Str();
+            o.BusinessType = data["BIZ_TYP"].Str();
+            o.BusinessAddress = data["BIZ_ADDRESS"].Str();
+            o.BusinessOwner = data["BIZ_OWNER"].Str();
+            o.BusinessOwnerAddress = data["BIZ_OWNER_ADDRESS"].Str();
+            return o;
+        }
 
         public static IEnumerable<dynamic> GetAllIssuesConcernList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
         {
@@ -212,6 +363,40 @@ namespace webapi.App.Aggregates.Common.Dto
         }
 
 
+        public static IEnumerable<dynamic> GetOfficialHeaderList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetOfficialHeader_List(data);
+            //var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetOfficialHeader_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_OfficialHeader_List(e));
+        }
+        public static IDictionary<string, object> Get_OfficialHeader_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.BrgyOfficialLogo = data["BRGY_LOGO"].Str();
+            o.MunicipalLogo = data["MUNICIPAL_LOGO"].Str();
+            o.Country = data["COUNTRYHEADER"].Str();
+            o.Province = data["PROVINCEHEADER"].Str();
+            o.Municipality = data["MUNICIPALHEADER"].Str();
+            o.Barangay = data["BARANGAYHEADER"].Str();
+            o.IssuedLocation = data["ISSUED_LOCATION"].Str();
+            return o;
+        }
+
 
         public static IEnumerable<dynamic> GetAllDocTypeList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
         {
@@ -246,6 +431,7 @@ namespace webapi.App.Aggregates.Common.Dto
             o.DocTypeNM = data["DOC_TYPE"].Str();
             o.Category = data["CATEGORY"].Str();
             o.CategoryNM = data["CATEGORY_NM"].Str();
+            o.DocContent = data["DOC_CONTENT"].Str();
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;
         }
@@ -300,14 +486,14 @@ namespace webapi.App.Aggregates.Common.Dto
             if (data == null) return null;
             var items = GetAllRequestDocument_List(data);
             var count = items.Count();
-            if (count >= limit)
-            {
-                var o = items.Last();
-                var filter = (o.NextFilter = Dynamic.Object);
-                items = items.Take(count - 1).Concat(new[] { o });
-                filter.NextFilter = o.num_row;
-                filter.Userid = userid;
-            }
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
             return items;
         }
         public static IEnumerable<dynamic> GetAllRequestDocument_List(IEnumerable<dynamic> data, bool fullinfo = true)
@@ -346,6 +532,7 @@ namespace webapi.App.Aggregates.Common.Dto
             o.IssuedDate = (data["DATE_ISSUED"].Str()=="") ? "" : Convert.ToDateTime(data["DATE_ISSUED"].Str()).ToString("MMM dd, yyyy");
             o.Amount = data["AMOUNT"].Str();
             o.BrgyCaptain = data["BRGY_CAPTAIN"].Str();
+            o.BrgyCaptainSignature = data["BRGY_CAPTAIN_SIGNATURE"].Str();
             o.URL_DocPath = data["URL_DOCPATH"].Str();
             o.ControlNo = data["CNTRL_NO"].Str();
             o.Gender = data["GNDR"].Str();
@@ -357,10 +544,183 @@ namespace webapi.App.Aggregates.Common.Dto
             o.ProfilePicture = data["PRF_PIC"].Str();
             o.PresentAddress = textInfo.ToUpper(data["PRSNT_ADDR"].Str());
             o.URLAttachment = data["URL_ATTACHMENT"].Str();
+            o.OTRDocumentType = data["OTR_DOC_ID"].Str();
+            o.OTRDocType = data["DOC_TYPE"].Str();
+            o.OTRDocContent = data["DOC_Content"].Str();
+            o.OTRCategory = data["OTR_CATEGORY"].Str();
+            o.OTRCategoryNM = data["OTR_CATEGORY_NM"].Str();
+            o.isFree = data["isFREE"].Str();
+            o.isFreeNM = data["isFREE_NM"].Str();
+            o.AppointmentDate = (data["APPT_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APPT_DATE"].Str()).ToString("MMM dd, yyyy");
 
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;
         }
+
+
+        public static IEnumerable<dynamic> GetAllRegisterBusinessList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllRegisterBusiness_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllRegisterBusiness_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllRegisterBusiness_List(e));
+        }
+        public static IDictionary<string, object> Get_AllRegisterBusiness_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.num_row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.BussinessID = data["BIZ_ID"].Str();
+            o.Category = data["CATEGORY"].Str();
+            o.ControlNo = data["CTRL_NO"].Str();
+            o.CTCNo = data["CTC_NO"].Str();
+            o.InitialCapital = data["INIT_CAP"].Str();
+            o.RegisteredNo = data["REG_NO"].Str();
+            o.Type = data["TYP"].Str();
+            o.BusinessName = data["BIZ_NM"].Str();
+            o.BusinessAddress = data["BIZ_ADDR"].Str();
+            o.Email = data["BIZ_EMAIL"].Str();
+            o.ContactNo = data["CT_NO"].Str();
+            o.FirstName = data["OWN_FRST_NM"].Str();
+            o.MiddleInitial = data["OWN_MI_NM"].Str();
+            o.LastName = data["OWN_LST_NM"].Str();
+            o.FullName = data["OWN_FLL_NM"].Str();
+            o.OwnerAddress = data["OWN_ADDR"].Str();
+            o.OwnerEmail = data["OWN_EMAIL"].Str();
+            o.OwnerContactNo = data["OWN_CT_NO"].Str();
+            o.Request = (data["REQ_DOC"].Str()=="") ? 0 : Convert.ToInt32(data["REQ_DOC"].Str());
+
+            //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAllOrganizationList(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllOrganization_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllOrganization_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllOrganization_List(e));
+        }
+        public static IDictionary<string, object> Get_AllOrganization_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.OrganizationID = data["ORG_ID"].Str();
+            o.OraganizationNM = data["ORG_NM"].Str();
+            o.OrganizatioAbbr = data["ORG_ABBR"].Str();
+            o.Estabalished = data["ORG_EST"].Str();
+
+            //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAllBusinessDocumentRequestList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllBusinessDocumentRequest_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllBusinessDocumentRequest_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllBusinessDocumentRequest_List(e));
+        }
+        public static IDictionary<string, object> Get_AllBusinessDocumentRequest_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.num_row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.BussinessID = data["BIZ_ID"].Str();
+            o.Category = data["CATEGORY"].Str();
+            o.ControlNo = data["CTRL_NO"].Str();
+            o.CTCNo = data["CTC_NO"].Str();
+            o.InitialCapital = data["INIT_CAP"].Str();
+            o.RegisteredNo = data["REG_NO"].Str();
+            o.Type = data["TYP"].Str();
+            o.BusinessName = data["BIZ_NM"].Str();
+            o.BusinessAddress = data["BIZ_ADDR"].Str();
+            o.Email = data["BIZ_EMAIL"].Str();
+            o.ContactNo = data["CT_NO"].Str();
+            o.FirstName = data["OWN_FRST_NM"].Str();
+            o.MiddleInitial = data["OWN_MI_NM"].Str();
+            o.LastName = data["OWN_LST_NM"].Str();
+            o.FullName = data["OWN_FLL_NM"].Str();
+            o.OwnerAddress = data["OWN_ADDR"].Str();
+            o.OwnerEmail = data["OWN_EMAIL"].Str();
+            o.OwnerContactNo = data["OWN_CT_NO"].Str();
+
+            o.ReqDocID = data["REQ_DOC_ID"].Str();
+            o.DoctypeID = data["DOCTYP_ID"].Str();
+            o.DoctypeNM = data["DOCTYP_NM"].Str();
+            o.Category_Doc_ID = data["CAT_DOC"].Str();
+            o.OTRDocumentType = data["OTR_DOC_ID"].Str();
+            o.ApplicationDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.AppointmentDate = (data["APPT_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APPT_DATE"].Str()).ToString("MMM dd, yyyy");
+
+            o.Status = data["STATUS"].Str();
+            o.Status_NM = data["STATUS_NM"].Str();
+
+            o.ORNO = data["OR_NO"].Str();
+            o.CTCNo = data["CTC_NO"].Str();
+            o.IssuedDate = (data["DATE_ISSUED"].Str() == "") ? "" : Convert.ToDateTime(data["DATE_ISSUED"].Str()).ToString("MMM dd, yyyy");
+            o.URL_DocPath = data["URL_DOCPATH"].Str();
+            o.BrgyCaptain = data["BRGY_CAPTAIN"].Str();
+            o.BrgyCaptainSignature = data["BRGY_CAPTAIN_SIGNATURE"].Str();
+            o.Amount = data["AMOUNT"].Str();
+            
+            o.OTRDocType = data["DOC_TYPE"].Str();
+            o.OTRDocContent = data["DOC_Content"].Str();
+            o.OTRCategory = data["OTR_CATEGORY"].Str();
+            o.OTRCategoryNM = data["OTR_CATEGORY_NM"].Str();
+            
+
+            //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
+            return o;
+        }
+
 
         public static IEnumerable<dynamic> GetAllDocRequirementList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
         {
@@ -387,6 +747,8 @@ namespace webapi.App.Aggregates.Common.Dto
             dynamic o = Dynamic.Object;
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             o.num_row = data["RW_NO"].Str();
+            o.Category = data["CATEGORY"].Str();
+            o.CategoryNM = data["CATEGORY_NM"].Str();
             o.SEQ_NO = data["SEQ_NO"].Str();
             o.DOC_REQRD = data["REQ_NM"].Str();
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
@@ -422,5 +784,9 @@ namespace webapi.App.Aggregates.Common.Dto
             catch { }
             return o;
         }
+
+
+        
+
     }
 }

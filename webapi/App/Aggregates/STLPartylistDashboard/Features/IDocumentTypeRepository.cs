@@ -43,6 +43,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmbrgy", request.BrgyCode},
                 {"parmdoctype",request.DocTypeNM },
                 {"parmcategory",request.Category },
+                {"parmdoccontent", request.DocContent },
                 {"parmdocrequirement", request.iDocRequirements },
                 {"parmuserid",account.USR_ID },
             }).FirstOrDefault();
@@ -70,6 +71,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmbrgy", request.BrgyCode},
                 {"parmdoctype",request.DocTypeNM },
                 {"parmcategory",request.Category },
+                {"parmdoccontent", request.DocContent },
                 {"parmdocrequirement", request.iDocRequirements },
                 {"parmuserid",account.USR_ID },
             }).FirstOrDefault();

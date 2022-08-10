@@ -14,7 +14,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     [Service.ITransient(typeof(ReportingRepository))]
     public interface IReportingRepository
     {
-        Task<(Results result, object acctstatic)> AcctStatistic(AcctStatistic acct);
+        Task<(Results result, object acctstatic)> AcctStatistic(AcctStatistic acct); 
+        Task<(Results result, object household)> Household(AcctStatistic acct);
+        Task<(Results result, object household)> MemberPerHousehold(AcctStatistic acct);
+        Task<(Results result, object household)> AgeBracket(AcctStatistic acct);
         Task<(Results result, object donation)> DonnationReport(AcctStatistic acct);
         Task<(Results result, object donation)> EmployeeReport(AcctStatistic acct);
         Task<(Results result, object donation)> DonationReportLeaderMember(AcctStatistic acct);
@@ -122,6 +125,50 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmmun",acct.Mun },
                 {"parmbrgy",acct.Brgy },
                 {"parmsitio",acct.Sitio }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> Household(AcctStatistic acct)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTHOUSEHOLD", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmpgrpid",acct.PGRP_ID },
+                {"parmbrgy",acct.Brgy },
+                {"parmsitio", acct.Sitio }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> MemberPerHousehold(AcctStatistic acct)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTMEMBERPERHOUSEHOLD", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmpgrpid",acct.PGRP_ID },
+                {"parmbrgy",acct.Brgy },
+                {"parmsitio", acct.Sitio }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> AgeBracket(AcctStatistic acct)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTAGEBRACKET", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmpgrpid",acct.PGRP_ID },
+                {"parmagefrom", acct.AgeFrom },
+                {"parmageto", acct.AgeTo },
+                {"parmbrgy",acct.Brgy },
+                {"parmsitio", acct.Sitio }
             });
             if (results != null)
                 return (Results.Success, results);

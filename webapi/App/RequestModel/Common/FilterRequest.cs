@@ -32,6 +32,8 @@ namespace webapi.App.RequestModel.Common
         public string BrgyCode;
         public string num_row;
         public string DocTypeID;
+        public string BusinessId;
+        public string Gender;
 
         public DateTime? TransactionDt;
         public DateTime? FromDt;

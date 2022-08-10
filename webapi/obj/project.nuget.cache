@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "7WyGLBTUtgmhkOZF6DaM6ikICKGNfJD9BJZrEoE0CM7sWTx/ZlMo6THJG+0MaROqBaO5iexVscqoHqBJuJQWpA==",
+  "dgSpecHash": "VOIN7q4vIcf/lvk90SEWBbuakIHTQE7EP2LZF9brnSabozjSbSh7uKL45rwnFkI2j6J8TTviobWiQ2mg1D8feg==",
   "success": true,
   "projectFilePath": "D:\\SourceTree_Dashboard\\ESAT_Developer\\Barangay_Dashboard_API\\webapi\\webapi.csproj",
   "expectedPackageFiles": [
@@ -212,9 +212,9 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
     "C:\\Users\\esatp\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
     "C:\\Users\\esatp\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512",
-    "C:\\Users\\esatp\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\3.1.23\\microsoft.netcore.app.runtime.win-x64.3.1.23.nupkg.sha512",
-    "C:\\Users\\esatp\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\3.1.23\\microsoft.aspnetcore.app.runtime.win-x64.3.1.23.nupkg.sha512",
-    "C:\\Users\\esatp\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\3.1.23\\microsoft.windowsdesktop.app.runtime.win-x64.3.1.23.nupkg.sha512"
+    "C:\\Users\\esatp\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\3.1.27\\microsoft.netcore.app.runtime.win-x64.3.1.27.nupkg.sha512",
+    "C:\\Users\\esatp\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\3.1.27\\microsoft.aspnetcore.app.runtime.win-x64.3.1.27.nupkg.sha512",
+    "C:\\Users\\esatp\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\3.1.27\\microsoft.windowsdesktop.app.runtime.win-x64.3.1.27.nupkg.sha512"
   ],
   "logs": [
     {

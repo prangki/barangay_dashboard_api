@@ -6,6 +6,9 @@ using System.Data;
 using Dapper;
 using System.Text;
 using System;
+using static System.Collections.Specialized.BitVector32;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 
 namespace Infrastructure.Repositories
 {
@@ -86,6 +89,7 @@ namespace Infrastructure.Repositories
         public SqlMapper.GridReader DQueryMultiple(string SqlString, Dictionary<string, object> parameters)
         {
             var connection = _context.Database.GetDbConnection();
+            
             return connection.QueryMultiple(SqlString,
                 param: new DynamicParameters(parameters));
         }
@@ -108,6 +112,26 @@ namespace Infrastructure.Repositories
         public SqlMapper.GridReader DSpQueryMultiple(string SpName, Dictionary<string, object> parameters)
         {
             var connection = _context.Database.GetDbConnection();
+            //Dapper.SqlMapper.TypeMapProvider = type =>
+            //{
+            //    // create fallback default type map
+            //    var fallback = new DefaultTypeMap(type);
+            //    return new CustomPropertyTypeMap(type, (t, column) =>
+            //    {
+            //        var property = t.GetProperties().FirstOrDefault(prop =>
+            //            prop.GetCustomAttributes(typeof(ColumnAttribute))
+            //                .Cast<ColumnAttribute>()
+            //                .Any(attr => attr.Name == column));
+
+            //        // if no property matched - fall back to default type map
+            //        if (property == null)
+            //        {
+            //            property = fallback.GetMember(column)?.Property;
+            //        }
+
+            //        return property;
+            //    });
+            //};
             return connection.QueryMultiple(SpName,
                 param: new DynamicParameters(parameters),
                 commandType: CommandType.StoredProcedure);

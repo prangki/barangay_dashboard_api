@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using webapi.App.Aggregates.Common.Dto;
 using System.Text;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
+using webapi.App.RequestModel.Common;
 
 namespace webapi.Controllers.STLPartylistMembership.Features
 {
@@ -59,8 +60,26 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
 
         [HttpPost]
-        [Route("membership/edit")]
+        [Route("registration/new")]
         public async Task<IActionResult> Task0c([FromBody] STLMembership request)
+        {
+            //var valresult = await validity(request);
+            //if (valresult.result == Results.Failed)
+            //    return Ok(new { Status = "error", Message = valresult.message });
+            //if (valresult.result != Results.Success)
+            //    return NotFound();
+
+            var reporesult = await _repo.MembershipAsync(request, true);
+            if (reporesult.result == Results.Success)
+                return Ok(new { result = reporesult.result, Message = reporesult.message, AcctID = reporesult.AcctID });
+            else if (reporesult.result == Results.Failed)
+                return Ok(new { result = reporesult.result, Message = reporesult.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("membership/edit")]
+        public async Task<IActionResult> Task0c1([FromBody] STLMembership request)
         {
             //var valresult = await validity(request);
             //if (valresult.result == Results.Failed)
@@ -131,6 +150,9 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(result.account);
             return NotFound();
         }
+
+
+
         [HttpPost]
         [Route("totalregister")]
         public async Task<IActionResult> Task0g2()
@@ -138,6 +160,16 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             var result = await _repo.TotalREgister();
             if (result.result == Results.Success)
                 return Ok(result.account);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("parent")]
+        public async Task<IActionResult> Task0g3([FromBody] FilterRequest request)
+        {
+            var result = await _repo.Load_Parent(request);
+            if (result.result == Results.Success)
+                return Ok(result.parent);
             return NotFound();
         }
         [HttpPost]

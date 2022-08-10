@@ -50,11 +50,13 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Nickname;
 
         public string BirthDate;
+        public string PlaceOfBirth;
         public string Gender;
         public string BloodType;
         public string Nationality;
         public string Citizenship;
         public string MaritalStatus;
+        public string PartnerID;
 
         public string MobileNumber;
         public string EmailAddress;
@@ -65,6 +67,14 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string PresentAddress;
         public string Occupation;
         public string Skills;
+        public string Height;
+        public string Weight;
+        public string LivingWParent;
+
+
+        public string HouseNo;
+        public string HouseholdNo;
+        public string Family;
 
         public string Region;
         public string Province;
@@ -90,6 +100,32 @@ namespace webapi.App.RequestModel.AppRecruiter
         public int WDisability;
         public string TypeDisability;
         public int RegisterVoter;
+        public int WChildren;
+        public int ParentResideBrgy;
+
+        //Parent
+        public string FR_ID;
+        public string MO_ID;
+        public string FrFirstName;
+        public string FrMiddleInitial;
+        public string FrLastname;
+        public string FrFullName;
+        public string FrAddress;
+        public string FrContactNo;
+        public string FrEmail;
+        public string MoFirstname;
+        public string MoMiddleInitial;
+        public string MoLastname;
+        public string MoFullName;
+        public string MoAddress;
+        public string MoContactNo;
+        public string MoEmail;
+
+        public string iChildren;
+        public string iValidGovernmentID;
+        public string iOrganization;
+        public string iEducationalAttainment;
+        public string iEmployement;
     }
     public class DateRangeModel
     {
@@ -196,11 +232,97 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string mun;
         public string brgy;
     }
+    public class BrgySignatory
+    {
+        public string Brgy_Captain;
+        public string Brgy_Captain_sig;
+        public string Brgy_Captain_sig_URL;
+        public string Capt_Events;
+        public string Brgy_FirstCouncilor;
+        public string Brgy_FirstCouncilor_sig;
+        public string Brgy_FirstCouncilor_sig_URL;
+        public string First_Events;
+        public string Brgy_SecondCouncilor;
+        public string Brgy_SecondCouncilor_sig;
+        public string Brgy_SecondCouncilor_sig_URL;
+        public string Second_Events;
+        public string Brgy_ThirdCouncilor;
+        public string Brgy_ThirdCouncilor_sig;
+        public string Brgy_ThirdCouncilor_sig_URL;
+        public string Third_Events;
+        public string Brgy_FourthCouncilor;
+        public string Brgy_FourthCouncilor_sig;
+        public string Brgy_FourthCouncilor_sig_URL;
+        public string Fourth_Events;
+        public string Brgy_FifthCouncilor;
+        public string Brgy_FifthCouncilor_sig;
+        public string Brgy_FifthCouncilor_sig_URL;
+        public string Fifth_Events;
+        public string Brgy_SixthCouncilor;
+        public string Brgy_SixthCouncilor_sig;
+        public string Brgy_SixthCouncilor_sig_URL;
+        public string Sixth_Events;
+        public string Brgy_SeventhCouncilor;
+        public string Brgy_SeventhCouncilor_sig;
+        public string Brgy_SeventhCouncilor_sig_URL;
+        public string Seventh_Events;
+        public string SK_Chairman;
+        public string SK_Chairman_sig;
+        public string SK_Chairman_sig_URL;
+        public string SKChairman_Events;
+        public string Brgy_Secretary;
+        public string Brgy_Secretary_sig;
+        public string Brgy_Secretary_sig_URL;
+        public string Secretary_Events;
+        public string Brgy_Treasurer;
+        public string Brgy_Treasurer_sig;
+        public string Brgy_Treasurer_sig_URL;
+        public string Treasurer_Events;
+        public string Brgy_Chief_Tanod;
+        public string Brgy_Chief_Tanod_sig;
+        public string Brgy_Chief_Tanod_sig_URL;
+        public string Tanod_Events;
+    }
+    public class BusinesseRequest
+    {
+        public string BussinessID;
+        public string ControlNo;
+        public string CTCNo;
+        public string InitialCapital;
+        public string RegisteredNo;
+        public string Type;
+        public string BusinessName;
+        public string Email;
+        public string ContactNo;
+        public string BusinessAddress;
+        public string FirstName;
+        public string MiddleInitial;
+        public string LastName;
+        public string FullName;
+        public string OwnerAddress;
+        public string OwnerEmail;
+        public string OwnerContactNo;
+
+    }
     public class LicenseKey
     {
         public string licensekey;
         public string licenseval;
         public string registereddevice;
         public string licenseexpiry;
+    }
+    public class OfficialHeader
+    {
+        public string iBrgyOfficialLogo;
+        public string iMunicipalLogo;
+        public int BrgyLogoChange;
+        public string BrgyOfficialLogo;
+        public int MunLogoChange;
+        public string MunicipalLogo;
+        public string Country;
+        public string Province;
+        public string Municipality;
+        public string Barangay;
+        public string IssuedLocation;
     }
 }

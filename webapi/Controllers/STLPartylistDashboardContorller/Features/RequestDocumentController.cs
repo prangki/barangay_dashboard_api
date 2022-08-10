@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using webapi.App.RequestModel.Common;
 using System.IO;
+using System.Text;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -48,8 +49,21 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return NotFound();
 
             var repoResult = await _repo.RequestDocumentAsync(request);
+
             if (repoResult.result == Results.Success)
+            {
+                if (request.isFree == "1")
+                {
+                    FilterRequest f = new FilterRequest();
+                    f.Search = repoResult.reqdocid;
+                    f.num_row = "0";
+                    f.Status = "1";
+                    var result = await _repo.LoadRequestDocument(f);
+                    return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, requestdocument=result.reqdoc, Message = repoResult.message });
+                }
                 return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, Message = repoResult.message });
+            }
+                
             else if (repoResult.result == Results.Failed)
                 return Ok(new { Status = "error", Message = repoResult.message });
             return NotFound();
@@ -87,7 +101,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
             var repoResult = await _repo.RequestBrgyClearanceAsync(request);
             if (repoResult.result == Results.Success)
-                return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, Message = repoResult.message });
+            {
+                FilterRequest f = new FilterRequest();
+                f.Search = repoResult.reqdocid;
+                f.num_row = "0";
+                f.Status = "1";
+                var result = await _repo.LoadRequestDocument(f);
+                return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, requestdocument = result.reqdoc, Message = repoResult.message });
+            }
+                
             else if (repoResult.result == Results.Failed)
                 return Ok(new { Status = "error", Message = repoResult.message });
             return NotFound();
@@ -130,26 +152,105 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("reqdoc/receivedreqdoc")]
+        public async Task<IActionResult> Task07([FromBody] RequestDocument request)
+        {
+            var repoResult = await _repo.ReceivedRequestDocument(request);
+            if (repoResult.result == Results.Success)
+                return Ok(new { Status = "ok", Message = repoResult.message });
+            else if (repoResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = repoResult.message });
+            return NotFound();
+        }
+
+
+
+        [HttpPost]
+        [Route("reqdoc/loadreqdocattm")]
+        public async Task<IActionResult> Task08([FromBody] RequestDocument request)
+        {
+            var result = await _repo.LoadIssuesConcernAttachment(request);
+            if (result.result == Results.Success)
+                return Ok(result.reqdoc);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reqdoc/purpose")]
+        public async Task<IActionResult> Task09()
+        {
+            var result = await _repo.LoadPurpose();
+            if (result.result == Results.Success)
+                return Ok(result.purpose);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reqdoc/businessname")]
+        public async Task<IActionResult> Task10()
+        {
+            var result = await _repo.LoadBusinessName();
+            if (result.result == Results.Success)
+                return Ok(result.bizname);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reqdoc/businessowner")]
+        public async Task<IActionResult> Task11()
+        {
+            var result = await _repo.LoadBusinessOwner();
+            if (result.result == Results.Success)
+                return Ok(result.bizowner);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reqdoc/businesstype")]
+        public async Task<IActionResult> Task12(string businessname)
+        {
+            var result = await _repo.LoadBusinessType(businessname);
+            if (result.result == Results.Success)
+                return Ok(result.businesstype);
+            return NotFound();
+        }
+
         private async Task<(Results result, string message)> validity(RequestDocument request)
         {
             if (request == null)
                 return (Results.Null, null);
-            if (request.Attachment.IsEmpty())
+
+            if (request.Attachment == null || request.Attachment.Count < 1)
                 return (Results.Success, null);
-            byte[] bytes = Convert.FromBase64String(request.Attachment.Str());
-            if (bytes.Length == 0)
-                return (Results.Failed, "Make sure selected image is invalid.");
-            var res = await PDFService.SendAsync(bytes);
-            bytes.Clear();
-            if (res == null)
-                return (Results.Failed, "Please contact to admin.");
-            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
-            if (json["status"].Str() != "error")
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < request.Attachment.Count; i++)
             {
-                request.URLAttachment = json["url"].Str();
+                var attachment = request.Attachment[i];
+                byte[] bytes = Convert.FromBase64String(attachment.Str());
+                if (bytes.Length == 0)
+                    return (Results.Failed, "Make sure selected image is valid.");
+
+                var res = await ImgService.SendAsync(bytes);
+                bytes.Clear();
+                if (res == null)
+                    return (Results.Failed, "Please contact to admin.");
+
+                var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                if (json["status"].Str() != "error")
+                {
+                    string url = json["url"].Str();
+                    sb.Append($"<item LNK_URL=\"{ url }\" />");
+                    request.Attachment[i] = url;
+                }
+                else return (Results.Failed, "Make sure selected image is valid.");
+            }
+            if (sb.Length > 0)
+            {
+                request.iAttachments = sb.ToString();
                 return (Results.Success, null);
             }
-            return (Results.Null, "Make sure selected image is invalid");
+            return (Results.Failed, "Make sure selected image is valid.");
         }
         private async Task<(Results result, string message)> validityReport(RequestDocument request)
         {

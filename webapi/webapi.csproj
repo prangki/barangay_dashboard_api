@@ -9,10 +9,19 @@
     <NoWarn>$(NoWarn);NU1605</NoWarn>
     <UserSecretsId>c7058193-5fd8-495e-acfd-63f309f3cde5</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="App\Aggregates\STLPartylistDashboard\ActiveAccount\**" />
+    <Compile Remove="App\Aggregates\STLPartylistDashboard\Common\**" />
+    <Content Remove="App\Aggregates\STLPartylistDashboard\ActiveAccount\**" />
+    <Content Remove="App\Aggregates\STLPartylistDashboard\Common\**" />
+    <EmbeddedResource Remove="App\Aggregates\STLPartylistDashboard\ActiveAccount\**" />
+    <EmbeddedResource Remove="App\Aggregates\STLPartylistDashboard\Common\**" />
+    <None Remove="App\Aggregates\STLPartylistDashboard\ActiveAccount\**" />
+    <None Remove="App\Aggregates\STLPartylistDashboard\Common\**" />
+  </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="App\Aggregates\STLPartylistDashboard\ActiveAccount\" />
-    <Folder Include="App\Aggregates\STLPartylistDashboard\Common\" />
     <Folder Include="App\ResponseModel\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
