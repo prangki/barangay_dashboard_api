@@ -489,12 +489,12 @@ namespace webapi.App.Aggregates.Common
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             o.Num_Row = data["Num_Row"].Str();
             o.PL_ID = data["PL_ID"].Str();
-            o.PSN_CD = data["PSN_CD"].Str();
-            o.PSN_NM = data["PSN_NM"].Str();
+            //o.PSN_CD = data["PSN_CD"].Str();
+            //o.PSN_NM = data["PSN_NM"].Str();
             o.PGRP_ID = data["PGRP_ID"].Str();
             o.PGRP_NM = data["PGRP_NM"].Str();
             o.PLTCL_NM = data["PLTCL_NM"].Str();
-            o.PSN_NM = data["PSN_NM"].Str();
+            //o.PSN_NM = data["PSN_NM"].Str();
             o.USR_ID = data["USR_ID"].Str();
             o.ACT_ID = data["ACT_ID"].Str();
             o.ACT_TYP = data["ACT_TYP"].Str();
@@ -537,22 +537,27 @@ namespace webapi.App.Aggregates.Common
             o.PlaceOfBirth = data["PLC_BRT"].Str();
             o.BLD_TYP = data["BLD_TYP"].Str();
             o.NATNLTY = textInfo.ToTitleCase(textInfo.ToLower(data["NATNLTY"].Str()));
+            o.Profession = data["PROFESSION"].Str();
             o.OCCPTN = textInfo.ToTitleCase(textInfo.ToLower(data["OCCPTN"].Str()));
             o.SKLLS = textInfo.ToTitleCase(textInfo.ToLower(data["SKLLS"].Str()));
             o.PRF_PIC = data["PRF_PIC"].Str();
+            o.FR_ID = data["FR_ID"].Str();
+            o.MO_ID = data["MO_ID"].Str();
             o.FrFirstName = data["FR_FRST_NM"].Str();
             o.FrMiddleInitial = data["FR_MI_NM"].Str();
             o.FrLastname = data["FR_LST_NM"].Str();
             o.FrFullName = data["FR_FLL_NM"].Str();
             o.FrContactNo = data["FR_MOB_NO"].Str();
             o.FrEmail = data["FR_EML_ADD"].Str();
+            o.FrAddress = data["FR_PRSNT_ADDRESS"].Str();
             o.MoFirstname = data["MOM_FRST_NM"].Str();
             o.MoMiddleInitial = data["MOM_MI_NM"].Str();
             o.MoLastname = data["MOM_LST_NM"].Str();
             o.MoFullName = data["MOM_FLL_NM"].Str();
             o.MoContactNo = data["MOM_MOB_NO"].Str();
             o.MoEmail = data["MOM_EML_ADD"].Str();
-            o.isEmployed = data["isEmployed"].Str();
+            o.MoAddress = data["MOM_PRSNT_ADDRESS"].Str();
+            //o.isEmployed = data["isEmployed"].Str();
             o.SIGNATUREID = data["SIGNATUREID"].Str();
             o.S_BLCK = Convert.ToBoolean((data["S_BLCK"].Str() == "0") ? 0 : 1);
             o.Age = data["AGE"].Str();
@@ -562,6 +567,8 @@ namespace webapi.App.Aggregates.Common
             o.WChildren = (data["WDependent"].Str() == "") ? 0 : Convert.ToInt32(data["WDependent"].Str());
             o.LivingWParent = (data["LivingWParent"].Str() == "") ? 0 : Convert.ToInt32(data["LivingWParent"].Str());
             o.ParentResideBrgy = (data["Parent_Reside_Brgy"].Str() == "") ? 0 : Convert.ToInt32(data["Parent_Reside_Brgy"].Str());
+            o.TotalRequest = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REQ"].Str());
+            o.TotalReceived = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REC"].Str());
             return o;
         }
 
@@ -608,6 +615,38 @@ namespace webapi.App.Aggregates.Common
         }
 
 
+        public static IEnumerable<dynamic> GetSignatoryList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetSignatory_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetSignatory_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_Signatory_List(e));
+        }
+        public static IDictionary<string, object> Get_Signatory_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.Name = data["NAME"].Str();
+            o.SignatureURL = data["SIGNATURE"].Str();
+            o.Position = textInfo.ToTitleCase(textInfo.ToLower(data["POSITION"].Str()));
+            return o;
+        }
+
+
         public static IDictionary<string, object> EventNofitication(IDictionary<string, object> data)
         {
             dynamic o = Dynamic.Object;
@@ -630,6 +669,7 @@ namespace webapi.App.Aggregates.Common
             catch { }
             return o;
         }
+
 
         public static IEnumerable<dynamic> GetAllGovenmentValidIDList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
         {
@@ -663,7 +703,42 @@ namespace webapi.App.Aggregates.Common
             o.SEQ_NO = data["SEQ_NO"].Str();
             o.GovValID = data["GOVVAL_ID"].Str();
             o.GovernmentID_NO = data["GOVVAL_ID_NO"].Str();
+            o.Base64StringAttachment = data["Base64StringAttachment"].Str();
             o.Attachment = data["ATTACHMENT"].Str();
+            o.NewUpload = data["NewUpload"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAllGovenmentIDList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllGovenmentID_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllGovenmentID_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllGovenmentID_List(e));
+        }
+        public static IDictionary<string, object> Get_AllGovenmentID_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Num_Row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.ID = data["ID"].Str();
+            o.GovernmentID_NM = data["GOVERNMENTID"].Str();
             return o;
         }
     }

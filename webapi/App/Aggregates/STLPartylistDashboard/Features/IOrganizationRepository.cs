@@ -18,7 +18,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     [Service.ITransient(typeof(OrganizationRepository))]
     public interface IOrganizationRepository
     {
-        Task<(Results result, object org)> Load_Organization();
+        Task<(Results result, object org)> Load_Organization(string organization);
+        Task<(Results result, string message, string orgid)> OrganizationAsync(Organization req, bool isUpdate = false);
     }
     public class OrganizationRepository:IOrganizationRepository
     {
@@ -31,16 +32,43 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             _repo = repo;
         }
 
-        public async Task<(Results result, object org)> Load_Organization()
+        public async Task<(Results result, object org)> Load_Organization(string organization)
         {
             var result = _repo.DSpQueryMultiple($"dbo.spfn_ORGZ0C", new Dictionary<string, object>()
             {
                 {"parmplid",account.PL_ID },
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsrch", organization }
             });
             if (result != null)
                 return (Results.Success, STLSubscriberDto.GetAllOrganizationList(result.Read<dynamic>()));
             return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message, string orgid)> OrganizationAsync(Organization req, bool isUpdate = false)
+        {
+            var results = _repo.DSpQueryMultiple((isUpdate ? "dbo.spfn_ORGZ0B" : "dbo.spfn_ORGZ0A"), new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmorgzid", (isUpdate ? req.OrganizationID : "") },
+                {"parmorgnm", req.OrganizationNM },
+                {"parmorgabbr",req.OrganizatioAbbr },
+                {"parmorgest",req.Estabalished },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Succesfull save", row["ORG_ID"].Str());
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Organization already Registered.", null);
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!", null);
+            }
+            return (Results.Null, null, null);
         }
     }
 }

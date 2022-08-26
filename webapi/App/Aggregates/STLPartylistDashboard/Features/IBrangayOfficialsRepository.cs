@@ -20,6 +20,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message, String oflid)> BarangayOfficialAsync(BarangayOfficial request);
         Task<(Results result, String message)> UpdateBarangayOfficialAsync(BarangayOfficial request);
         Task<(Results result, object brgyofl)> LoadMBarangayOfficial(FilterRequest request);
+        Task<(Results result, String message)> ElectedOfficialEndTerm(BarangayOfficial request);
     }
     public class BarangayOfficialsRepository:IBrangayOfficialsRepository
     {
@@ -54,8 +55,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Success, "Successfully save", row["BRGY_OFL_ID"].Str());
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check Details, Please try again", null);
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Please End the term of Previous Position, Please try again", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Elected Barngay Official already exist, Please try again", null);
+                    return (Results.Failed, "Please End the term of Previous Elected Personnel of this Position, Please try again", null);
             }
             return (Results.Null, null, null);
         }
@@ -98,8 +101,31 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Success, "Successfully save");
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check Details, Please try again");
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Please End the term of Previous Position, Please try again");
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Elected Barngay Official already exist, Please try again");
+                    return (Results.Failed, "Please End the term of Previous Elected Personnel of this Position, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ElectedOfficialEndTerm(BarangayOfficial request)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BRGYOFL0C", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid",request.Userid },
+                {"parmoptrid",account.USR_ID }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully End Term");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
             }
             return (Results.Null, null);
         }

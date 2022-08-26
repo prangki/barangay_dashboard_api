@@ -71,7 +71,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
 
             var reporesult = await _repo.MembershipAsync(request, true);
             if (reporesult.result == Results.Success)
-                return Ok(new { result = reporesult.result, Message = reporesult.message, AcctID = reporesult.AcctID });
+                return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID ,AcctID = reporesult.AcctID });
             else if (reporesult.result == Results.Failed)
                 return Ok(new { result = reporesult.result, Message = reporesult.message });
             return NotFound();
@@ -89,7 +89,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
 
             var reporesult = await _repo.MembershipAsync(request,true);
             if (reporesult.result == Results.Success)
-                return Ok(new { result = reporesult.result, Message = reporesult.message, AcctID = reporesult.AcctID });
+                return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID, AcctID = reporesult.AcctID });
             else if (reporesult.result == Results.Failed)
                 return Ok(new { result = reporesult.result, Message = reporesult.message });
             return NotFound();
@@ -123,6 +123,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(result.account);
             return NotFound();
         }
+
         [HttpPost]
         [Route("householdaccount")]
         public async Task<IActionResult> Task01(string search)
@@ -193,6 +194,78 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("children")]
+        public async Task<IActionResult> Task0j(string userid)
+        {
+            var result = await _repo.Load_Children(userid);
+            if (result.result == Results.Success)
+                return Ok(result.children);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("educatt")]
+        public async Task<IActionResult> Task0k(string userid)
+        {
+            var result = await _repo.Load_EducationalAttainment(userid);
+            if (result.result == Results.Success)
+                return Ok(result.educatt);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("emphist")]
+        public async Task<IActionResult> Task0l(string userid)
+        {
+            var result = await _repo.Load_EmploymentHistory(userid);
+            if (result.result == Results.Success)
+                return Ok(result.emphist);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("residence/organization")]
+        public async Task<IActionResult> Task0m(string userid)
+        {
+            var result = await _repo.Load_Organization(userid);
+            if (result.result == Results.Success)
+                return Ok(result.orgz);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("profilepicture/history")]
+        public async Task<IActionResult> Task0n(string userid)
+        {
+            var result = await _repo.Load_ProfilePictureHistory(userid);
+            if (result.result == Results.Success)
+                return Ok(result.prfpic);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("proffesion")]
+        public async Task<IActionResult> Task0o()
+        {
+            var result = await _repo.Load_Profession();
+            if (result.result == Results.Success)
+                return Ok(result.prof);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("occupation")]
+        public async Task<IActionResult> Task0p()
+        {
+            var result = await _repo.Load_Occupation();
+            if (result.result == Results.Success)
+                return Ok(result.occ);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("skills")]
+        public async Task<IActionResult> Task0q()
+        {
+            var result = await _repo.Load_Skills();
+            if (result.result == Results.Success)
+                return Ok(result.skl);
+            return NotFound();
+        }
         private async Task<(Results result, string message)> validity(STLMembership request)
         {
             if (request == null)

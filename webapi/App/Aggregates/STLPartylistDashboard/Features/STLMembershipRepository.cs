@@ -18,7 +18,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     [Service.ITransient(typeof(STLMembershipRepository))]
     public interface ISTLMembershipRepository
     {
-        Task<(Results result, String message, String AcctID)> MembershipAsync(STLMembership membership, bool isUpdate = false);
+        Task<(Results result, String message, String UserID, String AcctID)> MembershipAsync(STLMembership membership, bool isUpdate = false);
         Task<(Results result, object account)> LoadAccount(string search);
         Task<(Results result, object account)> LoadAccountSearch(string search);
         Task<(Results result, object account)> LoadAccountAccess();
@@ -30,6 +30,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> UpdateValidityAccount(ValidityAccount request);
         Task<(Results result, string message)> ChangeAccounttype(ChangeAccountType request);
         Task<(Results result, object parent)> Load_Parent(FilterRequest request);
+        Task<(Results result, object children)> Load_Children(string userid);
+        Task<(Results result, object educatt)> Load_EducationalAttainment(string userid);
+        Task<(Results result, object emphist)> Load_EmploymentHistory(string userid);
+        Task<(Results result, object orgz)> Load_Organization(string userid);
+        Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string userid);
+        Task<(Results result, object prof)> Load_Profession();
+        Task<(Results result, object occ)> Load_Occupation();
+        Task<(Results result, object skl)> Load_Skills();
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -121,22 +129,26 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, string message, string AcctID)> MembershipAsync(STLMembership membership, bool isUpdate = false)
+        public async Task<(Results result, string message, string UserID, string AcctID)> MembershipAsync(STLMembership membership, bool isUpdate = false)
         {
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-            var results = _repo.DSpQueryMultiple("dbo.spfn_BDABDBCAACBB02", new Dictionary<string, object>()
+            //var results = _repo.DSpQueryMultiple("dbo.spfn_BDABDBCAACBB02", new Dictionary<string, object>()
+            var results = _repo.DSpQueryMultiple("dbo.spfn_BDABDBBEBCAACBB02", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID },
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",membership.PLID },
+                {"parmpgrpid",membership.PGRPID },
                 {"parmfnm", textInfo.ToTitleCase(membership.Firstname) },
                 {"parmlnm",textInfo.ToTitleCase(membership.Lastname) },
                 {"parmmnm",textInfo.ToTitleCase(membership.Middlename) },
                 {"parmnnm",textInfo.ToTitleCase(membership.Nickname) },
+
                 {"parmregistervoter",membership.RegisterVoter },
                 {"parmprecentno", membership.PrecentNumber},
                 {"parmclusterno", membership.ClusterNumber },
+
                 {"parmmobno",membership.MobileNumber },
                 {"parmemladd",membership.EmailAddress },
+
                 {"parmwithdependent", membership.WChildren },
                 {"parmwithdisability",membership.WDisability },
                 {"parmtypedisability",membership.TypeDisability },
@@ -154,6 +166,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpartnerid", membership.PartnerID },
                 {"parmntnlty",textInfo.ToTitleCase(membership.Nationality) },
                 {"parmctznshp",textInfo.ToTitleCase(membership.Citizenship) },
+                {"parmprofession", membership.Profession },
                 {"parmoccptn",textInfo.ToTitleCase(membership.Occupation) },
                 {"parmsklls",textInfo.ToTitleCase(membership.Skills) },
                 {"parmheight", membership.Height },
@@ -183,13 +196,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmmo_contactno", membership.MoContactNo },
                 {"parmmo_email", membership.MoEmail },
 
-                {"parmchildren", membership.iChildren },
+                //{"parmchildren", membership.iChildren },
                 {"parmeducationattainment", membership.iEducationalAttainment },
                 {"parmvalidgovernmentid", membership.iValidGovernmentID },
                 {"parmorganization", membership.iOrganization },
                 {"parmemployementhistory", membership.iEmployement },
 
+                {"parmisprfpicChange", membership.isProfilePictureChange },
                 {"parmprfpic",membership.ImageUrl },
+                {"parmisSignatureChange", membership.isSignatureChange },
                 {"parmImgUrl",membership.ImageUrl },
                 {"parmsignature",membership.SignatureURL },
 
@@ -202,17 +217,17 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull save",row["ACT_ID"].Str());
+                    return (Results.Success, "Succesfull save", row["USR_ID"].Str(), row["ACT_ID"].Str());
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Invalid Mobile Number", null);
+                    return (Results.Failed, "Invalid Mobile Number", null, null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Mobile Number already exist", null);
+                    return (Results.Failed, "Mobile Number already exist", null, null);
                 else if (ResultCode == "4")
-                    return (Results.Failed, "You are already Register", null);
+                    return (Results.Failed, "You are already Register", null, null);
                 else if (ResultCode == "5")
-                    return (Results.Failed, "Username already exist", null);
+                    return (Results.Failed, "Username already exist", null, null);
             }
-            return (Results.Null, null, null);
+            return (Results.Null, null, null, null);
         }
 
         public async Task<(Results result, object access)> LoadUserAccess(string userid)
@@ -302,6 +317,107 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (results != null)
                 return (Results.Success, SubscriberDto.GetParentList(results, 100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object children)> Load_Children(string userid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BEBBDB0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", userid }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object emphist)> Load_EmploymentHistory(string userid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBEMPHST0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", userid }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object educatt)> Load_EducationalAttainment(string userid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBEDUCAT0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", userid }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object orgz)> Load_Organization(string userid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBORGZ0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", userid }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string userid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_PRFPIC0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", userid }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object prof)> Load_Profession()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBPROF", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object occ)> Load_Occupation()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBOCC0A", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object skl)> Load_Skills()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBSKLA", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (results != null)
+                return (Results.Success, results);
             return (Results.Null, null);
         }
     }

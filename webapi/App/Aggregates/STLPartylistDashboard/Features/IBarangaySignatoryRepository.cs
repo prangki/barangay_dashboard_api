@@ -18,6 +18,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, object signatory)> LoadSignatory();
         Task<(Results result, String message)> SignatoryAsync(BrgySignatory request);
+        Task<(Results result, Object sig)> Load_Signature(BarangaySignatory req);
+        Task<(Results result, Object col)> Load_Col_Signature();
     }
     public class BarangaySignatoryRepository:IBarangaySignatoryRepository
     {
@@ -108,6 +110,27 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 else if (ResultCode == "0")
                     return (Results.Failed, "Something wrong in your data, Please try again");
             }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object sig)> Load_Signature(BarangaySignatory req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYSIG0C", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmcolumname",req.ColName }
+            });
+            if (result != null)
+                return (Results.Success, SubscriberDto.GetSignatoryList(result,100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object col)> Load_Col_Signature()
+        {
+            var result = _repo.DQuery<dynamic>($"dbo.spnf_COLSIG0A");
+            if (result != null)
+                return (Results.Success, result);
             return (Results.Null, null);
         }
     }

@@ -59,6 +59,17 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { Status = "error", Message = repoResult.message });
             return NotFound();
         }
+        [HttpPost]
+        [Route("brgyofl/endterm")]
+        public async Task<IActionResult> Task04([FromBody] BarangayOfficial request)
+        {
+            var repoResult = await _repo.ElectedOfficialEndTerm(request);
+            if (repoResult.result == Results.Success)
+                return Ok(new { Status = "ok", Message = repoResult.message });
+            else if (repoResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = repoResult.message });
+            return NotFound();
+        }
 
     }
 }
