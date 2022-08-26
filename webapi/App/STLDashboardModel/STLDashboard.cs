@@ -247,4 +247,21 @@ namespace webapi.App.STLDashboardModel
         public string Docname;
         public string SummonDate;
     }
+
+    public class HouseDetails
+    {
+        public string HouseId;
+        public string HouseholdId;
+        public string FamilyId;
+        public string HouseholdUser;
+        public string NewFamilyHead;
+        public string FamilyMember;
+        public string NewFamilyMember;
+        public string HouseClassification;
+        public string SitioId;
+        public string HouseholderRelationship;
+        public string FamilyHeadRelationship;
+        public string HomeAddress;
+        public string CreatedBy;
+    }
 }
