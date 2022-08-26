@@ -637,7 +637,7 @@ namespace webapi.App.Aggregates.Common.Dto
             o.PL_ID = data["PL_ID"].Str();
             o.PGRP_ID = data["PGRP_ID"].Str();
             o.OrganizationID = data["ORG_ID"].Str();
-            o.OraganizationNM = data["ORG_NM"].Str();
+            o.OrganizationNM = data["ORG_NM"].Str();
             o.OrganizatioAbbr = data["ORG_ABBR"].Str();
             o.Estabalished = data["ORG_EST"].Str();
 

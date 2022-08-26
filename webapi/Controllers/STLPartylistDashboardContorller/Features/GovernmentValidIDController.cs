@@ -33,5 +33,37 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.govvalid);
             return NotFound();
         }
+        [HttpPost]
+        [Route("govid")]
+        public async Task<IActionResult> Task0b([FromBody] FilterRequest request)
+        {
+            var result = await _repo.Load_GovermentID(request);
+            if (result.result == Results.Success)
+                return Ok(result.govvalid);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("govid/new")]
+        public async Task<IActionResult> Task0a([FromBody] GovernmentValidID request)
+        {
+            var result = await _repo.GovernmentValidIDAsync(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message, govid = result.govid });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("govid/edit")]
+        public async Task<IActionResult> Task0b([FromBody] GovernmentValidID request)
+        {
+            var result = await _repo.GovernmentValidIDAsync(request, true);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message, govid = result.govid });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
     }
 }

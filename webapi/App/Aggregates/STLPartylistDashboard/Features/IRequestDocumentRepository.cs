@@ -18,12 +18,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     [Service.ITransient(typeof(RequestDocumentRepository))]
     public interface IRequestDocumentRepository
     {
-        Task<(Results result, String message, String reqdocid)> RequestDocumentAsync(RequestDocument request); 
+        Task<(Results result, String message, String reqdocid)> RequestDocumentAsync(RequestDocument request);
+        Task<(Results result, String message, String reqdocid, String controlno)> ResidenceRequestDocumentAsync(RequestDocument request);
         Task<(Results result, String message, String reqdocid)> RequestBrgyClearanceAsync(RequestDocument request);
         Task<(Results result, String message, String reqdocid)> UpdateRequestDocumentAsync(RequestDocument request);
         Task<(Results result, String message, String reqdocid)> UpdateRequestBrgyClearanceAsync(RequestDocument request);
         Task<(Results result, String message)> PrintRequestDocumentAsync(RequestDocument request);
         Task<(Results result, object reqdoc)> LoadRequestDocument(FilterRequest request);
+        Task<(Results result, object reqdoc)> LoadIndividualRequestDocument(FilterRequest request);
         Task<(Results result, object reqdoc)> LoadIssuesConcernAttachment(RequestDocument request);
         Task<(Results result, String message)> ReceivedRequestDocument(RequestDocument request);
         Task<(Results result, object purpose)> LoadPurpose();
@@ -331,6 +333,62 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
             return (Results.Null, null);
 
+        }
+
+        public async Task<(Results result, object reqdoc)> LoadIndividualRequestDocument(FilterRequest request)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_REQ_DOC0C01", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", request.Userid },
+                {"parmstatus", request.Status },
+                {"parmrownum", request.num_row},
+                {"parmsearch", request.Search}
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetAllRequestDocumentList(result.Read<dynamic>(), request.Userid, 100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message, string reqdocid, string controlno)> ResidenceRequestDocumentAsync(RequestDocument request)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_REQ_DOC0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmdoctypeid", request.DoctypeID },
+                {"parmcategorydocument", request.Category_Document },
+                {"parmpapplicationdate", request.ApplicationDate },
+                {"parmbizname", request.BusinessName},
+                {"parmbizaddress",request.BusinessAddress },
+                {"parmbizownername",request.BusinessOwnerName },
+                {"parmbizowneraddress", request.BusinessOwnerAddress },
+                {"parmbiztype", request.Type },
+                {"parmrequestorid", request.RequestorID },
+                {"parmrequestorname", request.RequestorNM },
+                {"parmcategory", request.CategoryID },
+                {"parmotherdocument", request.OTRDocumentType },
+                {"parmxattchmnt",request.iAttachments },
+                {"parmctcno", request.CTCNo },
+                {"parmorno", request.ORNO },
+                {"parmamount", request.Amount },
+                {"parmisfree", request.isFree },
+                {"parmstatus", request.STATUS },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save", row["REQ_DOC_ID"].Str(), row["CNTRL_NO"].Str());
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again", null, null);
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Elected Barngay Official already exist, Please try again", null, null);
+            }
+            return (Results.Null, null, null, null);
         }
     }
 }

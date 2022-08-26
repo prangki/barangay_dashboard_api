@@ -35,9 +35,19 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.signatory);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("barangaysignatory")]
+        public async Task<IActionResult> execute0a([FromBody] BarangaySignatory req)
+        {
+            var result = await _repo.Load_Signature(req);
+            if (result.result == Results.Success)
+                return Ok(result.sig);
+            return NotFound();
+        }
         [HttpPost]
         [Route("signatory/update")]
-        public async Task<IActionResult> execute0a([FromBody] BrgySignatory request)
+        public async Task<IActionResult> execute0b([FromBody] BrgySignatory request)
         {
             var valsig = await validity(request);
             if (valsig.result == Results.Failed)
@@ -53,6 +63,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("signaturecol")]
+        public async Task<IActionResult> execute0c()
+        {
+            var result = await _repo.Load_Col_Signature();
+            if (result.result == Results.Success)
+                return Ok(result.col);
+            return NotFound();
+        }
         private async Task<(Results result, string message)> validity(BrgySignatory request)
         {
             if (request == null)

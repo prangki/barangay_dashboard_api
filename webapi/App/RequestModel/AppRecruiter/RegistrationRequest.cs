@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace webapi.App.RequestModel.AppRecruiter
 {
@@ -65,6 +66,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string SequnceNumber;
         public string HomeAddress;
         public string PresentAddress;
+        public string Profession;
         public string Occupation;
         public string Skills;
         public string Height;
@@ -89,8 +91,10 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Userpassword;
 
 
+        public int isProfilePictureChange;
         public string Img;
         public string ImageUrl;
+        public int isSignatureChange;
         public string SignatureURL;
         //public string psncd;
 
@@ -283,6 +287,11 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Brgy_Chief_Tanod_sig_URL;
         public string Tanod_Events;
     }
+    public class BarangaySignatory
+    {
+        public string ColName;
+        public string ColSignature;
+    }
     public class BusinesseRequest
     {
         public string BussinessID;
@@ -325,4 +334,19 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Barangay;
         public string IssuedLocation;
     }
+
+    public class Organization
+    {
+        public string OrganizationID;
+        public string OrganizationNM;
+        public string OrganizatioAbbr;
+        public string Estabalished;
+    }
+
+    public class GovernmentValidID
+    {
+        public string ID;
+        public string GovernmentID;
+    }
+
 }

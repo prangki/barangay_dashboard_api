@@ -190,6 +190,14 @@ namespace webapi.App.STLDashboardModel
         public string RankNo;
         public string BrgyOfficialID;
     }
+    public class Profile_Picture
+    {
+        public string PL_ID;
+        public string PGRP_ID;
+        public string Userid;
+        public string ImageURL;
+        public string ImageBase64;
+    }
     public class RequestDocument
     {
         public string ReqDocID;

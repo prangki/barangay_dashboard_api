@@ -38,6 +38,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.reqdoc);
             return NotFound();
         }
+
         [HttpPost]
         [Route("reqdoc/new")]
         public async Task<IActionResult> Task02([FromBody] RequestDocument request)
@@ -69,6 +70,36 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("reqdoc/newdoc")]
+        public async Task<IActionResult> Task14([FromBody] RequestDocument request)
+        {
+            var valResult = await validity(request);
+            if (valResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valResult.message });
+            if (valResult.result != Results.Success)
+                return NotFound();
+
+            var repoResult = await _repo.ResidenceRequestDocumentAsync(request);
+
+            if (repoResult.result == Results.Success)
+            {
+                if (request.isFree == "1")
+                {
+                    FilterRequest f = new FilterRequest();
+                    f.Search = repoResult.reqdocid;
+                    f.num_row = "0";
+                    f.Status = "1";
+                    var result = await _repo.LoadRequestDocument(f);
+                    return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, requestdocument = result.reqdoc, Message = repoResult.message });
+                }
+                return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, ControlNo=repoResult.controlno, Message = repoResult.message });
+            }
+
+            else if (repoResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = repoResult.message });
+            return NotFound();
+        }
 
         [HttpPost]
         [Route("reqdoc/edit")]
@@ -213,6 +244,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             var result = await _repo.LoadBusinessType(businessname);
             if (result.result == Results.Success)
                 return Ok(result.businesstype);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reqdoc/account")]
+        public async Task<IActionResult> Task13([FromBody] FilterRequest request)
+        {
+            var result = await _repo.LoadIndividualRequestDocument(request);
+            if (result.result == Results.Success)
+                return Ok(result.reqdoc);
             return NotFound();
         }
 
