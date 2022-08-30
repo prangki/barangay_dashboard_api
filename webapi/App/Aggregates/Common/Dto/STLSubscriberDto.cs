@@ -544,7 +544,8 @@ namespace webapi.App.Aggregates.Common.Dto
             o.ProfilePicture = data["PRF_PIC"].Str();
             o.PresentAddress = textInfo.ToUpper(data["PRSNT_ADDR"].Str());
             o.URLAttachment = data["URL_ATTACHMENT"].Str();
-            o.OTRDocumentType = data["OTR_DOC_ID"].Str();
+            o.OTR_Document_ID = data["OTR_DOC_ID"].Str();
+            o.OTR_Document_Type = data["OTR_DOC_TYPE"].Str();
             o.OTRDocType = data["DOC_TYPE"].Str();
             o.OTRDocContent = data["DOC_Content"].Str();
             o.OTRCategory = data["OTR_CATEGORY"].Str();
