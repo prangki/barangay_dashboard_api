@@ -80,6 +80,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
+                    {"parmhseownr", details.HouseOwner},
                     {"parmhseclsfctn", details.HouseClassification},
                     {"parmsitloc", details.SitioId},
                     {"parmhmaddr", details.HomeAddress},

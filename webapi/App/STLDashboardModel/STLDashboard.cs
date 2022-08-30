@@ -266,6 +266,7 @@ namespace webapi.App.STLDashboardModel
         public string NewFamilyHead;
         public string FamilyMember;
         public string NewFamilyMember;
+        public string HouseOwner;
         public string HouseClassification;
         public string SitioId;
         public string HouseholderRelationship;
