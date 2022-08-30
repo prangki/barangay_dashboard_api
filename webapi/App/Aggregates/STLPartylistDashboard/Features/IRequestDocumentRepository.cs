@@ -175,7 +175,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmpapplicationdate", request.ApplicationDate },
                 {"parmdoctypeid", request.DoctypeID },
-                {"@parmcategorydocument", request.Category_Document },
+                {"parmcategorydocument", request.Category_Document },
                 {"parmrequestorid", request.RequestorID },
                 {"parmrequestorname", request.RequestorNM },
                 {"parmpurpose", request.Purpose },
@@ -353,13 +353,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
         public async Task<(Results result, string message, string reqdocid, string controlno)> ResidenceRequestDocumentAsync(RequestDocument request)
         {
-            var result = _repo.DSpQuery<dynamic>($"spfn_REQ_DOC0A", new Dictionary<string, object>()
+            var result = _repo.DSpQuery<dynamic>($"spfn_REQ_DOC0A02", new Dictionary<string, object>()
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
+                {"parmpapplicationdate", request.ApplicationDate },
                 {"parmdoctypeid", request.DoctypeID },
                 {"parmcategorydocument", request.Category_Document },
-                {"parmpapplicationdate", request.ApplicationDate },
+                {"parmpurpose", request.Purpose },
+                {"parmbizid", request.BusinessID },
                 {"parmbizname", request.BusinessName},
                 {"parmbizaddress",request.BusinessAddress },
                 {"parmbizownername",request.BusinessOwnerName },

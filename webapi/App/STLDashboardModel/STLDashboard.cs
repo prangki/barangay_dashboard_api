@@ -202,6 +202,7 @@ namespace webapi.App.STLDashboardModel
     {
         public string ReqDocID;
         public string DoctypeID;
+        public string BusinessID;
         public string BusinessName;
         public string BusinessAddress;
         public string Purpose;

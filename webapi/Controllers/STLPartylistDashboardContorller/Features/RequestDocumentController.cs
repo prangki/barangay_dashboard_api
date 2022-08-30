@@ -91,7 +91,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                     f.num_row = "0";
                     f.Status = "1";
                     var result = await _repo.LoadRequestDocument(f);
-                    return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, requestdocument = result.reqdoc, Message = repoResult.message });
+                    return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, requestdocument = result.reqdoc, ControlNo=repoResult.controlno, Message = repoResult.message });
                 }
                 return Ok(new { Status = "ok", ReqDocID = repoResult.reqdocid, ControlNo=repoResult.controlno, Message = repoResult.message });
             }
