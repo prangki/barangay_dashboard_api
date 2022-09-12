@@ -274,4 +274,9 @@ namespace webapi.App.STLDashboardModel
         public string HomeAddress;
         public string CreatedBy;
     }
+
+    public class AppointDetails
+    {
+        public string JsonString;
+    }
 }
