@@ -257,6 +257,64 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("purpose/new")]
+        public async Task<IActionResult> Task14([FromBody] PuposeDetails request)
+        {
+            var result = await _repo.PurposeAsyn(request);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, PurposeID = result.purposeid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("purpose/edit")]
+        public async Task<IActionResult> Task15([FromBody] PuposeDetails request)
+        {
+            var result = await _repo.PurposeAsyn(request, true);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, PurposeID = result.purposeid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        [Route("certtype/new")]
+        public async Task<IActionResult> Task16([FromBody] CertificateTypeDetails request)
+        {
+            var result = await _repo.CertificateTypeAsyn(request);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, CertTypID = result.certtypid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("/certtype/edit")]
+        public async Task<IActionResult> Task17([FromBody] CertificateTypeDetails request)
+        {
+            var result = await _repo.CertificateTypeAsyn(request, true);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, CertTypID = result.certtypid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("certtype")]
+        public async Task<IActionResult> Task18()
+        {
+            var result = await _repo.LoadCertificateType();
+            if (result.result == Results.Success)
+                return Ok(result.certtyp);
+            return NotFound();
+        }
+
+
         private async Task<(Results result, string message)> validity(RequestDocument request)
         {
             if (request == null)

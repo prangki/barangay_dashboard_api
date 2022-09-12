@@ -274,4 +274,14 @@ namespace webapi.App.STLDashboardModel
         public string HomeAddress;
         public string CreatedBy;
     }
+    public class PuposeDetails
+    {
+        public string PurposeID;
+        public string PurposeDescription;
+    }
+    public class CertificateTypeDetails
+    {
+        public string CertTypID;
+        public string CertTypDescription;
+    }
 }

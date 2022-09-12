@@ -192,9 +192,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmmo_firstname", membership.MoFirstname },
                 {"parmmo_middlename", membership.MoMiddleInitial },
                 {"parmmo_lastname", membership.MoLastname },
-                {"parmmo_address", membership.MoAddress },
                 {"parmmo_contactno", membership.MoContactNo },
                 {"parmmo_email", membership.MoEmail },
+                {"parmmo_address", membership.MoAddress },
+
+
+                {"parmmonthlyincone", membership.MonthlyIncome },
+                {"parmresidenttype", membership.ResidentType },
+                {"parmdatereside", membership.DateReside },
+                {"parmcompleteaddress", membership.CompleteAddress },
+                {"parmpermanentresident", membership.PermanentResidence },
+                {"parmseniorcitizenmember", membership.SeniorCitizenMember },
+                {"parmsingleparent", membership.SingleParent },
+                {"parmindigentfamily", membership.IndigentFamily },
 
                 //{"parmchildren", membership.iChildren },
                 {"parmeducationattainment", membership.iEducationalAttainment },

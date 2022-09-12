@@ -569,6 +569,18 @@ namespace webapi.App.Aggregates.Common
             o.ParentResideBrgy = (data["Parent_Reside_Brgy"].Str() == "") ? 0 : Convert.ToInt32(data["Parent_Reside_Brgy"].Str());
             o.TotalRequest = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REQ"].Str());
             o.TotalReceived = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REC"].Str());
+
+            //o.PermanentResidence = (data["PERM_RES"].Str() == "") ? 0 : Convert.ToInt32(data["PERM_RES"].Str());
+
+            o.PermanentResidence = (data["PERM_RES"].Str() == "") ? 0 : Convert.ToInt32(data["PERM_RES"]);
+            o.MonthlyIncome = data["MON_INC"].Str();
+            o.ResidentType = data["TYP_RES"].Str();
+            o.DateReside = data["DT_RES"].Str();
+            o.CompleteAddress = data["CMPLT_ADDRESS"].Str();
+            o.SeniorCitizenMember = (data["SR_CIT"].Str() == "") ? 0 : Convert.ToInt32(data["SR_CIT"]);
+            o.SingleParent = (data["SGL_PAR"].Str() == "") ? 0 : Convert.ToInt32(data["SGL_PAR"]);
+            o.IndigentFamily = (data["IND_FAM"].Str() == "") ? 0 : Convert.ToInt32(data["IND_FAM"]);
+
             return o;
         }
 

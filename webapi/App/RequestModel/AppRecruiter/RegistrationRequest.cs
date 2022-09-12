@@ -114,16 +114,26 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string FrMiddleInitial;
         public string FrLastname;
         public string FrFullName;
-        public string FrAddress;
         public string FrContactNo;
         public string FrEmail;
+        public string FrAddress;
+
         public string MoFirstname;
         public string MoMiddleInitial;
         public string MoLastname;
         public string MoFullName;
-        public string MoAddress;
         public string MoContactNo;
         public string MoEmail;
+        public string MoAddress;
+
+        public string MonthlyIncome;
+        public int PermanentResidence;
+        public int SeniorCitizenMember;
+        public int SingleParent;
+        public int IndigentFamily;
+        public string ResidentType;
+        public string DateReside;
+        public string CompleteAddress;
 
         public string iChildren;
         public string iValidGovernmentID;
@@ -347,6 +357,31 @@ namespace webapi.App.RequestModel.AppRecruiter
     {
         public string ID;
         public string GovernmentID;
+    }
+    public class TemplateType
+    {
+        public string TemplateTypeID;
+        public string Description;
+    }
+    public class ResidentType
+    {
+        public string RestTypId;
+        public string Description;
+    }
+    public class TemplateDocument
+    {
+        public string TemplateTypeID;
+        public string TemplateDocID;
+        public string Description;
+        public string TemplateDocContent;
+        public string iTagline;
+    }
+    public class ItemDescription
+    {
+        public string DescriptionID;
+        public string TPLID;
+        public string TP_ItemDescription;
+        public string Item_Description;
     }
 
 }

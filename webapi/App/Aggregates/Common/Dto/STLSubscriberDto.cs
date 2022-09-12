@@ -180,9 +180,43 @@ namespace webapi.App.Aggregates.Common.Dto
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
             o.PLID = data["PL_ID"].Str();
             o.PGRPID = data["PGRP_ID"].Str();
+            o.PurposeId = data["PURP_ID"].Str();
             o.Purpose = data["Purpose"].Str();
             return o;
         }
+
+
+        public static IEnumerable<dynamic> GetCertificateTypeList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetCertificateType_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetCertificateType_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_CertificateType_List(e));
+        }
+        public static IDictionary<string, object> Get_CertificateType_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["PL_ID"].Str();
+            o.PGRPID = data["PGRP_ID"].Str();
+            o.CertificateTypeId = data["CERTTYP_ID"].Str();
+            o.CertificateType = data["CertificatType"].Str();
+            return o;
+        }
+
+
 
         public static IEnumerable<dynamic> GetBusinessNameList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
         {

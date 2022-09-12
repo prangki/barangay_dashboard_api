@@ -1,0 +1,169 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using webapi.App.Aggregates.Common;
+using webapi.App.Aggregates.STLPartylistDashboard.Features;
+using webapi.App.Aggregates.SubscriberAppAggregate.Common;
+using webapi.App.RequestModel.AppRecruiter;
+using webapi.App.RequestModel.Common;
+
+namespace webapi.Controllers.STLPartylistDashboardContorller.Features
+{
+    [Route("app/v1/stldashboard")]
+    [ApiController]
+    [ServiceFilter(typeof(SubscriberAuthenticationAttribute))]
+    public class TemplateController:ControllerBase
+    {
+        private readonly IConfiguration _config;
+        private readonly ITemplateRepository _repo;
+        public TemplateController(IConfiguration config, ITemplateRepository repo)
+        {
+            _config = config;
+            _repo = repo;
+        }
+        [HttpPost]
+        [Route("templatetype")]
+        public async Task<IActionResult> Task0a()
+        {
+            var result = await _repo.Load_TemplateType();
+            if (result.result == Results.Success)
+                return Ok(result.tpl);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("templatetype/new")]
+        public async Task<IActionResult> Task0b([FromBody] TemplateType req)
+        {
+            var result = await _repo.TemplateTypeAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, TPLID = result.tplid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("templatetype/edit")]
+        public async Task<IActionResult> Task0c([FromBody] TemplateType req)
+        {
+            var result = await _repo.TemplateTypeAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, TPLID = result.tplid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+
+
+        [HttpPost]
+        [Route("templatedoc/tagline")]
+        public async Task<IActionResult> Task0d1(string templateid)
+        {
+            var result = await _repo.Load_Tagline(templateid);
+            if (result.result == Results.Success)
+                return Ok(result.tagline);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("templatedoc")]
+        public async Task<IActionResult> Task0d(string templateid)
+        {
+            var result = await _repo.Load_TemplateDoc(templateid);
+            if (result.result == Results.Success)
+                return Ok(result.tpl);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("templatedoc/new")]
+        public async Task<IActionResult> Task0e([FromBody] TemplateDocument req)
+        {
+            var result = await _repo.TemplateDocAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, TPLID = result.tplid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("templatedoc/edit")]
+        public async Task<IActionResult> Task0f([FromBody] TemplateDocument req)
+        {
+            var result = await _repo.TemplateDocAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, TPLID = result.tplid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+
+
+        [HttpPost]
+        [Route("taglineitem")]
+        public async Task<IActionResult> Task0g([FromBody] ItemDescription req)
+        {
+            var result = await _repo.Load_ItemTab(req);
+            if (result.result == Results.Success)
+                return Ok(result.item);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("taglineitem/new")]
+        public async Task<IActionResult> Task0h([FromBody] ItemDescription req)
+        {
+            var result = await _repo.ItemTabAsyn(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, DescriptionID = result.descid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("taglineitem/edit")]
+        public async Task<IActionResult> Task0i([FromBody] ItemDescription req)
+        {
+            var result = await _repo.ItemTabAsyn(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, DescriptionID = result.descid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        [Route("residenttype")]
+        public async Task<IActionResult> Task0j()
+        {
+            var result = await _repo.Load_ResType();
+            if (result.result == Results.Success)
+                return Ok(result.restype);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("residenttype/new")]
+        public async Task<IActionResult> Task0k([FromBody] ResidentType req)
+        {
+            var result = await _repo.ResidentTypeAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, RestTypId = result.resid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("residenttype/edit")]
+        public async Task<IActionResult> Task0l([FromBody] ResidentType req)
+        {
+            var result = await _repo.ResidentTypeAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, RestTypId = result.resid });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+    }
+}

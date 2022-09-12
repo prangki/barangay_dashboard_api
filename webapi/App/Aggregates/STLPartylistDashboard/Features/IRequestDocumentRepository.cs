@@ -28,7 +28,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object reqdoc)> LoadIndividualRequestDocument(FilterRequest request);
         Task<(Results result, object reqdoc)> LoadIssuesConcernAttachment(RequestDocument request);
         Task<(Results result, String message)> ReceivedRequestDocument(RequestDocument request);
+        Task<(Results result, String message, String purposeid)> PurposeAsyn(PuposeDetails request, bool isEdit=false);
+        Task<(Results result, String message, String certtypid)> CertificateTypeAsyn(CertificateTypeDetails request, bool isEdit=false);
         Task<(Results result, object purpose)> LoadPurpose();
+        Task<(Results result, object certtyp)> LoadCertificateType();
         Task<(Results result, object bizname)> LoadBusinessName();
         Task<(Results result, object bizowner)> LoadBusinessOwner();
         Task<(Results result, object businesstype)> LoadBusinessType(string businessname);
@@ -391,6 +394,77 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "Elected Barngay Official already exist, Please try again", null, null);
             }
             return (Results.Null, null, null, null);
+        }
+
+        public async Task<(Results result, string message, string purposeid)> PurposeAsyn(PuposeDetails request, bool isEdit=false)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_PURP0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmpurposeid", request.PurposeID },
+                {"parmpurposedescription", request.PurposeDescription },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    if (!isEdit)
+                        request.PurposeID = row["PURP_ID"].Str();
+                    return (Results.Success, "Successfully save", request.PurposeID);
+                }
+                    
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again", null);
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Description already exist, Please try again", null);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message, string certtypid)> CertificateTypeAsyn(CertificateTypeDetails request, bool isUpdate=false)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_CERTTYP0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmcerttypid", request.CertTypID },
+                {"parmcerttypdescription", request.CertTypDescription },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    if (!isUpdate)
+                        request.CertTypID = row["CERTTYP_ID"].Str();
+                    return (Results.Success, "Successfully save", request.CertTypID);
+                }
+                    
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again", null);
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Description already exist, Please try again", null);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, object certtyp)> LoadCertificateType()
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_CERTTYP0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetCertificateTypeList(result.Read<dynamic>(), 1000));
+
+            return (Results.Null, null);
         }
     }
 }
