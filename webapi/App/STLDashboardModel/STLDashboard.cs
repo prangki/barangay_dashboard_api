@@ -274,6 +274,7 @@ namespace webapi.App.STLDashboardModel
         public string HomeAddress;
         public string CreatedBy;
     }
+
     public class PuposeDetails
     {
         public string PurposeID;
@@ -283,5 +284,11 @@ namespace webapi.App.STLDashboardModel
     {
         public string CertTypID;
         public string CertTypDescription;
+
+    }
+    public class AppointDetails
+    {
+        public string JsonString;
     }
 }
+
