@@ -541,6 +541,7 @@ namespace webapi.App.Aggregates.Common
             o.OCCPTN = textInfo.ToTitleCase(textInfo.ToLower(data["OCCPTN"].Str()));
             o.SKLLS = textInfo.ToTitleCase(textInfo.ToLower(data["SKLLS"].Str()));
             o.PRF_PIC = data["PRF_PIC"].Str();
+            o.Taken_ProfPic = data["TAKEN_PIC"].Str();
             o.FR_ID = data["FR_ID"].Str();
             o.MO_ID = data["MO_ID"].Str();
             o.FrFirstName = data["FR_FRST_NM"].Str();
@@ -623,6 +624,68 @@ namespace webapi.App.Aggregates.Common
             o.FLL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FLL_NM"].Str()));
             o.BRT_DT = data["BRT_DT"].Str();
             o.Age = data["AGE"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetBrygClearanceList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBrygClearance_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBrygClearance_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BrygClearance_List(e));
+        }
+        public static IDictionary<string, object> Get_BrygClearance_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.ClearanceNo = data["BRGYCLR_ID"].Str();
+            o.ControlNo = data["CNTRL_NO"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.ResidentIDNo = data["RESIDENT_ID_NO"].Str();
+            o.Requestor = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.TypeofClearance = data["CERTTYP_ID"].Str();
+            o.ClearanceType = textInfo.ToUpper(textInfo.ToLower(data["CERTTYP_NM"].Str()));
+            o.Purpose = data["PURP_ID"].Str();
+            o.PurposeNM = textInfo.ToUpper(textInfo.ToLower(data["PURP_NM"].Str()));
+
+            o.ORNumber = textInfo.ToUpper(textInfo.ToLower(data["OR_NO"].Str()));
+            //o.AmountPaid = Convert.ToDecimal(string.Format("{0:#.0}", data["AMOUNT_PAID"].Str()));
+            o.AmountPaid = Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
+            o.TotalAmount = Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
+
+            o.EnableCommunityTax = Convert.ToBoolean(data["ENABLECTC"].Str());
+            o.CTCNo = textInfo.ToUpper(textInfo.ToLower(data["CTC"].Str()));
+            o.CTCIssuedAt = textInfo.ToUpper(textInfo.ToLower(data["CTCISSUEDAT"].Str()));
+            o.CTCIssuedOn = (data["CTCISSUEDON"].Str() == "") ? "" : Convert.ToDateTime(data["CTCISSUEDON"].Str()).ToString("MMM dd, yyyy");
+
+            o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
+            o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
+
+            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
+            o.MosValidity = Convert.ToInt32(data["MOS_VAL"].Str());
+            o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
+            o.ExpiryDate = (data["VALIDITYDATE"].Str() == "" ) ? "" : Convert.ToDateTime(data["VALIDITYDATE"].Str()).ToString("MMM dd, yyyy");
+            o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
+            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy"); 
             return o;
         }
 

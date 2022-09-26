@@ -275,7 +275,7 @@ namespace webapi.App.STLDashboardModel
         public string CreatedBy;
     }
 
-    public class PuposeDetails
+    public class PurposeDetails
     {
         public string PurposeID;
         public string PurposeDescription;
@@ -286,9 +286,36 @@ namespace webapi.App.STLDashboardModel
         public string CertTypDescription;
 
     }
+    public class BusinessOwnershipType
+    {
+        public string BusinessOwnershiptypeID;
+        public string BusinessOwnershipDescription;
+    }
     public class AppointDetails
     {
         public string JsonString;
+    }
+
+    public class BrgyClearance
+    {
+        public string ClearanceNo;
+        public string ControlNo;
+        public string TypeofClearance;
+        public string Purpose;
+        public string ORNumber;
+        public string AmountPaid;
+        public string DocStamp;
+        public int EnableCommunityTax;
+        public string CTCNo;
+        public string CTCIssuedAt;
+        public string CTCIssuedOn;
+        public string DocumentID;
+        public string UserID;
+        public string Requestor;
+
+        public string IssuedDate;
+        public string ExpiryDate;
+        public int MosValidity;
     }
 }
 

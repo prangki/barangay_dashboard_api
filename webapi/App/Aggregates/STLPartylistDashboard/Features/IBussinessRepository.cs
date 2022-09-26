@@ -12,6 +12,7 @@ using webapi.Commons.AutoRegister;
 using webapi.App.Features.UserFeature;
 using webapi.App.RequestModel.Common;
 using webapi.App.Aggregates.Common.Dto;
+using webapi.App.STLDashboardModel;
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
@@ -23,6 +24,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object business)> Load_RegisteredBusiness(FilterRequest request);
         Task<(Results result, object dochistory)> Load_BusinessDocHistory(FilterRequest request);
         Task<(Results result, object type)> LoadTYpe();
+        Task<(Results result, String message, String bizownrshptypid)> BusinessOwnershipTypeAsync(BusinessOwnershipType request, bool isEdit = false);
+        Task<(Results result, object bizowrnshptyp)> Load_BusinessOwnershipType();
+        Task<(Results result, String message)> RemoveBusinessOwnershiptype(BusinessOwnershipType request);
     }
     public class BusinessRepository:IBussinessRepository
     {
@@ -41,20 +45,23 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
-                {"parmctcno",request.CTCNo },
-                {"parminitcap",request.InitialCapital },
                 {"parmregisterno",request.RegisteredNo },
-                {"parmtype",request.Type },
+                {"parmnatureofbusiness",request.NatureofBusiness },
                 {"parmbizname",request.BusinessName },
                 {"parmbizemail",request.Email },
                 {"parmcontactno",request.ContactNo },
                 {"parmbizaddress",request.BusinessAddress },
-                {"parmfirstname",request.FirstName },
-                {"parmminm",request.MiddleInitial },
-                {"parmlastname",request.LastName },
-                {"parmowneraddress",request.OwnerAddress },
-                {"parmownemail",request.OwnerEmail },
-                {"parmowncontactno",request.OwnerContactNo },
+                {"parmdateoperate",request.DateOperate },
+                {"parmownershiptype",request.BusinessOwnershipTypeID },
+                {"parmownerid",request.OwnerID },
+                {"parmbizstatus",request.BizStatus },
+                
+                //{"parmfirstname",request.FirstName },
+                //{"parmminm",request.MiddleInitial },
+                //{"parmlastname",request.LastName },
+                //{"parmowneraddress",request.OwnerAddress },
+                //{"parmownemail",request.OwnerEmail },
+                //{"parmowncontactno",request.OwnerContactNo },
                 {"parmoptrid",account.USR_ID }
             }).FirstOrDefault();
             if (result != null)
@@ -79,19 +86,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmbizid",request.BussinessID },
-                {"parmctcno",request.CTCNo },
-                {"parminitcap",request.InitialCapital },
+                {"parmbizonctrolno",request.ControlNo },
+
                 {"parmregisterno",request.RegisteredNo },
-                {"parmtype",request.Type },
+                {"parmnatureofbusiness",request.NatureofBusiness },
                 {"parmbizname",request.BusinessName },
                 {"parmbizemail",request.Email },
                 {"parmcontactno",request.ContactNo },
                 {"parmbizaddress",request.BusinessAddress },
-                {"parmfirstname",request.FirstName },
-                {"parmminm",request.MiddleInitial },
-                {"parmlastname",request.LastName },
-                {"parmownemail",request.OwnerEmail },
-                {"parmowncontactno",request.OwnerContactNo },
+                {"parmdateoperate",request.DateOperate },
+                {"parmownershiptype",request.BusinessOwnershipTypeID },
+                {"parmownerid",request.OwnerID },
+                {"parmbizstatus",request.BizStatus },
+
                 {"parmoptrid",account.USR_ID }
             }).FirstOrDefault();
             if (result != null)
@@ -149,6 +156,69 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (result != null)
                 return (Results.Success, STLSubscriberDto.GetAllBusinessDocumentRequestList(result.Read<dynamic>(), request.Userid, 100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, String message, String bizownrshptypid)> BusinessOwnershipTypeAsync(BusinessOwnershipType request, bool isEdit = false)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BIZTYPOWRNSHP0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbusinesstypeownershipid", request.BusinessOwnershiptypeID },
+                {"parmdescription", request.BusinessOwnershipDescription },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    if (!isEdit)
+                        request.BusinessOwnershiptypeID = row["BIZTYPOWNRSHP_ID"].Str();
+                    return (Results.Success, "Successfully save", request.BusinessOwnershiptypeID);
+                }
+
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again", null);
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Business Ownership Type already exist, Please try again", null);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, object bizowrnshptyp)> Load_BusinessOwnershipType()
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_BIZTYPOWRNSHP0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetBusinessOwnerTypeList(result.Read<dynamic>(), 1000));
+
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveBusinessOwnershiptype(BusinessOwnershipType request)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BIZTYPOWRNSHP0C", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmpurposeid", request.BusinessOwnershiptypeID }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully Remove Selected Item");
+
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
+            }
             return (Results.Null, null);
         }
     }

@@ -47,6 +47,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmissuedlocation", request.IssuedLocation },
                 {"parmoflbrgylogo",request.BrgyOfficialLogo },
                 {"parmoflmunicipallogo",request.MunicipalLogo },
+                {"parmcontactnumber", request.ContactNo },
+                {"parmdefaultvalidity",request.DefaultValidity },
+                {"parmmonhtvalidity",request.MonthValidity },
                 {"parmoptrid",account.USR_ID }
             }).FirstOrDefault();
             if (result != null)
