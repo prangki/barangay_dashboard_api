@@ -52,10 +52,46 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
-        [Route("appoint/member/withdraw")]
-        public async Task<IActionResult> WithdrawAppointedMember(string appointid)
+        [Route("appoint/member/approve")]
+        public async Task<IActionResult> Approve(string appointid)
         {
-            var result = await _repo.WithdrawAppointedMember(appointid);
+            var result = await _repo.Approve(appointid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("appoint/member/approveselect")]
+        public async Task<IActionResult> ApproveBySelection(string groupid)
+        {
+            var result = await _repo.ApproveBySelection(groupid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("appoint/member/withdraw")]
+        public async Task<IActionResult> Withdraw(string appointid)
+        {
+            var result = await _repo.Withdraw(appointid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("appoint/member/withdrawselect")]
+        public async Task<IActionResult> WithdrawBySelection(string groupid)
+        {
+            var result = await _repo.WithdrawBySelection(groupid);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
@@ -68,6 +104,18 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> RemoveAppointedMember(string appointid)
         {
             var result = await _repo.RemoveAppointedMember(appointid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("appoint/member/removeselect")]
+        public async Task<IActionResult> RemoveBySelection(string groupid)
+        {
+            var result = await _repo.RemoveBySelection(groupid);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
@@ -98,5 +146,31 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return NotFound();
 
         }
+
+        [HttpPost]
+        [Route("appoint/update/oath")]
+        public async Task<IActionResult> UpdateOathDate(string date)
+        {
+            var result = await _repo.UpdateDate(date);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("appoint/update/statement")]
+        public async Task<IActionResult> UpdateStatementDate(string date)
+        {
+            var result = await _repo.UpdateDate(date,true);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+
     }
 }
