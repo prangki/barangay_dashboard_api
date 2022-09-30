@@ -23,8 +23,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, string message)> SaveAppointedMember(string jsonString);
         Task<(Results result, object appoint)> LoadAppointMember();
-        Task<(Results result, string message)> WithdrawAppointedMember(string appointid);
+        Task<(Results result, string message)> Approve(string appointid);
+        Task<(Results result, string message)> ApproveBySelection(string groupid);
+        Task<(Results result, string message)> Withdraw(string appointid);
+        Task<(Results result, string message)> WithdrawBySelection(string groupid);
         Task<(Results result, string message)> RemoveAppointedMember(string appointid);
+        Task<(Results result, string message)> RemoveBySelection(string groupid);
+        Task<(Results result, string message)> UpdateDate(string date, bool isStmt = false);
         Task<(Results result, object details)> ViewAppointedMemberDetails(string userid);
         Task<(Results result, object details)> ViewDocumentTags(string id);
     }
@@ -78,7 +83,82 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Failed, null);
         }
 
-        public async Task<(Results result, string message)> WithdrawAppointedMember(string appointid)
+        public async Task<(Results result, string message)> Approve(string appointid)
+        {
+
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS01", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmappntid", appointid},
+                    {"parmsaprv", 1}
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ApproveBySelection(string groupid)
+        {
+
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS01", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmsaprv", 1},
+                    {"parmgrpapntid", groupid}
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> WithdrawBySelection(string groupid)
+        {
+
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS01", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmswdrwn", 1},
+                    {"@parmgrpapntid", groupid}
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> Withdraw(string appointid)
         {
 
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS01", new Dictionary<string, object>()
@@ -112,6 +192,56 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmappntid", appointid},
                     {"parmsrmv", 1}
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveBySelection(string groupid)
+        {
+
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS01", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmsrmv", 1},
+                    {"parmgrpapntid", groupid},
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> UpdateDate(string date, bool isStmt = false)
+        {
+
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS01", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {(isStmt) ? "parmsapntmtstmt" : "parmsoath", 1},
+                    {"parmoathdt", date}
                 }).FirstOrDefault();
 
             if (result != null)
