@@ -98,9 +98,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
                         SIGNATUREID = row["SIGNATUREID"].Str(),
                         S_ACTV = row["S_ACTV"].Str(),
                         SessionID = row["SSSN_ID"].Str(),
+                        SKIN = row["SKIN"].Str(),
                         sActive = true,
                         IsLogin = true
-                    }); ;
+                    });
                 }
                 else if (ResultCode == "22")
                     return (Results.Failed, "Your account was in-active", null);

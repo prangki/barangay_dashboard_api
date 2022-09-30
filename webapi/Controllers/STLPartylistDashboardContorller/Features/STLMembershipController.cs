@@ -104,6 +104,16 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(result.access);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("account/skin")]
+        public async Task<IActionResult> Task0d01(string skin)
+        {
+            var result = await _repo.AssigendSkin(skin);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message=result.message});
+            return NotFound();
+        }
         [HttpPost]
         [Route("account/assignedaccess")]
         public async Task<IActionResult> Task0e(string userid, string menu)

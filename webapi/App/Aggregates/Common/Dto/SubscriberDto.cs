@@ -689,6 +689,68 @@ namespace webapi.App.Aggregates.Common
             return o;
         }
 
+        public static IEnumerable<dynamic> GetBrygBusinessClearanceList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBrygBusinessClearance_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBrygBusinessClearance_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BrygBusinessClearance_List(e));
+        }
+        public static IDictionary<string, object> Get_BrygBusinessClearance_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.BusinessClearanceID = data["BIZCLR_ID"].Str();
+            o.ControlNo = data["CTNRL_NO"].Str();
+            o.BusinessID = data["BIZ_ID"].Str();
+            o.BusinessNM = textInfo.ToUpper(textInfo.ToLower(data["BIZ_NM"].Str()));
+            o.BusinessAddress = textInfo.ToUpper(textInfo.ToLower(data["BIZ_ADDR"].Str()));
+            o.DateOperate = data["DATE_OPRT"].Str();
+            o.OwnerID = data["OWNER_ID"].Str();
+            o.OwnerNM = textInfo.ToUpper(textInfo.ToLower(data["OWNER_NM"].Str()));
+            o.OwnerAddress = textInfo.ToUpper(textInfo.ToLower(data["OWNR_ADDRESS"].Str()));
+            o.DateIssued = data["DATEISSUED"].Str();
+            o.ExpiryDate = data["EXPIREDDATE"].Str();
+
+            o.ORNumber = textInfo.ToUpper(textInfo.ToLower(data["OR_NO"].Str()));
+            //o.AmountPaid = Convert.ToDecimal(string.Format("{0:#.0}", data["AMOUNT_PAID"].Str()));
+            o.AmountPaid = Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
+            o.TotalAmount = Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
+
+            o.EnableCommunityTax = Convert.ToBoolean(data["ENABLECTC"].Str());
+            o.CTCNo = textInfo.ToUpper(textInfo.ToLower(data["CTC"].Str()));
+            o.CTCIssuedAt = textInfo.ToUpper(textInfo.ToLower(data["CTCISSUEDAT"].Str()));
+            o.CTCIssuedOn = (data["CTCISSUEDON"].Str() == "") ? "" : Convert.ToDateTime(data["CTCISSUEDON"].Str()).ToString("MMM dd, yyyy");
+
+            o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
+            o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
+
+            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
+            o.MosValidity = Convert.ToInt32(data["MOS_VAL"].Str());
+            o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
+            o.ExpiryDate = (data["VALIDITYDATE"].Str() == "") ? "" : Convert.ToDateTime(data["VALIDITYDATE"].Str()).ToString("MMM dd, yyyy");
+            o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
+            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            return o;
+        }
 
         public static IEnumerable<dynamic> GetSignatoryList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
         {

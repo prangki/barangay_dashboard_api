@@ -317,5 +317,24 @@ namespace webapi.App.STLDashboardModel
         public string ExpiryDate;
         public int MosValidity;
     }
+    public class BrgyBusinessClearance
+    {
+        public string BusinessClearanceID;
+        public string ControlNo;
+        public string BusinessID;
+        public string ORNumber;
+        public string AmountPaid;
+        public string DocStamp;
+        public int EnableCommunityTax;
+        public string CTCNo;
+        public string CTCIssuedAt;
+        public string CTCIssuedOn;
+        public string OwnerID;
+        public string IssuedDate;
+        public string ExpiryDate;
+        public int MosValidity;
+        public string VerifiedBy;
+        public string CertifiedBy;
+    }
 }
 

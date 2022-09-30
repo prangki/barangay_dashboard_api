@@ -49,6 +49,7 @@ namespace webapi.App.Model.User
         public string SKLLS;
         public string PRF_PIC;
         public string SIGNATUREID;
+        public string SKIN;
         public string S_ACTV;
 
         public String SessionID;

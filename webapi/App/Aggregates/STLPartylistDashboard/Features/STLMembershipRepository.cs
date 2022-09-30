@@ -38,6 +38,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object prof)> Load_Profession();
         Task<(Results result, object occ)> Load_Occupation();
         Task<(Results result, object skl)> Load_Skills();
+        Task<(Results result, String message)> AssigendSkin(string skin);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -431,6 +432,26 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (results != null)
                 return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> AssigendSkin(string skin)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_AAD002", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID},
+                {"parmusrid",account.USR_ID},
+                {"parmskin",skin }
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully update!");
+                return (Results.Failed, "Something wrong in your data, Please try again");
+            }
             return (Results.Null, null);
         }
     }
