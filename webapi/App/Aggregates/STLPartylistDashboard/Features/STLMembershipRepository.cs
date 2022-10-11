@@ -38,6 +38,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object prof)> Load_Profession();
         Task<(Results result, object occ)> Load_Occupation();
         Task<(Results result, object skl)> Load_Skills();
+        Task<(Results result, String message)> AssigendSkin(string skin);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -137,10 +138,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",membership.PLID },
                 {"parmpgrpid",membership.PGRPID },
-                {"parmfnm", textInfo.ToTitleCase(membership.Firstname) },
-                {"parmlnm",textInfo.ToTitleCase(membership.Lastname) },
-                {"parmmnm",textInfo.ToTitleCase(membership.Middlename) },
-                {"parmnnm",textInfo.ToTitleCase(membership.Nickname) },
+                {"parmtitlename", membership.TitleName },
+                {"parmfnm", membership.Firstname },
+                {"parmlnm",membership.Lastname },
+                {"parmmnm",membership.Middlename },
+                {"parmextensionname", membership.ExtensionName },
+                {"parmnnm",membership.Nickname },
+                {"parmreligion", membership.Religion },
 
                 {"parmregistervoter",membership.RegisterVoter },
                 {"parmprecentno", membership.PrecentNumber},
@@ -158,17 +162,17 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmhousehold", membership.HouseholdNo },
                 {"parmfamily", membership.Family },
 
-                {"parmbldType",textInfo.ToTitleCase(membership.BloodType) },
+                {"parmbldType",membership.BloodType },
                 {"parmbdate",membership.BirthDate },
                 {"parmplaceofbirth" , membership.PlaceOfBirth },
                 {"parmgender",membership.Gender },
                 {"parmmstastus",membership.MaritalStatus },
                 {"parmpartnerid", membership.PartnerID },
-                {"parmntnlty",textInfo.ToTitleCase(membership.Nationality) },
-                {"parmctznshp",textInfo.ToTitleCase(membership.Citizenship) },
+                {"parmntnlty",membership.Nationality },
+                {"parmctznshp",membership.Citizenship },
                 {"parmprofession", membership.Profession },
-                {"parmoccptn",textInfo.ToTitleCase(membership.Occupation) },
-                {"parmsklls",textInfo.ToTitleCase(membership.Skills) },
+                {"parmoccptn",membership.Occupation },
+                {"parmsklls",membership.Skills },
                 {"parmheight", membership.Height },
                 {"parmweight", membership.Weight },
                 {"parmlivingwithparent", membership.LivingWParent },
@@ -178,8 +182,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmmun",membership.Municipality },
                 {"parmbrgy",membership.Barangay },
                 {"parmsitio",membership.Sitio },
-                {"parmhmeadd",textInfo.ToTitleCase(membership.HomeAddress) },
-                {"parmprsntadd",textInfo.ToTitleCase(membership.PresentAddress) },
+                {"parmhmeadd",membership.HomeAddress },
+                {"parmprsntadd",membership.PresentAddress },
 
                 {"parmfr_id", membership.FR_ID },
                 {"parmmo_id", membership.MO_ID },
@@ -428,6 +432,26 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (results != null)
                 return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> AssigendSkin(string skin)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_AAD002", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID},
+                {"parmusrid",account.USR_ID},
+                {"parmskin",skin }
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully update!");
+                return (Results.Failed, "Something wrong in your data, Please try again");
+            }
             return (Results.Null, null);
         }
     }

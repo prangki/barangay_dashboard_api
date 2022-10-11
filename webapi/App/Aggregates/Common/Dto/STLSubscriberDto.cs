@@ -186,6 +186,37 @@ namespace webapi.App.Aggregates.Common.Dto
         }
 
 
+
+        public static IEnumerable<dynamic> GetBusinessOwnerTypeList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBusinessOwnerType_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBusinessOwnerType_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BusinessOwnerType_List(e));
+        }
+        public static IDictionary<string, object> Get_BusinessOwnerType_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PLID = data["PL_ID"].Str();
+            o.PGRPID = data["PGRP_ID"].Str();
+            o.BusinessOwnershiptypeID = data["BIZTYPOWNRSHP_ID"].Str();
+            o.BusinessOwnershipDescription = textInfo.ToUpper(textInfo.ToLower(data["DESCRPTN"].Str()));
+            return o;
+        }
+
         public static IEnumerable<dynamic> GetCertificateTypeList(IEnumerable<dynamic> data, int limit = 1000, bool fullinfo = true)
         {
             if (data == null) return null;
@@ -428,6 +459,9 @@ namespace webapi.App.Aggregates.Common.Dto
             o.Municipality = data["MUNICIPALHEADER"].Str();
             o.Barangay = data["BARANGAYHEADER"].Str();
             o.IssuedLocation = data["ISSUED_LOCATION"].Str();
+            o.ContactNo = data["CNTCTNO"].Str();
+            o.DefaultValidity = Convert.ToInt32(data["DF_VAL"].Str());
+            o.MonthValidity = data["MOS_VAL"].Str();
             return o;
         }
 
@@ -621,24 +655,32 @@ namespace webapi.App.Aggregates.Common.Dto
             o.PL_ID = data["PL_ID"].Str();
             o.PGRP_ID = data["PGRP_ID"].Str();
             o.BussinessID = data["BIZ_ID"].Str();
-            o.Category = data["CATEGORY"].Str();
-            o.ControlNo = data["CTRL_NO"].Str();
-            o.CTCNo = data["CTC_NO"].Str();
-            o.InitialCapital = data["INIT_CAP"].Str();
-            o.RegisteredNo = data["REG_NO"].Str();
-            o.Type = data["TYP"].Str();
-            o.BusinessName = data["BIZ_NM"].Str();
-            o.BusinessAddress = data["BIZ_ADDR"].Str();
-            o.Email = data["BIZ_EMAIL"].Str();
-            o.ContactNo = data["CT_NO"].Str();
-            o.FirstName = data["OWN_FRST_NM"].Str();
-            o.MiddleInitial = data["OWN_MI_NM"].Str();
-            o.LastName = data["OWN_LST_NM"].Str();
-            o.FullName = data["OWN_FLL_NM"].Str();
-            o.OwnerAddress = data["OWN_ADDR"].Str();
-            o.OwnerEmail = data["OWN_EMAIL"].Str();
-            o.OwnerContactNo = data["OWN_CT_NO"].Str();
-            o.Request = (data["REQ_DOC"].Str()=="") ? 0 : Convert.ToInt32(data["REQ_DOC"].Str());
+            //o.Category = data["CATEGORY"].Str();
+            o.BusinessControlNo = data["CTRL_NO"].Str();
+            //o.CTCNo = data["CTC_NO"].Str();
+            //o.InitialCapital = data["INIT_CAP"].Str();
+            o.RegisteredNo = textInfo.ToUpper(textInfo.ToLower(data["REG_NO"].Str()));
+            o.NatureofBusiness = textInfo.ToUpper(textInfo.ToLower(data["NTREBIZ"].Str()));
+            o.BusinessName = textInfo.ToUpper(textInfo.ToLower(data["BIZ_NM"].Str()));
+            o.BusinessEmail = data["BIZ_EMAIL"].Str();
+            o.BusinessContactNo = data["CT_NO"].Str();
+            o.BusinessAddress = textInfo.ToUpper(textInfo.ToLower(data["BIZ_ADDR"].Str()));
+            o.BusinessDateOperate = data["DATE_OPRT"].Str();
+            o.BusinessOwnershipTypeID = data["OWNRSHP_TYP"].Str();
+            o.BusinessOwnershipTypeNM = textInfo.ToUpper(textInfo.ToLower(data["OWNRSHP_TYP_NM"].Str()));
+            o.isInActive = Convert.ToBoolean(data["nSTATUS"].Str());
+            o.Owner_ID = data["OWN_ID"].Str();
+            o.Owner_NM = textInfo.ToUpper(textInfo.ToLower(data["OWNR_NM"].Str()));
+            o.OwnerAddres = textInfo.ToUpper(textInfo.ToLower(data["OWNR_ADDRESS"].Str()));
+
+            //o.FirstName = data["OWN_FRST_NM"].Str();
+            //o.MiddleInitial = data["OWN_MI_NM"].Str();
+            //o.LastName = data["OWN_LST_NM"].Str();
+            //o.FullName = data["OWN_FLL_NM"].Str();
+            //o.OwnerAddress = data["OWN_ADDR"].Str();
+            //o.OwnerEmail = data["OWN_EMAIL"].Str();
+            //o.OwnerContactNo = data["OWN_CT_NO"].Str();
+            //o.Request = (data["REQ_DOC"].Str()=="") ? 0 : Convert.ToInt32(data["REQ_DOC"].Str());
 
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;

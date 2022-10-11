@@ -45,10 +45,13 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Userid;
         public string Acctid;
 
+        public string TitleName;
         public string Firstname;
         public string Lastname;
         public string Middlename;
         public string Nickname;
+        public string ExtensionName;
+        public string Religion;
 
         public string BirthDate;
         public string PlaceOfBirth;
@@ -309,11 +312,13 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string CTCNo;
         public string InitialCapital;
         public string RegisteredNo;
-        public string Type;
+        public string NatureofBusiness;
         public string BusinessName;
         public string Email;
         public string ContactNo;
         public string BusinessAddress;
+        public string DateOperate;
+        public string BusinessOwnershipTypeID;
         public string FirstName;
         public string MiddleInitial;
         public string LastName;
@@ -321,6 +326,8 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string OwnerAddress;
         public string OwnerEmail;
         public string OwnerContactNo;
+        public string OwnerID;
+        public string BizStatus;
 
     }
     public class LicenseKey
@@ -338,11 +345,14 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string BrgyOfficialLogo;
         public int MunLogoChange;
         public string MunicipalLogo;
+        public string ContactNo;
         public string Country;
         public string Province;
         public string Municipality;
         public string Barangay;
         public string IssuedLocation;
+        public int DefaultValidity;
+        public int MonthValidity;
     }
 
     public class Organization
@@ -351,6 +361,51 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string OrganizationNM;
         public string OrganizatioAbbr;
         public string Estabalished;
+    }
+
+    public class LegalDocument
+    {
+        public string Tagline;
+        public string FormTabID;
+        public string FormTabDescription;
+    }
+    public class LegalDocument_Transaction
+    {
+        public string LegalFormsID;
+        public string LegalFormssControlNo;
+        public string TypeofTemplateID;
+        public string TypeofTemplateNM;
+        public string TemplateID;
+        public string TemplateNM;
+        public string ORNumber;
+        public string AmountPaid;
+
+        public string UserID;
+        public string Requestor;
+        public string URLProfPic;
+        public string Taken_ProfPic;
+        public string ProfilePic;
+        public string Gender;
+        public string GenderNM;
+        public string MaritalStatus;
+        public string MaritalStatusNM;
+        public string ResidentAddress;
+        public string BirthDate;
+        public string BirthPlace;
+        public string ContactNumber;
+        public int Age;
+
+        public string IssuedDate;
+        public string ExpiryDate;
+        public string GivenDay;
+        public string GivenMonth;
+        public string GivenYear;
+        public string Barangay;
+        public int MosValidity;
+        public string itagline;
+        public string Search;
+        public string DateFrom;
+        public string DateTo;
     }
 
     public class GovernmentValidID

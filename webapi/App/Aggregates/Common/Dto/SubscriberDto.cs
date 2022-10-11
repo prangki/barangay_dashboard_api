@@ -501,11 +501,13 @@ namespace webapi.App.Aggregates.Common
             o.HouseNo = data["HSENO_ID"].Str();
             o.HouseholdNo = data["HHLD_ID"].Str();
             o.Family = data["FAM_ID"].Str();
+            o.TitleName = data["NM_TTL"].Str();
             o.FRST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FRST_NM"].Str()));
             o.MDL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["MDL_NM"].Str()));
             o.LST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["LST_NM"].Str()));
             o.NCK_NM = textInfo.ToTitleCase(textInfo.ToLower(data["NCK_NM"].Str()));
             o.FLL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.Religion = textInfo.ToTitleCase(textInfo.ToLower(data["REL"].Str()));
             o.MOB_NO = data["MOB_NO"].Str();
             o.EML_ADD = data["EML_ADD"].Str();
             o.USR_NM = data["USR_NM"].Str();
@@ -514,8 +516,8 @@ namespace webapi.App.Aggregates.Common
             o.PRCNT_NO = data["PRCNT_NO"].Str();
             o.CLSTR_NO = data["CLSTR_NO"].Str();
             o.SEQUENCE_NO = data["SEQUENCE_NO"].Str();
-            o.HM_ADDR = textInfo.ToTitleCase(textInfo.ToLower(data["HM_ADDR"].Str()));
-            o.PRSNT_ADDR = textInfo.ToTitleCase(textInfo.ToLower(data["PRSNT_ADDR"].Str()));
+            o.HM_ADDR = textInfo.ToUpper(textInfo.ToLower(data["HM_ADDR"].Str()));
+            o.PRSNT_ADDR = textInfo.ToUpper(textInfo.ToLower(data["PRSNT_ADDR"].Str()));
             o.PartnerID = data["PTNR_ID"].Str();
             o.LOC_REG = data["LOC_REG"].Str();
             o.LOC_REG_NM = data["LOC_REG_NM"].Str();
@@ -532,6 +534,7 @@ namespace webapi.App.Aggregates.Common
             o.MRTL_STAT = data["MRTL_STAT"].Str();
             o.MRTL_STAT_NM = data["MRTL_STAT_NM"].Str();
             o.CTZNSHP = data["CTZNSHP"].Str();
+            o.Religion = data["REL"].Str();
             o.IMG_URL = data["IMG_URL"].Str();
             o.BRT_DT = data["BRT_DT"].Str();
             o.PlaceOfBirth = data["PLC_BRT"].Str();
@@ -541,6 +544,7 @@ namespace webapi.App.Aggregates.Common
             o.OCCPTN = textInfo.ToTitleCase(textInfo.ToLower(data["OCCPTN"].Str()));
             o.SKLLS = textInfo.ToTitleCase(textInfo.ToLower(data["SKLLS"].Str()));
             o.PRF_PIC = data["PRF_PIC"].Str();
+            o.Taken_ProfPic = data["TAKEN_PIC"].Str();
             o.FR_ID = data["FR_ID"].Str();
             o.MO_ID = data["MO_ID"].Str();
             o.FrFirstName = data["FR_FRST_NM"].Str();
@@ -626,6 +630,215 @@ namespace webapi.App.Aggregates.Common
             return o;
         }
 
+
+        public static IEnumerable<dynamic> GetBrygClearanceList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBrygClearance_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBrygClearance_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BrygClearance_List(e));
+        }
+        public static IDictionary<string, object> Get_BrygClearance_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.ClearanceNo = data["BRGYCLR_ID"].Str();
+            o.ControlNo = data["CNTRL_NO"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.ResidentIDNo = data["RESIDENT_ID_NO"].Str();
+            o.Requestor = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.TypeofClearance = data["CERTTYP_ID"].Str();
+            o.ClearanceType = textInfo.ToUpper(textInfo.ToLower(data["CERTTYP_NM"].Str()));
+            o.Purpose = data["PURP_ID"].Str();
+            o.PurposeNM = textInfo.ToUpper(textInfo.ToLower(data["PURP_NM"].Str()));
+
+            o.ORNumber = textInfo.ToUpper(textInfo.ToLower(data["OR_NO"].Str()));
+            //o.AmountPaid = Convert.ToDecimal(string.Format("{0:#.0}", data["AMOUNT_PAID"].Str()));
+            o.AmountPaid = Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
+            o.TotalAmount = Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
+
+            o.EnableCommunityTax = Convert.ToBoolean(data["ENABLECTC"].Str());
+            o.CTCNo = textInfo.ToUpper(textInfo.ToLower(data["CTC"].Str()));
+            o.CTCIssuedAt = textInfo.ToUpper(textInfo.ToLower(data["CTCISSUEDAT"].Str()));
+            o.CTCIssuedOn = (data["CTCISSUEDON"].Str() == "") ? "" : Convert.ToDateTime(data["CTCISSUEDON"].Str()).ToString("MMM dd, yyyy");
+
+            o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
+            o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
+
+            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
+            o.MosValidity = Convert.ToInt32(data["MOS_VAL"].Str());
+            o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
+            o.ExpiryDate = (data["VALIDITYDATE"].Str() == "" ) ? "" : Convert.ToDateTime(data["VALIDITYDATE"].Str()).ToString("MMM dd, yyyy");
+            o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
+            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy"); 
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetLegalDocumentList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetLegalDocument_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetLegalDocument_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Ge_LegalDocument_List(e));
+        }
+        public static IDictionary<string, object> Ge_LegalDocument_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.LegalDocID = data["LGLDOC_ID"].Str();
+            o.ControlNo = data["CONTROLNO"].Str();
+            o.RequestorID = data["REQUESTORID"].Str();
+            o.RequestorName = data["REQUESTORNM"].Str();
+            o.TypeofTemplateID = data["TPLTYP_ID"].Str();
+            o.TypeofTemplateNM = data["TPLTTYP_NM"].Str();
+            o.FormsCertificateID = data["TPL_ID"].Str();
+            o.FormsCertificateNM = data["TPL_NM"].Str();
+            o.ReportContent = data["TPL_CONT"].Str();
+
+            o.ORNumber = data["OR_NO"].Str();
+            o.AmountPaid = (data["AMOUNT_PAID"].Str() == "") ? Convert.ToDouble("0").ToString("n2") : Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+
+
+            o.ProcessDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
+            o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
+            o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
+            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetLegalDocumentDetailsList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetLegalDocumentDetails_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetLegalDocumentDetails_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_LegalDocumentDetails_List(e));
+        }
+        public static IDictionary<string, object> Get_LegalDocumentDetails_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.FormsCertificateID = data["TPL_ID"].Str();
+            o.LegalDocID = data["LGLDOC_ID"].Str();
+            o.TagDescription = data["TAG_DESCR"].Str();
+            o.Tagline = data["TAGLINE"].Str();
+            o.TaglineInputType = data["TAG_IPTYP"].Str();
+            o.Value = data["Value"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetBrygBusinessClearanceList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetBrygBusinessClearance_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetBrygBusinessClearance_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_BrygBusinessClearance_List(e));
+        }
+        public static IDictionary<string, object> Get_BrygBusinessClearance_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.BusinessClearanceID = data["BIZCLR_ID"].Str();
+            o.ControlNo = data["CTNRL_NO"].Str();
+            o.BusinessID = data["BIZ_ID"].Str();
+            o.BusinessNM = textInfo.ToUpper(textInfo.ToLower(data["BIZ_NM"].Str()));
+            o.BusinessAddress = textInfo.ToUpper(textInfo.ToLower(data["BIZ_ADDR"].Str()));
+            o.DateOperate = data["DATE_OPRT"].Str();
+            o.OwnerID = data["OWNER_ID"].Str();
+            o.OwnerNM = textInfo.ToUpper(textInfo.ToLower(data["OWNER_NM"].Str()));
+            o.OwnerAddress = textInfo.ToUpper(textInfo.ToLower(data["OWNR_ADDRESS"].Str()));
+            o.DateIssued = data["DATEISSUED"].Str();
+            o.ExpiryDate = data["EXPIREDDATE"].Str();
+
+            o.ORNumber = textInfo.ToUpper(textInfo.ToLower(data["OR_NO"].Str()));
+            //o.AmountPaid = Convert.ToDecimal(string.Format("{0:#.0}", data["AMOUNT_PAID"].Str()));
+            o.AmountPaid = Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
+            o.TotalAmount = Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
+
+            o.EnableCommunityTax = Convert.ToBoolean(data["ENABLECTC"].Str());
+            o.CTCNo = textInfo.ToUpper(textInfo.ToLower(data["CTC"].Str()));
+            o.CTCIssuedAt = textInfo.ToUpper(textInfo.ToLower(data["CTCISSUEDAT"].Str()));
+            o.CTCIssuedOn = (data["CTCISSUEDON"].Str() == "") ? "" : Convert.ToDateTime(data["CTCISSUEDON"].Str()).ToString("MMM dd, yyyy");
+
+            o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
+            o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
+
+            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
+            o.MosValidity = Convert.ToInt32(data["MOS_VAL"].Str());
+            o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
+            o.ExpiryDate = (data["VALIDITYDATE"].Str() == "") ? "" : Convert.ToDateTime(data["VALIDITYDATE"].Str()).ToString("MMM dd, yyyy");
+            o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
+            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            return o;
+        }
 
         public static IEnumerable<dynamic> GetSignatoryList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
         {

@@ -275,7 +275,7 @@ namespace webapi.App.STLDashboardModel
         public string CreatedBy;
     }
 
-    public class PuposeDetails
+    public class PurposeDetails
     {
         public string PurposeID;
         public string PurposeDescription;
@@ -307,9 +307,80 @@ namespace webapi.App.STLDashboardModel
         public string CertTypDescription;
 
     }
+    public class BusinessOwnershipType
+    {
+        public string BusinessOwnershiptypeID;
+        public string BusinessOwnershipDescription;
+    }
     public class AppointDetails
     {
         public string JsonString;
+    }
+
+    public class BrgyCedula
+    {
+        public string RequestBy;
+        public string RequestType;
+        public string RequestPurpose;
+        public string Birthdate;
+        public string Gender;
+        public string Address;
+        public string Citizenship;
+        public string CivilStatus;
+        public decimal BCT;
+        public decimal GEB;
+        public decimal GEBTax;
+        public decimal GEP;
+        public decimal GEPTax;
+        public decimal IRP;
+        public decimal IRPTax;
+        public decimal TotalTax;
+        public decimal InterestRate;
+        public decimal Interest;
+        public decimal AmountPaid;
+        public string ProcessBy;
+        public string ProcessDate;
+    }
+
+    public class BrgyClearance
+    {
+        public string ClearanceNo;
+        public string ControlNo;
+        public string TypeofClearance;
+        public string Purpose;
+        public string ORNumber;
+        public string AmountPaid;
+        public string DocStamp;
+        public int EnableCommunityTax;
+        public string CTCNo;
+        public string CTCIssuedAt;
+        public string CTCIssuedOn;
+        public string DocumentID;
+        public string UserID;
+        public string Requestor;
+
+        public string IssuedDate;
+        public string ExpiryDate;
+        public int MosValidity;
+    }
+    public class BrgyBusinessClearance
+    {
+        public string BusinessClearanceID;
+        public string ControlNo;
+        public string BusinessID;
+        public string ORNumber;
+        public string AmountPaid;
+        public string DocStamp;
+        public int EnableCommunityTax;
+        public string CTCNo;
+        public string CTCIssuedAt;
+        public string CTCIssuedOn;
+        public string OwnerID;
+        public string IssuedDate;
+        public string ExpiryDate;
+        public int MosValidity;
+        public string VerifiedBy;
+        public string CertifiedBy;
     }
 }
 

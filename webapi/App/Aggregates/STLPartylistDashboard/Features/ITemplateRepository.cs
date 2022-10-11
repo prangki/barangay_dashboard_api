@@ -27,6 +27,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object tagline)> Load_Tagline(string templateid);
         Task<(Results result, object restype)> Load_ResType();
         Task<(Results result, String message, String resid)> ResidentTypeAsync(ResidentType req);
+        Task<(Results result, String message)> RemoveResidentType(ResidentType req);
+        Task<(Results result, String message)> RemoveTemplateType(TemplateType req);
+        Task<(Results result, String message)> RemoveTemplateDoc(TemplateDocument req);
 
     }
     public class TemplateRepository:ITemplateRepository
@@ -227,6 +230,69 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 return (Results.Failed, "Something wrong in your data, Please try again", null);
             }
             return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveResidentType(ResidentType req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BIMSRESTYP0C", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmrestypid", req.RestTypId }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully Remove Selected Item");
+
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveTemplateType(TemplateType req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_TPLTYP0C", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmtemplatetypeid", req.TemplateTypeID }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully Remove Selected Item");
+
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveTemplateDoc(TemplateDocument req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_TPLDOC0C", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmtemplateid", req.TemplateDocID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully Remove Selected Item");
+
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
+            }
+            return (Results.Null, null);
         }
     }
 }

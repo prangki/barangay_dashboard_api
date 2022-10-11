@@ -259,7 +259,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("purpose/new")]
-        public async Task<IActionResult> Task14([FromBody] PuposeDetails request)
+        public async Task<IActionResult> Task14([FromBody] PurposeDetails request)
         {
             var result = await _repo.PurposeAsyn(request);
             if (result.result == Results.Success)
@@ -270,7 +270,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
         [HttpPost]
         [Route("purpose/edit")]
-        public async Task<IActionResult> Task15([FromBody] PuposeDetails request)
+        public async Task<IActionResult> Task15([FromBody] PurposeDetails request)
         {
             var result = await _repo.PurposeAsyn(request, true);
             if (result.result == Results.Success)
@@ -280,10 +280,22 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("purpose/remove")]
+        public async Task<IActionResult> Task16([FromBody] PurposeDetails request)
+        {
+            var result = await _repo.RemovePurpose(request);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
 
         [HttpPost]
         [Route("certtype/new")]
-        public async Task<IActionResult> Task16([FromBody] CertificateTypeDetails request)
+        public async Task<IActionResult> Task17([FromBody] CertificateTypeDetails request)
         {
             var result = await _repo.CertificateTypeAsyn(request);
             if (result.result == Results.Success)
@@ -292,9 +304,10 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
         [HttpPost]
-        [Route("/certtype/edit")]
-        public async Task<IActionResult> Task17([FromBody] CertificateTypeDetails request)
+        [Route("certtype/edit")]
+        public async Task<IActionResult> Task18([FromBody] CertificateTypeDetails request)
         {
             var result = await _repo.CertificateTypeAsyn(request, true);
             if (result.result == Results.Success)
@@ -305,8 +318,19 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
+        [Route("certtype/remove")]
+        public async Task<IActionResult> Task19([FromBody] CertificateTypeDetails request)
+        {
+            var result = await _repo.RemoveCertificate(request);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
         [Route("certtype")]
-        public async Task<IActionResult> Task18()
+        public async Task<IActionResult> Task20()
         {
             var result = await _repo.LoadCertificateType();
             if (result.result == Results.Success)

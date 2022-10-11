@@ -165,5 +165,42 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
+
+        [HttpPost]
+        [Route("residenttype/remove")]
+        public async Task<IActionResult> Task0m([FromBody] ResidentType req)
+        {
+            var result = await _repo.RemoveResidentType(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message});
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("templatetype/remove")]
+        public async Task<IActionResult> Task0n([FromBody] TemplateType req)
+        {
+            var result = await _repo.RemoveTemplateType(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("templatedoc/remove")]
+        public async Task<IActionResult> Task0o([FromBody] TemplateDocument req)
+        {
+            var result = await _repo.RemoveTemplateDoc(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
     }
 }
