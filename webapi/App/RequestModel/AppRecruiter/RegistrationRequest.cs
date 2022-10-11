@@ -363,6 +363,51 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Estabalished;
     }
 
+    public class LegalDocument
+    {
+        public string Tagline;
+        public string FormTabID;
+        public string FormTabDescription;
+    }
+    public class LegalDocument_Transaction
+    {
+        public string LegalFormsID;
+        public string LegalFormssControlNo;
+        public string TypeofTemplateID;
+        public string TypeofTemplateNM;
+        public string TemplateID;
+        public string TemplateNM;
+        public string ORNumber;
+        public string AmountPaid;
+
+        public string UserID;
+        public string Requestor;
+        public string URLProfPic;
+        public string Taken_ProfPic;
+        public string ProfilePic;
+        public string Gender;
+        public string GenderNM;
+        public string MaritalStatus;
+        public string MaritalStatusNM;
+        public string ResidentAddress;
+        public string BirthDate;
+        public string BirthPlace;
+        public string ContactNumber;
+        public int Age;
+
+        public string IssuedDate;
+        public string ExpiryDate;
+        public string GivenDay;
+        public string GivenMonth;
+        public string GivenYear;
+        public string Barangay;
+        public int MosValidity;
+        public string itagline;
+        public string Search;
+        public string DateFrom;
+        public string DateTo;
+    }
+
     public class GovernmentValidID
     {
         public string ID;
