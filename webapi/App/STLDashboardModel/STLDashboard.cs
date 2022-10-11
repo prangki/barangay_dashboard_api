@@ -296,6 +296,31 @@ namespace webapi.App.STLDashboardModel
         public string JsonString;
     }
 
+    public class BrgyCedula
+    {
+        public string RequestBy;
+        public string RequestType;
+        public string RequestPurpose;
+        public string Birthdate;
+        public string Gender;
+        public string Address;
+        public string Citizenship;
+        public string CivilStatus;
+        public decimal BCT;
+        public decimal GEB;
+        public decimal GEBTax;
+        public decimal GEP;
+        public decimal GEPTax;
+        public decimal IRP;
+        public decimal IRPTax;
+        public decimal TotalTax;
+        public decimal InterestRate;
+        public decimal Interest;
+        public decimal AmountPaid;
+        public string ProcessBy;
+        public string ProcessDate;
+    }
+
     public class BrgyClearance
     {
         public string ClearanceNo;
