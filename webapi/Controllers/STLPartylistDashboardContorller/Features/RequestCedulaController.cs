@@ -75,5 +75,18 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("request/cedula/update")]
+        public async Task<IActionResult> Update([FromBody] BrgyCedula data)
+        {
+            var result = await _repo.Update(data);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+
     }
 }
