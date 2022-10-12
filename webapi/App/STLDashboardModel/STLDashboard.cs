@@ -280,6 +280,27 @@ namespace webapi.App.STLDashboardModel
         public string PurposeID;
         public string PurposeDescription;
     }
+
+    //public class Position
+    //{
+    //    public string JsonString;
+    //}
+    public class Position
+    {
+        public int PositionId;
+        public string PL_ID;
+        public string PGRP_ID;
+        public string LOC_BRGY;
+        public string Positionn;
+        public int Category;
+    }
+
+    public class Religion
+    {
+        public string Code;
+        public string Description;
+    }
+
     public class CertificateTypeDetails
     {
         public string CertTypID;
