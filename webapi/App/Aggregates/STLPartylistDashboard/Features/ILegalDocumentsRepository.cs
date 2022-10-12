@@ -24,6 +24,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message, object legaldoc)> LegalDocAsync(LegalDocument_Transaction req);
         Task<(Results result, object legaldoc)> Load_LegalDoc(LegalDocument_Transaction req);
         Task<(Results result, object legaldocdetails)> Load_LegalDocDetails(LegalDocument_Transaction req);
+        Task<(Results result, String message, object release)> ReleaseAsync(LegalDocument_Transaction req);
+        Task<(Results result, String message, object cancel)> CancellAsync(LegalDocument_Transaction req);
     }
     public class LegalDocumentRepository:ILegalDocumentsRepository
     {
@@ -154,6 +156,54 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             if (result != null)
                 return (Results.Success, SubscriberDto.GetLegalDocumentDetailsList(result, 100));
             return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message, object release)> ReleaseAsync(LegalDocument_Transaction req)
+        {
+            var results = _repo.DSpQueryMultiple($"dbo.spfn_LGLDOC0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmlgldocid", req.LegalFormsID },
+                {"parmcontrolno", req.LegalFormssControlNo },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, "Clearance succesfully released !", results);
+                }
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!", null);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message, object cancel)> CancellAsync(LegalDocument_Transaction req)
+        {
+            var results = _repo.DSpQueryMultiple($"dbo.spfn_LGLDOC0E", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmlgldocid", req.LegalFormsID },
+                {"parmcontrolno", req.LegalFormssControlNo },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, "Selected Item succesfully cancelled", results);
+                }
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!", null);
+            }
+            return (Results.Null, null, null);
         }
     }
 }
