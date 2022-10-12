@@ -319,6 +319,7 @@ namespace webapi.App.STLDashboardModel
 
     public class BrgyCedula
     {
+        public string CedulaId;
         public string RequestBy;
         public string RequestType;
         public string RequestPurpose;
