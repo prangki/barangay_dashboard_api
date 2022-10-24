@@ -247,9 +247,10 @@ namespace webapi.App.STLDashboardModel
         public string BarangaySecretary;
         public string Accusations;
         public string PlaceOfIncident;
-        public string Witness;
+        public string JsonStringAccomplice;
         public string DateTimeOfIncident;
         public string NarrativeOfIncident;
+        public string DateCreated;
         public string ModifiedBy;
         public string DTModified;
         public string ReportPath;
@@ -315,6 +316,7 @@ namespace webapi.App.STLDashboardModel
     public class AppointDetails
     {
         public string JsonString;
+        public string DateCreated;
     }
 
     public class BrgyCedula
