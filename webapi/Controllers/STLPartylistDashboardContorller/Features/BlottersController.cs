@@ -65,9 +65,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/load")]
-        public async Task<IActionResult> LoadBlotter(string plid, string pgrpid)
+        public async Task<IActionResult> LoadBlotter(int id)
         {
-            var result = await _repo.LoadBlotter(plid, pgrpid);
+            var result = await _repo.LoadBlotter(id);
             if (result.result == Results.Success)
                 return Ok(result.blotter);
             return NotFound();
@@ -117,7 +117,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/summon/resolve")]
-        public async Task<IActionResult> ResolveSummon([FromBody] Blotter info, bool isSummon = true)
+        public async Task<IActionResult> ResolveSummon([FromBody] Blotter info)
         {
             var result = await _repo.ResolveSummon(info);
             if (result.result == Results.Success)
@@ -216,6 +216,36 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return (Results.Success, null);
             }
             return (Results.Null, "Make sure selected image is invalid");
+        }
+
+        [HttpPost]
+        [Route("document/template")]
+        public async Task<IActionResult> GetDocumentTemplate(string docname)
+        {
+            var result = await _repo.GetDocumentTemplate(docname);
+            if (result.result == Results.Success)
+                return Ok(result.document);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/complaint")]
+        public async Task<IActionResult> Complaint(string caseno, string createby, string createdate)
+        {
+            var result = await _repo.Complaint(caseno, createby, createdate);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/cancel")]
+        public async Task<IActionResult> Cancel(string caseno, string createby, string createdate)
+        {
+            var result = await _repo.Cancel(caseno, createby, createdate);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
         }
     }
 }

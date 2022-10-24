@@ -21,8 +21,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     [Service.ITransient(typeof(AppointedMemberRepository))]
     public interface IAppointedMemberRepository
     {
-        Task<(Results result, string message)> SaveAppointedMember(string jsonString);
-        Task<(Results result, object appoint)> LoadAppointMember();
+        Task<(Results result, string message)> SaveAppointedMember(AppointDetails param);
+        Task<(Results result, object appoint)> LoadAppointMember(int recordType);
         Task<(Results result, string message)> Approve(string appointid);
         Task<(Results result, string message)> ApproveBySelection(string groupid);
         Task<(Results result, string message)> Withdraw(string appointid);
@@ -46,14 +46,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             _repo = repo;
         }
 
-        public async Task<(Results result, string message)> SaveAppointedMember(string jsonString)
+        public async Task<(Results result, string message)> SaveAppointedMember(AppointDetails param)
         {
 
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
-                    {"parmjson", jsonString}
+                    {"parmjson", param.JsonString},
+                    {"parmappntdt", param.DateCreated}
                 }).FirstOrDefault();
 
             if (result != null)
@@ -70,12 +71,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object appoint)> LoadAppointMember()
+        public async Task<(Results result, object appoint)> LoadAppointMember(int recordType)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYAPPNTDMMBRS", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid", account.PGRP_ID}
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmrectyp", recordType}
             });
 
             if (result != null)

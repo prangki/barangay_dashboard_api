@@ -31,7 +31,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("appoint/member/save")]
         public async Task<IActionResult> SaveAppointedMember([FromBody] AppointDetails appoint)
         {
-            var result = await _repo.SaveAppointedMember(appoint.JsonString);
+            var result = await _repo.SaveAppointedMember(appoint);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
@@ -41,9 +41,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("appoint/member/load")]
-        public async Task<IActionResult> LoadAppointedMember()
+        public async Task<IActionResult> LoadAppointedMember(int recordType)
         {
-            var result = await _repo.LoadAppointMember();
+            var result = await _repo.LoadAppointMember(recordType);
             if (result.result == Results.Success)
                 return Ok(result.appoint);
             else
