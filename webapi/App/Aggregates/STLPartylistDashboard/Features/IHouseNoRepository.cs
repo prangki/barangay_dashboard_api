@@ -28,13 +28,16 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> SaveFamilyMember(HouseDetails details);
         Task<(Results result, object family)> LoadFamilyMembers();
         Task<(Results result, object family)> LoadSpecificFamilyMembers(string householdid);
-        Task<(Results result, object houseinfo)> LoadHouseInfo(string houseno, string householdid);
+        Task<(Results result, object houseinfo)> LoadHouseInfo();
         Task<(Results result, string message)> RemoveHouseNo(string houseno);
         Task<(Results result, string message)> RemoveHousehold(string householdid);
         Task<(Results result, string message)> RemoveFamilyMember(string familyId, string familyMemId);
         Task<(Results result, string message)> UpdateHouseNo(HouseDetails details);
         Task<(Results result, string message)> UpdateHousehold(HouseDetails details);
         Task<(Results result, string message)> UpdateFamily(HouseDetails details);
+        Task<(Results result, string message)> UpdateFamilyMember(string userId, string familyId);
+        Task<(Results result, object houseinfo)> LoadFamilyMember(string familyId);
+        Task<(Results result, string message)> RemoveFamilyMember(string userId);
 
     }
 
@@ -84,7 +87,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmhseclsfctn", details.HouseClassification},
                     {"parmsitloc", details.SitioId},
                     {"parmhmaddr", details.HomeAddress},
-                    {"parmrgsby", details.CreatedBy}
+                    {"parmrgsby", details.CreatedBy},
+                    {"parmrgsdt", details.DateCreated}
                 }).FirstOrDefault();
 
             if (result != null)
@@ -132,7 +136,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
-                    {"parmusrid", details.HouseholdUser}
+                    {"parmhhld", details.Household},
+                    {"parmcsftn", details.HouseholdClassification},
+                    {"parmrgsby", details.CreatedBy},
+                    {"parmrgsdt", details.DateCreated}
                 }).FirstOrDefault();
 
             if (result != null)
@@ -180,11 +187,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
+                    {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmusrid", details.FamilyMember},
-                    {"parmhhldrltnsp", details.HouseholderRelationship},
-                    {"parmfmhdrltnsp", details.FamilyHeadRelationship},
-                    {"parmfammid", details.FamilyId}
+                    {"parmusrid", details.FamilyId},
+                    {"parmoptr", details.CreatedBy},
+                    {"parmdt", details.DateCreated}
                 }).FirstOrDefault();
 
             if (result != null)
@@ -226,14 +233,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object houseinfo)> LoadHouseInfo(string houseno, string householdid)
+        public async Task<(Results result, object houseinfo)> LoadHouseInfo()
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSENOHHLDFMLY00", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
-                    {"parmpgrpid", account.PGRP_ID},
-                    {"parmhseid", houseno},
-                    {"parmhhldid", householdid}
+                    {"parmpgrpid", account.PGRP_ID}
                 });
             if (result != null)
                 return (Results.Success, result);
@@ -293,7 +298,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmfamid", familyId},
-                    {"parmfammem", familyMemId} 
+                    {"parmusrid", familyMemId} 
                 }).FirstOrDefault();
 
             if (result != null)
@@ -317,7 +322,6 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
-                    {"parmhseownr", details.HouseOwner},
                     {"parmhseclsfctn", details.HouseClassification},
                     {"parmsitloc", details.SitioId},
                     {"parmhmaddr", details.HomeAddress},
@@ -339,12 +343,16 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
         public async Task<(Results result, string message)> UpdateHousehold(HouseDetails details)
         {
-            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSENOHHLDFMLY01", new Dictionary<string, object>()
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHHLDU", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
+                    {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmhhlder", details.HouseholdUser}
+                    {"parmhhld", details.Household},
+                    {"parmcsftn", details.HouseholdClassification},
+                    {"parmmodby", details.ModifiedBy},
+                    {"parmmoddt", details.ModifiedDate}
                 }).FirstOrDefault();
 
             if (result != null)
@@ -362,18 +370,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         }
 
         public async Task<(Results result, string message)> UpdateFamily(HouseDetails details)
+        
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSENOHHLDFMLY01", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
+                    {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
+                    {"parmhhlder", details.Household},
                     {"parmfamid", details.FamilyId},
                     {"parmnewfamid", details.NewFamilyHead},
-                    {"parmfammem", details.FamilyMember},
-                    {"parmnewfammem", details.NewFamilyMember},
-                    {"parmhhldrltnsp", details.HouseholderRelationship},
-                    {"parmfmhdrltnsp", details.FamilyHeadRelationship},
+                    {"parmmodby", details.ModifiedBy},
+                    {"parmmoddt", details.ModifiedDate}
                 }).FirstOrDefault();
 
             if (result != null)
@@ -389,5 +398,67 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             }
             return (Results.Null, null);
         }
+
+        public async Task<(Results result, string message)> UpdateFamilyMember(string userId, string familyId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYFMLYADMBR", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmusrid", userId},
+                    {"parmfamid", familyId}
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, $"Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object houseinfo)> LoadFamilyMember(string familyId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYFMLYADMBR", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmfamid", familyId}
+                });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveFamilyMember(string userId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYFMLYADMBR", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmusrid", userId},
+                }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, $"Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+
     }
 }
