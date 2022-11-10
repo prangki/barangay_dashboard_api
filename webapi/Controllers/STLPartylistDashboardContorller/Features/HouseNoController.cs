@@ -149,9 +149,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/info")]
-        public async Task<IActionResult> LoadHouseInfo(string houseno,string householdid)
+        public async Task<IActionResult> LoadHouseInfo()
         {
-            var result = await _repo.LoadHouseInfo(houseno,householdid);
+            var result = await _repo.LoadHouseInfo();
             if (result.result == Results.Success)
                 return Ok(result.houseinfo);
             return NotFound();
@@ -229,5 +229,38 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("house/family/member/add")]
+        public async Task<IActionResult> UpdateFamilyMember(string userId, string familyId)
+        {
+            var result = await _repo.UpdateFamilyMember(userId, familyId);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/family/member")]
+        public async Task<IActionResult> LoadFamilyMember(string familyId)
+        {
+            var result = await _repo.LoadFamilyMember(familyId);
+            if (result.result == Results.Success)
+                return Ok(result.houseinfo);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/family/member/remove")]
+        public async Task<IActionResult> RemoveFamilyMember(string userId)
+        {
+            var result = await _repo.RemoveFamilyMember(userId);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
     }
 }
