@@ -266,17 +266,22 @@ namespace webapi.App.STLDashboardModel
         public string HouseId;
         public string HouseholdId;
         public string FamilyId;
+        public string HouseOwner;
         public string HouseholdUser;
+        public string Household;
         public string NewFamilyHead;
         public string FamilyMember;
         public string NewFamilyMember;
-        public string HouseOwner;
+        public string HouseholdClassification;
         public string HouseClassification;
         public string SitioId;
         public string HouseholderRelationship;
         public string FamilyHeadRelationship;
         public string HomeAddress;
         public string CreatedBy;
+        public string DateCreated;
+        public string ModifiedBy;
+        public string ModifiedDate;
     }
 
     public class PurposeDetails
