@@ -128,6 +128,7 @@ namespace webapi.App.Aggregates.FeatureAggregate
         public async Task<(Results result, object item)> RequestPersonalChatAsync(String RequestID){
             String SenderID = $"{ account.PL_ID }{ account.ACT_ID }";
             String ReceiverID = $"{ account.PL_ID }{ RequestID }";
+            String strChatKey = DateTime.Now.ToTimeMillisecond().ToString("X");
             var results = _repo.DQueryMultiple($@"
                 DECLARE @ChatID bigint;
                 DECLARE @CurrentDT datetime = GETDATE();
@@ -262,7 +263,17 @@ namespace webapi.App.Aggregates.FeatureAggregate
                 { "MediaUrl", (request.IsImage||request.IsFile?request.MediaUrl:"") },
             }).ReadSingleOrDefault();
             if(result!=null){
-                await notifyChat(ChatKey, result);
+                //await notifyChat(ChatKey, result);
+                //return (Results.Success, SetAsYou(result));
+
+
+                var row = ((IDictionary<string, object>)result);
+                bool IsPublicChat = row["IsPublicChat"].To<bool>(false);
+                bool IsPersonal = row["IsPersonal"].To<bool>(false);
+                if (IsPublicChat)
+                    await notifyChat(ChatKey, result);
+                else if (IsPersonal)
+                    await notifyChat(ChatKey, result, request.MemberID);
                 return (Results.Success, SetAsYou(result));
             }
             return (Results.Null, null);
@@ -397,9 +408,11 @@ namespace webapi.App.Aggregates.FeatureAggregate
             data["IsYou"] = true;
             return data;
         }
-        private async Task<bool> notifyChat(String ChatKey, IDictionary<string, object> row){
+        private async Task<bool> notifyChat(String ChatKey, IDictionary<string, object> row, String MemberID = "")
+        {
             //if(row["IsPublicChat"].Str().Equals("1")) return;
             bool IsPublicChat = row["IsPublicChat"].To<bool>(false);
+            bool IsPersonal = row["IsPersonal"].To<bool>(false);
             /*var results = _repo.DQueryMultiple($@"
                 DECLARE @FRBS_AUTH varchar(250) = (SELECT TOP(1) FRBS_AUTH FROM dbo.STL001 with(nolock) WHERE COMP_ID=@CompanyID)
                 SELECT @FRBS_AUTH FRBS_AUTH;
@@ -408,8 +421,8 @@ namespace webapi.App.Aggregates.FeatureAggregate
             });
             var result = ((IDictionary<string, object>)results.ReadSingleOrDefault());
             String FirebaseAuth = result["FRBS_AUTH"].Str();*/
-            
-            if(IsPublicChat){
+
+            if (IsPublicChat){
                 var conversation = _repo.DQueryMultiple($@"
                     SELECT TOP(1) a.CHT_ID ID, a.CHT_CD ChatKey, a.S_PRSNL IsPersonal, a.S_GRP IsGroup, a.S_PBLC IsPublic, a.S_ALLW_INVT IsAllowInvatiation
                         , b.MMBR_ID MemberID, S_ADMN IsAdmin, b.DSPLY_NM DisplayName, b.FLL_NM Fullname, b.PROF_IMG_URL ProfileImageUrl
@@ -422,7 +435,26 @@ namespace webapi.App.Aggregates.FeatureAggregate
                 }).ReadSingleOrDefault();
                 conversation.Messages = new List<dynamic>(new[]{row});
                 await Pusher.PushAsync($"/{account.PL_ID}/{account.PGRP_ID}/chat", new{ type = "public", content = conversation });
-            }else{
+            }
+            else if (IsPersonal)
+            {
+                //string strReceiver=
+                var conversation = _repo.DQueryMultiple($@"
+                    SELECT TOP(1) a.CHT_ID ID, a.CHT_CD ChatKey, a.S_PRSNL IsPersonal, a.S_GRP IsGroup, a.S_PBLC IsPublic, a.S_ALLW_INVT IsAllowInvatiation
+                        , b.MMBR_ID MemberID, S_ADMN IsAdmin, b.DSPLY_NM DisplayName, b.FLL_NM Fullname, b.PROF_IMG_URL ProfileImageUrl
+                    FROM dbo.STL0BA a with(nolock)
+                    INNER JOIN dbo.STL0BB b with(nolock) ON a.CHT_ID=b.CHT_ID 
+                    WHERE a.CHT_CD=@ChatKey
+                    AND (a.S_PRSNL=1 AND b.MMBR_ID=@MemberID);
+                ", new Dictionary<string, object>(){
+                    { "ChatKey", ChatKey },
+                    { "MemberID", MemberID },
+                }).ReadSingleOrDefault();
+                conversation.Messages = new List<dynamic>(new[] { row });
+                await Pusher.PushAsync($"/{account.PL_ID}/{account.PGRP_ID}/chat", new { type = "personal", content = conversation });
+            }
+            else
+            {
             }
             return false;
         }

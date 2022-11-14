@@ -30,15 +30,6 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
 
         [HttpPost]
-        [Route("brgyclearance")]
-        public async Task<IActionResult> Task0d([FromBody] BrgyClearance request)
-        {
-            var result = await _repo.Load_BrgyClearance(request);
-            if (result.result == Results.Success)
-                return Ok(result.bryclrid);
-            return NotFound();
-        }
-        [HttpPost]
         [Route("brgyclearance/new")]
         public async Task<IActionResult> Task0a([FromBody] BrgyClearance request)
         {
@@ -67,6 +58,37 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             var result = await _repo.CancellAsync(request);
             if (result.result == Results.Success)
                 return Ok(new { Status = "ok", Message = result.message, Cancel = result.cancel });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("brgyclearance")]
+        public async Task<IActionResult> Task0d([FromBody] BrgyClearance request)
+        {
+            var result = await _repo.Load_BrgyClearance(request);
+            if (result.result == Results.Success)
+                return Ok(result.bryclrid);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("brgyclearance/received")]
+        public async Task<IActionResult> Task0e([FromBody] BrgyClearance request)
+        {
+            var result = await _repo.ReceivedBrgyClearanceRequestAsync(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("brgyclearance/process")]
+        public async Task<IActionResult> Task0f([FromBody] BrgyClearance request)
+        {
+            var result = await _repo.ProcessRecivedBrgyClearanceRequestAsync(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
             if (result.result == Results.Failed)
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();

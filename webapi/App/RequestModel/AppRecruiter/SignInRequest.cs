@@ -27,4 +27,15 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string groupid;
         public string psncd;
     }
+    public class BIMSSMSIN 
+    {
+        public string Id;
+        public string SMSID;
+        public string SendTime;
+        public string Messagefrom;
+        public string Messageto;
+        public string Messagetext;
+        public string Messagetype;
+        public string MessageRead;
+    }
 }

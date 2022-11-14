@@ -86,7 +86,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmreg",request.reg },
                 {"parmprov",request.prov },
                 {"parmmun",request.mun },
-                {"parmbrgy",request.brgy }
+                {"parmbrgy",request.brgy },
+                {"parmsitio",request.sitio }
             });
             if (results != null)
                 return (Results.Success, SubscriberDto.GetMasterList1(results, 100));

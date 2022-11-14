@@ -9,6 +9,7 @@ using webapi.App.Model.User;
 using webapi.App.STLDashboardModel;
 using webapi.Commons.AutoRegister;
 using Comm.Commons.Extensions;
+using webapi.App.Aggregates.Common.Dto;
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
@@ -24,6 +25,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> IndividualText(IndividualText mob);
         Task<(Results result, String message)> GenerateTextBlast(GenerateBlasting mob);
         Task<(Results result, object mob)> GeneratedMobileNumber(int row);
+        Task<(Results result, String message)> SMSReadInbox(IndividualText req);
+        Task<(Results result, String message, String smsid)> SMSSendMessage(IndividualText req);
+        Task<(Results result, String message)> SMSReSendMessage(IndividualText req);
+        Task<(Results result, object inbox,object smsinbox)> LoadSMSInbox(IndividualText req);
     }
     public class TextBlastingRepository:ITextBlastingRepository
     {
@@ -202,6 +207,100 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             //    return (Results.Success, result);
             //}
             //return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> SMSReadInbox(IndividualText req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_SMSIN0C", new Dictionary<string, object>()
+            {
+                {"parmmobno",req.MobileNumber },
+                {"parmid",req.Id },
+                {"parmsmsid", req.SMS_ID }
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully Save");
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Failed Save");
+                else
+                    return (Results.Failed, "Error Save");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object inbox, object smsinbox)> LoadSMSInbox(IndividualText req)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_SMSIN0B", new Dictionary<string, object>()
+            {
+                {"parmmobno", req.MobileNumber },
+                {"parmsmstype", req.SMSType },
+                {"parmuserid", account.USR_ID }
+            });
+            if (result != null)
+            {
+                var inbox = STLSubscriberDto.GetInbox(result.ReadSingleOrDefault());
+                var smsinbox = STLSubscriberDto.GetSMSInboxList(result.Read<dynamic>());
+                return (Results.Success, inbox, smsinbox);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message, String smsid)> SMSSendMessage(IndividualText req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_SMSOUT0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmmessageto",req.MobileNumber },
+                {"parmmessagetext",req.TextMessage },
+                {"parmessagetype", req.SMSType },
+                {"parmuserid", account.USR_ID }
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    req.SMS_ID = row["SMS_ID"].Str();
+                    return (Results.Success, "Successfully Sent", req.SMS_ID);
+                }
+                    
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Failed Sent", null);
+                else
+                    return (Results.Failed, "Error Sent", null);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message)> SMSReSendMessage(IndividualText req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_SMSOUT0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmmessageto",req.MobileNumber },
+                {"parmmessagetext",req.TextMessage },
+                {"parmessagetype", req.SMSType },
+                {"parmsmsid", req.SMS_ID },
+                {"parmuserid", account.USR_ID }
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully Sent");
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Failed Sent");
+                else
+                    return (Results.Failed, "Error Sent");
+            }
+            return (Results.Null, null);
         }
     }
 }

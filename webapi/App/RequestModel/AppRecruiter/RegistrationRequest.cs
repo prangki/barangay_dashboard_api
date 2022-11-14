@@ -229,6 +229,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string prov;
         public string mun;
         public string brgy;
+        public string sitio;
     }
     public class BarangayList
     {

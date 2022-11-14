@@ -58,6 +58,45 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
+        [Route("smsisread")]
+        public async Task<IActionResult> SMSInboxIsRead(IndividualText req)
+        {
+            var result = await _repo.SMSReadInbox(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("sms/inbox")]
+        public async Task<IActionResult> SMSInbox(IndividualText req)
+        {
+            var result = await _repo.LoadSMSInbox(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, unread = result.inbox, smsinbox = result.smsinbox });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("sms/sendoutbox")]
+        public async Task<IActionResult> SMSSendOutbox(IndividualText req)
+        {
+            var result = await _repo.SMSSendMessage(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, smsid=result.smsid });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("sms/resendoutbox")]
+        public async Task<IActionResult> SMSReSendOutbox(IndividualText req)
+        {
+            var result = await _repo.SMSReSendMessage(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
         [Route("textblast/generatednumber")]
         public async Task<IActionResult> Gen_Number([FromBody] TextBlasting mob)
         {

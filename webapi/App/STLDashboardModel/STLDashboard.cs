@@ -146,6 +146,9 @@ namespace webapi.App.STLDashboardModel
     {
         public string MobileNumber;
         public string TextMessage;
+        public string Id;
+        public string SMSType;
+        public string SMS_ID;
     }
     public class GenerateBlasting
     {
@@ -347,6 +350,7 @@ namespace webapi.App.STLDashboardModel
 
     public class BrgyClearance
     {
+        public string ClearanceID;
         public string ClearanceNo;
         public string ControlNo;
         public string TypeofClearance;
@@ -365,6 +369,8 @@ namespace webapi.App.STLDashboardModel
         public string IssuedDate;
         public string ExpiryDate;
         public int MosValidity;
+        public int StatusRequest;
+        public string AppointmentDate;
     }
     public class BrgyBusinessClearance
     {

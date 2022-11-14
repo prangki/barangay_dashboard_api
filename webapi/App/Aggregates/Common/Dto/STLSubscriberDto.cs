@@ -38,6 +38,48 @@ namespace webapi.App.Aggregates.Common.Dto
             o.PLTCL_NM = data["PLTCL_NM"].Str();
             return o;
         }
+
+        public static IDictionary<string, object> GetInbox(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            o.MobileNumber = data["MessageFrom"].Str();
+            o.TotalUnRead = data["UnreadSMS"].Str();
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetSMSInboxList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetSMSInbox_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetSMSInbox_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_SMSInbox_List(e));
+        }
+        public static IDictionary<string, object> Get_SMSInbox_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            o.Id = data["Id"].Str();
+            o.SMS_ID = data["SMS_ID"].Str();
+            o.SendTime = Convert.ToDateTime(data["SendTime"].Str()).ToString("MMM dd, yyyy hh:mm tt");
+            o.MessageFrom = data["MessageFrom"].Str();
+            o.MessageTo = data["MessageTo"].Str();
+            o.MessageText = data["MessageText"].Str();
+            o.MessageType = data["MessageType"].Str();
+            o.IsRead = (data["IsRead"].Str() == "") ? false : Convert.ToBoolean(data["IsRead"]);
+            return o;
+        }
+
         public static IDictionary<string, object> GetGroupSA(IDictionary<string, object> data, string plid, string pgrpid, bool fullinfo = true)
         {
             dynamic o = Dynamic.Object;

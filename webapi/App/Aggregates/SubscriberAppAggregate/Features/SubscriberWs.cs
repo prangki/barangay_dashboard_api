@@ -75,7 +75,7 @@ namespace webapi.App.Aggregates.SubscriberAppAggregate.Features
 
         private void Subscribes(){
             stack.subscribe("/test", this.msgTest);
-            
+            stack.subscribe("/smsin", this.msgSMSIN);
             stack.subscribe($"/{account.PL_ID}/notify", this.receivedCompanyNotication);
             stack.subscribe($"/{account.PL_ID}/{account.PGRP_ID}/chat", this.receivedBranchPublicChat);
             stack.subscribe($"/{account.PL_ID}/{account.PGRP_ID}/notify", this.receivedBranchNotication);
@@ -103,7 +103,10 @@ namespace webapi.App.Aggregates.SubscriberAppAggregate.Features
         private void msgTest(Ultralight.StompMessage message){
             stomp("/test", message.Body);
         }
-        
+        private void msgSMSIN(Ultralight.StompMessage message)
+        {
+            stomp("/smsin", message.Body);
+        }
         private void receivedCompanyNotication(Ultralight.StompMessage message){
             stomp("/company", message.Body);
         }

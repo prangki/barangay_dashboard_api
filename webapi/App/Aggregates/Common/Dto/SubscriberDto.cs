@@ -499,8 +499,12 @@ namespace webapi.App.Aggregates.Common
             o.ACT_ID = data["ACT_ID"].Str();
             o.ACT_TYP = data["ACT_TYP"].Str();
             o.HouseNo = data["HSENO_ID"].Str();
+            o.HouseClassification = data["HSE_CLSFCTN"].Str();
+            o.HouseOwner = data["HSE_OWNR"].Str();
             o.HouseholdNo = data["HHLD_ID"].Str();
+            o.HouseholdNM = data["HHLD_NM"].Str();
             o.Family = data["FAM_ID"].Str();
+            o.FamilyNM = data["FAM_NM"].Str();
             o.TitleName = data["NM_TTL"].Str();
             o.FRST_NM = textInfo.ToTitleCase(textInfo.ToLower(data["FRST_NM"].Str()));
             o.MDL_NM = textInfo.ToTitleCase(textInfo.ToLower(data["MDL_NM"].Str()));
@@ -688,7 +692,8 @@ namespace webapi.App.Aggregates.Common
             o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
             o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
             o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
-            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy"); 
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
             return o;
         }
 
