@@ -247,5 +247,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("blotter/report")]
+        public async Task<IActionResult> LoadReport()
+        {
+            var result = await _repo.LoadReport();
+            if (result.result == Results.Success)
+                return Ok(result.report);
+            return NotFound();
+        }
     }
 }
