@@ -35,6 +35,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object document)> GetDocumentTemplate(string docname);
         Task<(Results result, string message)> Complaint(string caseno, string createby, string createdate);
         Task<(Results result, string message)> Cancel(string caseno, string createby, string createdate);
+        Task<(Results result, object report)> LoadReport();
     }
 
     public class BlotterRepository : IBlottersRepository
@@ -413,6 +414,25 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Null, null);
             }
             return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object report)> LoadReport()
+        {
+            try
+            {
+                var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTRRPT", new Dictionary<string, object>()
+                {
+                    {"parmplid",account.PL_ID },
+                    {"parmpgrpid",account.PGRP_ID },
+                });
+                if (result != null)
+                    return (Results.Success, result);
+                return (Results.Null, null);
+            }
+            catch (System.Exception)
+            {
+                return (Results.Null, null);
+            }
         }
     }
 }
