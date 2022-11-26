@@ -28,6 +28,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object bizowrnshptyp)> Load_BusinessOwnershipType();
         Task<(Results result, String message)> RemoveBusinessOwnershiptype(BusinessOwnershipType request);
         Task<(Results result, String message)> BrgyBusinessClearanceAsync(BrgyBusinessClearance req, bool isUpdate = false);
+        Task<(Results result, String message)> ReceivedBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req);
+        Task<(Results result, String message)> ProcessBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req);
         Task<(Results result, object brgybizclearance)> Load_BrgyBizClearance(BrgyBusinessClearance req);
         Task<(Results result, String message, object release)> ReleaseAsync(BrgyBusinessClearance req);
         Task<(Results result, String message, object cancel)> CancellAsync(BrgyBusinessClearance req);
@@ -330,6 +332,71 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "Check your Data, Please try again!", null);
             }
             return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message)> ReceivedBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BRGYBIZCLR0E", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbrgybizclrid",req.BusinessClearanceID },
+                {"parmcontrolno",req.ControlNo },
+                {"parmdateappointment", req.AppointmentDate },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    req.VerifiedBy = row["VERIFIEDBY"].Str();
+                    req.CertifiedBy = row["CERTIFIEDBY"].Str();
+                    return (Results.Success, "Successfully save");
+                }
+                    
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ProcessBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req)
+        {
+            var results = _repo.DSpQueryMultiple($"dbo.spfn_BRGYBIZCLR0F", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbrgybizclrid", req.BusinessClearanceID },
+                {"parmcontrolno", req.ControlNo },
+                {"parmbusinessid", req.BusinessID },
+                {"parmorno",req.ORNumber },
+                {"parmamountpaid",req.AmountPaid },
+                {"parmdocstamp",req.DocStamp },
+
+                {"parmissueddate",req.IssuedDate },
+                {"parmexpirydate",req.ExpiryDate },
+                {"parmvalidity",req.MosValidity },
+
+                {"parmenablectc",req.EnableCommunityTax },
+                {"parmctcno",req.CTCNo },
+                {"parmctcissuedat",req.CTCIssuedAt },
+                {"parmctcissuedon",req.CTCIssuedOn },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, "Process Clearance succesfully save!");
+                }
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!");
+            }
+            return (Results.Null, null);
         }
     }
 }

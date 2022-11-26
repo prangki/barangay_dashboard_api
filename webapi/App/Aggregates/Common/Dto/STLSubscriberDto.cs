@@ -714,6 +714,8 @@ namespace webapi.App.Aggregates.Common.Dto
             o.Owner_ID = data["OWN_ID"].Str();
             o.Owner_NM = textInfo.ToUpper(textInfo.ToLower(data["OWNR_NM"].Str()));
             o.OwnerAddres = textInfo.ToUpper(textInfo.ToLower(data["OWNR_ADDRESS"].Str()));
+            o.Owner_ContactNo = data["MOB_NO"].Str();
+            o.Owner_Email = data["EML_ADD"].Str();
 
             //o.FirstName = data["OWN_FRST_NM"].Str();
             //o.MiddleInitial = data["OWN_MI_NM"].Str();
@@ -722,7 +724,7 @@ namespace webapi.App.Aggregates.Common.Dto
             //o.OwnerAddress = data["OWN_ADDR"].Str();
             //o.OwnerEmail = data["OWN_EMAIL"].Str();
             //o.OwnerContactNo = data["OWN_CT_NO"].Str();
-            //o.Request = (data["REQ_DOC"].Str()=="") ? 0 : Convert.ToInt32(data["REQ_DOC"].Str());
+            o.Request = (data["REQ_DOC"].Str()=="") ? 0 : Convert.ToInt32(data["REQ_DOC"].Str());
 
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;
@@ -765,19 +767,20 @@ namespace webapi.App.Aggregates.Common.Dto
         }
 
 
+
         public static IEnumerable<dynamic> GetAllBusinessDocumentRequestList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
         {
             if (data == null) return null;
             var items = GetAllBusinessDocumentRequest_List(data);
             var count = items.Count();
-            //if (count >= limit)
-            //{
-            //    var o = items.Last();
-            //    var filter = (o.NextFilter = Dynamic.Object);
-            //    items = items.Take(count - 1).Concat(new[] { o });
-            //    filter.NextFilter = o.num_row;
-            //    filter.Userid = userid;
-            //}
+            if (count >= limit)
+            {
+                var o = items.Last();
+                var filter = (o.NextFilter = Dynamic.Object);
+                items = items.Take(count - 1).Concat(new[] { o });
+                filter.NextFilter = o.num_row;
+                filter.Userid = userid;
+            }
             return items;
         }
         public static IEnumerable<dynamic> GetAllBusinessDocumentRequest_List(IEnumerable<dynamic> data, bool fullinfo = true)

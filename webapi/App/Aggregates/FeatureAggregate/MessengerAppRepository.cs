@@ -218,10 +218,11 @@ namespace webapi.App.Aggregates.FeatureAggregate
 
         public async Task<(Results result, object item)> SendMessageAsync(String ChatKey, MessengerAppRequest request){
             String SenderID = $"{ account.PL_ID }{ account.ACT_ID }";
+            request.MemberID = $"{account.PL_ID}{request.MemberID}";
             var result = _repo.DQueryMultiple($@"
                 DECLARE @IsFirstMessage bit = '0';
                 --
-                DECLARE @Fullname varchar(150), @DisplayName varchar(150), @ProfileImageUrl varchar(500);
+                DECLARE @Fullname varchar(150), @DisplayName varchar(150), @ProfileImageUrl varchar(500), @IsPersonal bit=0;
                 (SELECT TOP(1) @DisplayName=NCK_NM, @ProfileImageUrl=IMG_URL, @Fullname=FLL_NM
                 FROM dbo.STLBDB a with(nolock) 
                 WHERE CONCAT(a.PL_ID, a.ACT_ID)=@SenderID) ORDER BY a.PL_ID, a.USR_ID;
@@ -230,7 +231,7 @@ namespace webapi.App.Aggregates.FeatureAggregate
                 DECLARE @DateSend datetime=GETDATE();
                 DECLARE @ChatID bigint, @IsPublicChat bit;
                 --
-                SELECT TOP(1) @ChatID=CHT_ID, @IsPublicChat=IIF(ISNULL(S_PBLC,'0')='1' AND ISNULL(S_GRP,'0')='1', 1, 0) FROM dbo.STL0BA with(nolock) WHERE CHT_CD=@ChatKey;
+                SELECT TOP(1) @ChatID=CHT_ID, @IsPublicChat=IIF(ISNULL(S_PBLC,'0')='1' AND ISNULL(S_GRP,'0')='1', 1, 0), @IsPersonal=IIF(ISNULL(S_PRSNL,'0')='1', 1, 0) FROM dbo.STL0BA with(nolock) WHERE CHT_CD=@ChatKey;
                 IF(@ChatID IS NOT NULL)
                 BEGIN
                     INSERT INTO dbo.STL0BC(CHT_ID, SNDR_ID, DSPLY_NM, PROF_IMG_URL, MSG,  SND_TS, S_FRST_MSG
@@ -245,7 +246,7 @@ namespace webapi.App.Aggregates.FeatureAggregate
                     SELECT DISTINCT TOP(15) a.CHT_ID ChatID, a.CHT_CONV_ID ID, a.SNDR_ID SenderID, a.DSPLY_NM DisplayName, a.PROF_IMG_URL ProfileImageUrl
                         , a.MSG Message, a.SND_TS DateSend, a.S_FRST_MSG IsFirstMessage
                         , a.S_IMG IsImage, a.S_FIL IsFile, a.MDIA_URL MediaUrl --, CAST(IIF(@SenderID=a.SNDR_ID,1,0) as bit) IsYou
-                        , @IsPublicChat IsPublicChat
+                        , @IsPublicChat IsPublicChat, @IsPersonal IsPersonal 
                     FROM dbo.STL0BC a with(nolock)
                     WHERE CHT_CONV_ID=@ChatConversationID;
                 END 

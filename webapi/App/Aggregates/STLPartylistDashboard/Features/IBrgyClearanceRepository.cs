@@ -173,6 +173,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
+
                 {"parmbrgyclrid", req.ClearanceNo },
                 {"parmcontrolno", req.ControlNo },
                 {"parmuserid", req.UserID },
@@ -189,8 +190,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
                 {"parmenablectc",req.EnableCommunityTax },
                 {"parmctcno",req.CTCNo },
-                {"parmctcissuedat",req.CTCIssuedAt },
+                {"parmctcissuedate",req.CTCIssuedAt },
                 {"parmctcissuedon",req.CTCIssuedOn },
+
                 {"parmoptrid",account.USR_ID }
             }).ReadSingleOrDefault();
             if (results != null)

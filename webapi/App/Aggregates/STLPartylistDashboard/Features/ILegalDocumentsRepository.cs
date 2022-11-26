@@ -26,6 +26,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object legaldocdetails)> Load_LegalDocDetails(LegalDocument_Transaction req);
         Task<(Results result, String message, object release)> ReleaseAsync(LegalDocument_Transaction req);
         Task<(Results result, String message, object cancel)> CancellAsync(LegalDocument_Transaction req);
+        Task<(Results result, String message)> ReceivedOtheDocumentRequest(LegalDocument_Transaction req);
+        Task<(Results result, String message)> ProcessOtheDocumentRequest(LegalDocument_Transaction req);
     }
     public class LegalDocumentRepository:ILegalDocumentsRepository
     {
@@ -204,6 +206,66 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "Check your Data, Please try again!", null);
             }
             return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message)> ReceivedOtheDocumentRequest(LegalDocument_Transaction req)
+        {
+            var results = _repo.DSpQueryMultiple($"spfn_LGLDOC0F", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmlgldocid", req.LegalFormsID },
+                {"parmcontrolno", req.LegalFormssControlNo },
+                {"parmdateappointment",req.AppointmentDate },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    req.VerifiedBy = row["VERIFIEDBY"].Str();
+                    req.CertifiedBy = row["CERTIFIEDBY"].Str();
+                    return (Results.Success, "Succesfull save");
+                }
+                    
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Request Document was not exist.");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ProcessOtheDocumentRequest(LegalDocument_Transaction req)
+        {
+            var results = _repo.DSpQueryMultiple($"spfn_LGLDOC0G", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmlgldocid", req.LegalFormsID },
+                {"parmcontrolno", req.LegalFormssControlNo },
+                {"parmrequestor",req.Requestor },
+                {"parmtemplatetype",req.TypeofTemplateID },
+                {"parmtemplatedoc",req.TemplateID },
+                {"parmorno",req.ORNumber },
+                {"parmamountpaid",req.AmountPaid },
+                {"parmtagline",req.itagline },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Succesfull save");
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Legal Document not exist.");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!");
+            }
+            return (Results.Null, null);
         }
     }
 }

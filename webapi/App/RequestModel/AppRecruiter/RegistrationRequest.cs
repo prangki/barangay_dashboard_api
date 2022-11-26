@@ -407,6 +407,10 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Search;
         public string DateFrom;
         public string DateTo;
+        public string Status;
+        public string AppointmentDate;
+        public string VerifiedBy;
+        public string CertifiedBy;
     }
 
     public class GovernmentValidID
@@ -428,6 +432,7 @@ namespace webapi.App.RequestModel.AppRecruiter
     {
         public string TemplateTypeID;
         public string TemplateDocID;
+        public int TemplateMod;
         public string Description;
         public string TemplateDocContent;
         public string iTagline;

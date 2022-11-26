@@ -165,5 +165,28 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("businessclearance/received")]
+        public async Task<IActionResult> Task0n([FromBody] BrgyBusinessClearance request)
+        {
+            var result = await _repo.ReceivedBrgyBusinessClearanceRequestAsync(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message, Content = request });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("businessclearance/process")]
+        public async Task<IActionResult> Task0O([FromBody] BrgyBusinessClearance request)
+        {
+            var result = await _repo.ProcessBrgyBusinessClearanceRequestAsync(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
     }
 }

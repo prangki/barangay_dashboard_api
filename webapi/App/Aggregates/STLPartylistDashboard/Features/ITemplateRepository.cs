@@ -107,6 +107,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmtemplateid",req.TemplateDocID },
                 {"parmtemplatename",req.Description },
                 {"parmtemplatetypeid",req.TemplateTypeID },
+                {"parmtemplatemod", req.TemplateMod },
                 {"parmtemplatecontent",req.TemplateDocContent },
                 {"parmtagline",req.iTagline },
                 {"parmoptrid",account.USR_ID }

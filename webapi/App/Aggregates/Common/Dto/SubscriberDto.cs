@@ -672,9 +672,9 @@ namespace webapi.App.Aggregates.Common
 
             o.ORNumber = textInfo.ToUpper(textInfo.ToLower(data["OR_NO"].Str()));
             //o.AmountPaid = Convert.ToDecimal(string.Format("{0:#.0}", data["AMOUNT_PAID"].Str()));
-            o.AmountPaid = Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
-            o.DocStamp = Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
-            o.TotalAmount = Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
+            o.AmountPaid = (data["AMOUNT_PAID"].Str() == "") ? Convert.ToDecimal(0).ToString("n2") : Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = (data["DOC_STAMP"].Str() == "") ? Convert.ToDecimal(0).ToString("n2") : Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
+            o.TotalAmount = (data["TTL_AMNT"].Str() == "") ? Convert.ToDecimal(0).ToString("n2") : Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
 
             o.EnableCommunityTax = Convert.ToBoolean(data["ENABLECTC"].Str());
             o.CTCNo = textInfo.ToUpper(textInfo.ToLower(data["CTC"].Str()));
@@ -684,13 +684,13 @@ namespace webapi.App.Aggregates.Common
             o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
             o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
 
-            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
-            o.MosValidity = Convert.ToInt32(data["MOS_VAL"].Str());
+            o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
+            o.MosValidity = (data["MOS_VAL"].Str() == "") ? 0 : Convert.ToInt32(data["MOS_VAL"].Str());
             o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
             o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
             o.ExpiryDate = (data["VALIDITYDATE"].Str() == "" ) ? "" : Convert.ToDateTime(data["VALIDITYDATE"].Str()).ToString("MMM dd, yyyy");
             o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
-            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.Cancelled = (data["CANCELLED"].Str() == "") ? false : Convert.ToBoolean(data["CANCELLED"].Str());
             o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
             o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
             o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
@@ -735,14 +735,18 @@ namespace webapi.App.Aggregates.Common
             o.ORNumber = data["OR_NO"].Str();
             o.AmountPaid = (data["AMOUNT_PAID"].Str() == "") ? Convert.ToDouble("0").ToString("n2") : Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
 
+            o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
+            o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
 
             o.ProcessDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
-            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
+            o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
             o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
             o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
-            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.Cancelled = (data["CANCELLED"].Str() == "") ? false : Convert.ToBoolean(data["CANCELLED"].Str());
             o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
             o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            o.StatusRequest = (data["STAT_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["STAT_REQ"].Str());
+            o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
             return o;
         }
 
@@ -821,11 +825,11 @@ namespace webapi.App.Aggregates.Common
 
             o.ORNumber = textInfo.ToUpper(textInfo.ToLower(data["OR_NO"].Str()));
             //o.AmountPaid = Convert.ToDecimal(string.Format("{0:#.0}", data["AMOUNT_PAID"].Str()));
-            o.AmountPaid = Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
-            o.DocStamp = Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
-            o.TotalAmount = Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
+            o.AmountPaid = (data["AMOUNT_PAID"].Str() == "") ? Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2") : Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = (data["DOC_STAMP"].Str() == "") ? Convert.ToDecimal(0).ToString("n2") : Convert.ToDecimal(data["DOC_STAMP"].Str()).ToString("n2");
+            o.TotalAmount = (data["TTL_AMNT"].Str() == "") ? Convert.ToDecimal(0).ToString("n2") : Convert.ToDecimal(data["TTL_AMNT"].Str()).ToString("n2");
 
-            o.EnableCommunityTax = Convert.ToBoolean(data["ENABLECTC"].Str());
+            o.EnableCommunityTax = (data["ENABLECTC"].Str() == "") ? false : Convert.ToBoolean(data["ENABLECTC"].Str());
             o.CTCNo = textInfo.ToUpper(textInfo.ToLower(data["CTC"].Str()));
             o.CTCIssuedAt = textInfo.ToUpper(textInfo.ToLower(data["CTCISSUEDAT"].Str()));
             o.CTCIssuedOn = (data["CTCISSUEDON"].Str() == "") ? "" : Convert.ToDateTime(data["CTCISSUEDON"].Str()).ToString("MMM dd, yyyy");
@@ -833,15 +837,17 @@ namespace webapi.App.Aggregates.Common
             o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
             o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
 
-            o.Release = Convert.ToBoolean(data["RELEASED"].Str());
-            o.MosValidity = Convert.ToInt32(data["MOS_VAL"].Str());
+            o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
+            o.MosValidity = (data["MOS_VAL"].Str() == "") ? 0 : Convert.ToInt32(data["MOS_VAL"].Str());
             o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
             o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
             o.ExpiryDate = (data["VALIDITYDATE"].Str() == "") ? "" : Convert.ToDateTime(data["VALIDITYDATE"].Str()).ToString("MMM dd, yyyy");
             o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
-            o.Cancelled = Convert.ToBoolean(data["CANCELLED"].Str());
+            o.Cancelled = (data["CANCELLED"].Str() ==  "") ? false : Convert.ToBoolean(data["CANCELLED"].Str());
             o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
             o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            o.StatusRequest = (data["STAT_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["STAT_REQ"].Str());
+            o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyyy");
             return o;
         }
 

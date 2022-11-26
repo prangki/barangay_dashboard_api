@@ -70,6 +70,19 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("legaldocument/process")]
+        public async Task<IActionResult> Task0d1([FromBody] LegalDocument_Transaction request)
+        {
+            var result = await _repo.ProcessOtheDocumentRequest(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+
         [HttpPost]
         [Route("legaldocument")]
         public async Task<IActionResult> Task0e(LegalDocument_Transaction req)
@@ -95,6 +108,17 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             var result = await _repo.ReleaseAsync(request);
             if (result.result == Results.Success)
                 return Ok(new { Status = "ok", Message = result.message, Release = result.release });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("legaldocument/received")]
+        public async Task<IActionResult> Task0b1([FromBody] LegalDocument_Transaction request)
+        {
+            var result = await _repo.ReceivedOtheDocumentRequest(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message, Content = request });
             if (result.result == Results.Failed)
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();

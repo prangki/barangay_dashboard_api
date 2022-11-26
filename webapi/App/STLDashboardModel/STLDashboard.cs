@@ -395,6 +395,8 @@ namespace webapi.App.STLDashboardModel
         public int MosValidity;
         public string VerifiedBy;
         public string CertifiedBy;
+        public string AppointmentDate;
+        public int StatusRequest;
     }
 }
 
