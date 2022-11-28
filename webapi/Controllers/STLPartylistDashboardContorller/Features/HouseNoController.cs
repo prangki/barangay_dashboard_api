@@ -171,9 +171,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/household/remove")]
-        public async Task<IActionResult> RemoveHousehold(string householdid)
+        public async Task<IActionResult> RemoveHousehold(string householdid, string userid)
         {
-            var result = await _repo.RemoveHousehold(householdid);
+            var result = await _repo.RemoveHousehold(householdid, userid);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
@@ -260,6 +260,50 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
                 return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/classification/add")]
+        public async Task<IActionResult> AddHouseClassification(string classification)
+        {
+            var result = await _repo.AddHouseClassification(classification);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/classification/load")]
+        public async Task<IActionResult> LoadHouseClassifications()
+        {
+            var result = await _repo.LoadHouseClassifications();
+            if (result.result == Results.Success)
+                return Ok(result.classifications);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/classification/remove")]
+        public async Task<IActionResult> RemoveHouseClassifications(string classification)
+        {
+            var result = await _repo.RemoveHouseClassifications(classification);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/report")]
+        public async Task<IActionResult> LoadHoueReport(string brgyloc, string from, string to)
+        {
+            var result = await _repo.LoadHouseReport(brgyloc, from, to);
+            if (result.result == Results.Success)
+                return Ok(result.report);
             return NotFound();
         }
     }

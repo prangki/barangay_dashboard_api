@@ -351,6 +351,7 @@ namespace webapi.App.STLDashboardModel
         public decimal AmountPaid;
         public string ProcessBy;
         public string ProcessDate;
+	    public string ReleaseDate;
     }
 
     public class BrgyClearance

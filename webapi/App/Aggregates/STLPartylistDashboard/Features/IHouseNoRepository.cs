@@ -30,7 +30,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object family)> LoadSpecificFamilyMembers(string householdid);
         Task<(Results result, object houseinfo)> LoadHouseInfo();
         Task<(Results result, string message)> RemoveHouseNo(string houseno);
-        Task<(Results result, string message)> RemoveHousehold(string householdid);
+        Task<(Results result, string message)> RemoveHousehold(string householdid, string userid);
         Task<(Results result, string message)> RemoveFamilyMember(string familyId, string familyMemId);
         Task<(Results result, string message)> UpdateHouseNo(HouseDetails details);
         Task<(Results result, string message)> UpdateHousehold(HouseDetails details);
@@ -38,6 +38,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> UpdateFamilyMember(string userId, string familyId);
         Task<(Results result, object houseinfo)> LoadFamilyMember(string familyId);
         Task<(Results result, string message)> RemoveFamilyMember(string userId);
+        Task<(Results result, string message)> AddHouseClassification(string classification);
+        Task<(Results result, object classifications)> LoadHouseClassifications();
+        Task<(Results result, string message)> RemoveHouseClassifications(string classification);
+        Task<(Results result, object report)> LoadHouseReport(string brgyloc, string from, string to);
 
     }
 
@@ -268,13 +272,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, string message)> RemoveHousehold(string householdid)
+        public async Task<(Results result, string message)> RemoveHousehold(string householdid, string userid)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSENOHHLDFMLY02", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
-                    {"parmhhldid", householdid}
+                    {"parmhhldid", householdid},
+                    {"parmusrid", userid},
                 }).FirstOrDefault();
 
             if (result != null)
@@ -322,6 +327,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
+                    {"parmhseownr", details.HouseOwner},
                     {"parmhseclsfctn", details.HouseClassification},
                     {"parmsitloc", details.SitioId},
                     {"parmhmaddr", details.HomeAddress},
@@ -459,6 +465,71 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, string message)> AddHouseClassification(string classification)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSECLSFTN", new Dictionary<string, object>()
+            {
+                {"parmclsftn", classification}
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, $"Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object classifications)> LoadHouseClassifications()
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSECLSFTN", new Dictionary<string, object>()
+                {});
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> RemoveHouseClassifications(string classification)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSECLSFTN", new Dictionary<string, object>()
+            {
+                {"parmid", classification}
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, $"Already exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object report)> LoadHouseReport(string brgyloc, string from, string to)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSRPT", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmbrgyloc", brgyloc},
+                {"parmfrom", from},
+                {"parmto", to}
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
 
     }
 }

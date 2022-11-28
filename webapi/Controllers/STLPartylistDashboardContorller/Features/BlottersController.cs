@@ -35,11 +35,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("blotter/save")]
         public async Task<IActionResult> SaveBlotter([FromBody] Blotter info)
         {
-            var valResult = await validityReport(info);
-            if (valResult.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valResult.message });
-            if (valResult.result != Results.Success)
-                return NotFound();
+            //var valResult = await validityReport(info);
+            //if (valResult.result == Results.Failed)
+            //    return Ok(new { Status = "error", Message = valResult.message });
+            //if (valResult.result != Results.Success)
+            //    return NotFound();
 
             var result = await _repo.SaveBlotter(info);
             if (result.result == Results.Success)
@@ -51,11 +51,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("blotter/update")]
         public async Task<IActionResult> UpdateBlotter([FromBody] Blotter info)
         {
-            var valResult = await validityReport(info);
-            if (valResult.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valResult.message });
-            if (valResult.result != Results.Success)
-                return NotFound();
+            //var valResult = await validityReport(info);
+            //if (valResult.result == Results.Failed)
+            //    return Ok(new { Status = "error", Message = valResult.message });
+            //if (valResult.result != Results.Success)
+            //    return NotFound();
 
             var result = await _repo.UpdateBlotter(info);
             if (result.result == Results.Success)
@@ -65,9 +65,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/load")]
-        public async Task<IActionResult> LoadBlotter(int id)
+        public async Task<IActionResult> LoadBlotter(int id, string from, string to)
         {
-            var result = await _repo.LoadBlotter(id);
+            var result = await _repo.LoadBlotter(id,from,to);
             if (result.result == Results.Success)
                 return Ok(result.blotter);
             return NotFound();
@@ -87,11 +87,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("blotter/summon/save")]
         public async Task<IActionResult> SaveSummon([FromBody] Blotter info, bool isSummon = true)
         {
-            var valResult = await validityReport(info);
-            if (valResult.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valResult.message });
-            if (valResult.result != Results.Success)
-                return NotFound();
+            //var valResult = await validityReport(info);
+            //if (valResult.result == Results.Failed)
+            //    return Ok(new { Status = "error", Message = valResult.message });
+            //if (valResult.result != Results.Success)
+            //    return NotFound();
 
             var result = await _repo.SaveSummon(info);
             if (result.result == Results.Success)
@@ -103,11 +103,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("blotter/summon/update")]
         public async Task<IActionResult> UpdateSummon([FromBody] Blotter info, bool isSummon = true)
         {
-            var valResult = await validityReport(info);
-            if (valResult.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valResult.message });
-            if (valResult.result != Results.Success)
-                return NotFound();
+            //var valResult = await validityReport(info);
+            //if (valResult.result == Results.Failed)
+            //    return Ok(new { Status = "error", Message = valResult.message });
+            //if (valResult.result != Results.Success)
+            //    return NotFound();
 
             var result = await _repo.UpdateSummon(info);
             if (result.result == Results.Success)
@@ -253,6 +253,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> LoadReport()
         {
             var result = await _repo.LoadReport();
+            if (result.result == Results.Success)
+                return Ok(result.report);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("case/load")]
+        public async Task<IActionResult> LoadCaseIdentifier(string name)
+        {
+            var result = await _repo.LoadCaseIdentifier(name);
             if (result.result == Results.Success)
                 return Ok(result.report);
             return NotFound();
