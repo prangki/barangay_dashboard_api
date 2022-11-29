@@ -64,6 +64,18 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
+        [Route("request/cedula/release/update")]
+        public async Task<IActionResult> Reschedule(string ctcno, string date)
+        {
+            var result = await _repo.Reschedule(ctcno, date);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
         [Route("request/cedula/cancel")]
         public async Task<IActionResult> Cancel(string ctcno, string date, string canceledby)
         {
@@ -87,6 +99,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("cedula/report")]
+        public async Task<IActionResult> LoadCedulaReport(string from, string to)
+        {
+            var result = await _repo.LoadCedulaReport(from, to);
+            if (result.result == Results.Success)
+                return Ok(result.report);
+            else
+                return NotFound();
 
+        }
     }
 }

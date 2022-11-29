@@ -20,7 +20,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, string message)> SaveBlotter(Blotter info);
         Task<(Results result, string message)> UpdateBlotter(Blotter info);
-        Task<(Results result, object blotter)> LoadBlotter(int id);
+        Task<(Results result, object blotter)> LoadBlotter(int id, string from, string to);
         Task<(Results result, string message)> SaveSummon(Blotter info);
         Task<(Results result, string message)> UpdateSummon(Blotter info);
         Task<(Results result, string message)> ResolveSummon(Blotter info);
@@ -36,6 +36,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> Complaint(string caseno, string createby, string createdate);
         Task<(Results result, string message)> Cancel(string caseno, string createby, string createdate);
         Task<(Results result, object report)> LoadReport();
+        Task<(Results result, object report)> LoadCaseIdentifier(string name);
     }
 
     public class BlotterRepository : IBlottersRepository
@@ -123,7 +124,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
         }
 
-        public async Task<(Results result, object blotter)> LoadBlotter(int id)
+        public async Task<(Results result, object blotter)> LoadBlotter(int id, string from, string to)
         {
             try
             {
@@ -131,7 +132,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     {"paramplid",account.PL_ID },
                     {"parampgrpid",account.PGRP_ID },
-                    {"paramvwtyp", id }
+                    {"paramvwtyp", id },
+                    {"paramfrom", from },
+                    {"paramto", to }
                 });
                     if (result != null)
                         return (Results.Success, result);
@@ -424,6 +427,26 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     {"parmplid",account.PL_ID },
                     {"parmpgrpid",account.PGRP_ID },
+                });
+                if (result != null)
+                    return (Results.Success, result);
+                return (Results.Null, null);
+            }
+            catch (System.Exception)
+            {
+                return (Results.Null, null);
+            }
+        }
+
+        public async Task<(Results result, object report)> LoadCaseIdentifier(string name)
+        {
+            try
+            {
+                var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYCSID", new Dictionary<string, object>()
+                {
+                    {"parmplid",account.PL_ID },
+                    {"parmpgrpid",account.PGRP_ID },
+                    {"parmname",name },
                 });
                 if (result != null)
                     return (Results.Success, result);
