@@ -304,6 +304,14 @@ namespace webapi.App.STLDashboardModel
         public int Category;
     }
 
+    public class Report
+    {
+        public string XML;
+        public string brgyCode;
+        public int typeOfReport;
+        public string columnBits;
+    }
+
     public class Religion
     {
         public string Code;
