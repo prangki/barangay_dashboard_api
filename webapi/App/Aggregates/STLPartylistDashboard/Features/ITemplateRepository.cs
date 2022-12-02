@@ -19,8 +19,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     public interface ITemplateRepository
     {
         Task<(Results result, object tpl)> Load_TemplateType();
+        Task<(Results result, object tpl)> Load_TemplateType1(string plid, string pgrpid);
         Task<(Results result, String message, String tplid)> TemplateTypeAsync(TemplateType req);
         Task<(Results result, object tpl)> Load_TemplateDoc(string templateid);
+        Task<(Results result, object tpl)> Load_TemplateDoc1(string plid, string pgrpid, string templateid);
         Task<(Results result, String message, string tplid)> TemplateDocAsync(TemplateDocument req);
         Task<(Results result, String message, String descid)> ItemTabAsyn(ItemDescription req);
         Task<(Results result, object item)> Load_ItemTab(ItemDescription req);
@@ -49,6 +51,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object tpl)> Load_TemplateType1(string plid, string pgrpid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_TPLTYP0B", new Dictionary<string, object>()
+            {
+                {"parmplid",plid },
+                {"parmpgrpid",pgrpid }
             });
             if (result != null)
                 return (Results.Success, result);
@@ -91,6 +105,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
+                {"parmtemplatetypeid", templateid }
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, object tpl)> Load_TemplateDoc1(string plid, string pgrpid, string templateid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_TPLDOC0B", new Dictionary<string, object>()
+            {
+                {"parmplid",plid },
+                {"parmpgrpid",pgrpid },
                 {"parmtemplatetypeid", templateid }
             });
             if (result != null)

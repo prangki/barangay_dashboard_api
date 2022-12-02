@@ -364,6 +364,8 @@ namespace webapi.App.STLDashboardModel
 
     public class BrgyClearance
     {
+        public string PLID;
+        public string PGRPID;
         public string ClearanceID;
         public string ClearanceNo;
         public string ControlNo;
@@ -388,6 +390,8 @@ namespace webapi.App.STLDashboardModel
     }
     public class BrgyBusinessClearance
     {
+        public string PLID;
+        public string PGRPID;
         public string BusinessClearanceID;
         public string ControlNo;
         public string BusinessID;

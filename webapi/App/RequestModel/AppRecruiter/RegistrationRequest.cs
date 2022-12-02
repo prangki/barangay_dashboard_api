@@ -372,6 +372,8 @@ namespace webapi.App.RequestModel.AppRecruiter
     }
     public class LegalDocument_Transaction
     {
+        public string PLID;
+        public string PGRPID;
         public string LegalFormsID;
         public string LegalFormssControlNo;
         public string TypeofTemplateID;
@@ -420,6 +422,8 @@ namespace webapi.App.RequestModel.AppRecruiter
     }
     public class TemplateType
     {
+        public string PLID;
+        public string PGRPID;
         public string TemplateTypeID;
         public string Description;
     }

@@ -86,8 +86,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYCLR0C", new Dictionary<string, object>()
             {
-                {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid", req.PLID},
+                {"parmpgrpid",req.PGRPID },
                 {"parmuserid",req.UserID },
                 {"parmrequeststatus", req.StatusRequest },
             });

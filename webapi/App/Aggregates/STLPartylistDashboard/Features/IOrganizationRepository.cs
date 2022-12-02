@@ -18,7 +18,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     [Service.ITransient(typeof(OrganizationRepository))]
     public interface IOrganizationRepository
     {
-        Task<(Results result, object org)> Load_Organization(string organization);
+        Task<(Results result, object org)> Load_Organization(string plid, string pgrpid, string organization);
         Task<(Results result, string message, string orgid)> OrganizationAsync(Organization req, bool isUpdate = false);
     }
     public class OrganizationRepository:IOrganizationRepository
@@ -32,12 +32,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             _repo = repo;
         }
 
-        public async Task<(Results result, object org)> Load_Organization(string organization)
+        public async Task<(Results result, object org)> Load_Organization(string plid, string pgrpid, string organization)
         {
             var result = _repo.DSpQueryMultiple($"dbo.spfn_ORGZ0C", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID },
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",plid },
+                {"parmpgrpid",pgrpid},
                 {"parmsrch", organization }
             });
             if (result != null)

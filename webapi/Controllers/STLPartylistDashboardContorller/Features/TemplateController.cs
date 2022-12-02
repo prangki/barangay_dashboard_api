@@ -34,6 +34,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
         [HttpPost]
+        [Route("templatetype1")]
+        public async Task<IActionResult> Task0a1(string plid, string pgrpid)
+        {
+            var result = await _repo.Load_TemplateType1(plid, pgrpid);
+            if (result.result == Results.Success)
+                return Ok(result.tpl);
+            return NotFound();
+        }
+        [HttpPost]
         [Route("templatetype/new")]
         public async Task<IActionResult> Task0b([FromBody] TemplateType req)
         {
@@ -72,6 +81,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> Task0d(string templateid)
         {
             var result = await _repo.Load_TemplateDoc(templateid);
+            if (result.result == Results.Success)
+                return Ok(result.tpl);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("templatedoc1")]
+        public async Task<IActionResult> Task0d1(string plid, string pgrpid, string templateid)
+        {
+            var result = await _repo.Load_TemplateDoc1(plid, pgrpid, templateid);
             if (result.result == Results.Success)
                 return Ok(result.tpl);
             return NotFound();

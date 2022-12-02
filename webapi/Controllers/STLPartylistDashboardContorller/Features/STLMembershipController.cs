@@ -215,36 +215,36 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
         [HttpPost]
         [Route("educatt")]
-        public async Task<IActionResult> Task0k(string userid)
+        public async Task<IActionResult> Task0k(string plid, string pgrpid, string userid)
         {
-            var result = await _repo.Load_EducationalAttainment(userid);
+            var result = await _repo.Load_EducationalAttainment(plid, pgrpid, userid);
             if (result.result == Results.Success)
                 return Ok(result.educatt);
             return NotFound();
         }
         [HttpPost]
         [Route("emphist")]
-        public async Task<IActionResult> Task0l(string userid)
+        public async Task<IActionResult> Task0l(string plid, string pgrpid, string userid)
         {
-            var result = await _repo.Load_EmploymentHistory(userid);
+            var result = await _repo.Load_EmploymentHistory(plid, pgrpid, userid);
             if (result.result == Results.Success)
                 return Ok(result.emphist);
             return NotFound();
         }
         [HttpPost]
         [Route("residence/organization")]
-        public async Task<IActionResult> Task0m(string userid)
+        public async Task<IActionResult> Task0m(string plid, string pgrpid, string userid)
         {
-            var result = await _repo.Load_Organization(userid);
+            var result = await _repo.Load_Organization(plid, pgrpid, userid);
             if (result.result == Results.Success)
                 return Ok(result.orgz);
             return NotFound();
         }
         [HttpPost]
         [Route("profilepicture/history")]
-        public async Task<IActionResult> Task0n(string userid)
+        public async Task<IActionResult> Task0n(string plid, string pgrpid, string userid)
         {
-            var result = await _repo.Load_ProfilePictureHistory(userid);
+            var result = await _repo.Load_ProfilePictureHistory(plid, pgrpid, userid);
             if (result.result == Results.Success)
                 return Ok(result.prfpic);
             return NotFound();
