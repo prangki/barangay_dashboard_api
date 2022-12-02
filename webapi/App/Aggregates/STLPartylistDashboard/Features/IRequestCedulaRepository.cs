@@ -26,7 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object list)> Load(string filterId, string from, string to);
         Task<(Results result, string message)> Release(string ctcno, string releasedDate, string releasedBy);
         Task<(Results result, string message)> Reschedule(string ctcno, string releasedDate);
-        Task<(Results result, string message)> Cancel(string ctcno, string canceledDate, string canceledBy);
+        Task<(Results result, string message)> Cancel(string ctcno, string reason, string canceledDate, string canceledBy);
         Task<(Results result, object report)> LoadCedulaReport(string from, string to);
     }
 
@@ -185,7 +185,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, string message)> Cancel(string ctcno, string canceledDate, string canceledBy)
+        public async Task<(Results result, string message)> Cancel(string ctcno, string reason, string canceledDate, string canceledBy)
         {
 
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYRQCTC01", new Dictionary<string, object>()
@@ -194,7 +194,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmctcno", ctcno},
                     {"parmdtcncl", canceledDate},
-                    {"parmoprtr", canceledBy}
+                    {"parmoprtr", canceledBy},
+                    {"parmrfc", reason}
                 }).FirstOrDefault();
 
             if (result != null)
