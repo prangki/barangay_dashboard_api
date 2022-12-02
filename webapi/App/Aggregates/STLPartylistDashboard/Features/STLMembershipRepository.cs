@@ -35,9 +35,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object emphist)> Load_EmploymentHistory(string userid);
         Task<(Results result, object orgz)> Load_Organization(string userid);
         Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string userid);
-        Task<(Results result, object prof)> Load_Profession();
-        Task<(Results result, object occ)> Load_Occupation();
-        Task<(Results result, object skl)> Load_Skills();
+        Task<(Results result, object prof)> Load_Profession(string search);
+        Task<(Results result, object occ)> Load_Occupation(string search);
+        Task<(Results result, object skl)> Load_Skills(string search);
         Task<(Results result, String message)> AssigendSkin(string skin);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
@@ -400,36 +400,39 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object prof)> Load_Profession()
+        public async Task<(Results result, object prof)> Load_Profession(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBPROF", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
             });
             if (results != null)
                 return (Results.Success, results);
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object occ)> Load_Occupation()
+        public async Task<(Results result, object occ)> Load_Occupation(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBOCC0A", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
             });
             if (results != null)
                 return (Results.Success, results);
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object skl)> Load_Skills()
+        public async Task<(Results result, object skl)> Load_Skills(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBSKLA", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
             });
             if (results != null)
                 return (Results.Success, results);

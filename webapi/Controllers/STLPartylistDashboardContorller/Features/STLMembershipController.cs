@@ -251,27 +251,27 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
         [HttpPost]
         [Route("proffesion")]
-        public async Task<IActionResult> Task0o()
+        public async Task<IActionResult> Task0o(string search)
         {
-            var result = await _repo.Load_Profession();
+            var result = await _repo.Load_Profession(search);
             if (result.result == Results.Success)
                 return Ok(result.prof);
             return NotFound();
         }
         [HttpPost]
         [Route("occupation")]
-        public async Task<IActionResult> Task0p()
+        public async Task<IActionResult> Task0p(string search)
         {
-            var result = await _repo.Load_Occupation();
+            var result = await _repo.Load_Occupation(search);
             if (result.result == Results.Success)
                 return Ok(result.occ);
             return NotFound();
         }
         [HttpPost]
         [Route("skills")]
-        public async Task<IActionResult> Task0q()
+        public async Task<IActionResult> Task0q(string search)
         {
-            var result = await _repo.Load_Skills();
+            var result = await _repo.Load_Skills(search);
             if (result.result == Results.Success)
                 return Ok(result.skl);
             return NotFound();
