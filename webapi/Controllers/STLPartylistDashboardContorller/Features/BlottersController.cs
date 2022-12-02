@@ -240,9 +240,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/cancel")]
-        public async Task<IActionResult> Cancel(string caseno, string createby, string createdate)
+        public async Task<IActionResult> Cancel(string caseno, string reason, string createby, string createdate)
         {
-            var result = await _repo.Cancel(caseno, createby, createdate);
+            var result = await _repo.Cancel(caseno, reason, createby, createdate);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
