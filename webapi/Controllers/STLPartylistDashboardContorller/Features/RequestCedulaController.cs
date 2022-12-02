@@ -77,9 +77,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("request/cedula/cancel")]
-        public async Task<IActionResult> Cancel(string ctcno, string date, string canceledby)
+        public async Task<IActionResult> Cancel(string ctcno, string reason, string date, string canceledby)
         {
-            var result = await _repo.Cancel(ctcno, date, canceledby);
+            var result = await _repo.Cancel(ctcno, reason, date, canceledby);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
