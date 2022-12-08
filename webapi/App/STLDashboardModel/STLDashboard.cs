@@ -306,10 +306,20 @@ namespace webapi.App.STLDashboardModel
 
     public class Report
     {
-        public string XML;
+        public string XML = null;
         public string brgyCode;
         public int typeOfReport;
         public string columnBits;
+        public string code = null;
+        public int loctype;
+    }
+
+    public class StatisticalData
+    {
+
+        public string code = null;
+        public int loctype;
+        public string xml = null;
     }
 
     public class Religion

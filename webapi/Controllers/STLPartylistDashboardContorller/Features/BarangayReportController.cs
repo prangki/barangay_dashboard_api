@@ -15,7 +15,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
     [Route("app/v1/stldashboard")]
     [ApiController]
     [ServiceFilter(typeof(SubscriberAuthenticationAttribute))]
-    public class BarangayReportController:ControllerBase
+    public class BarangayReportController : ControllerBase
     {
         private readonly IConfiguration _config;
         private readonly IBarangayReportRepository _repo;
@@ -28,7 +28,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("reporting/persitio")]
-        public async Task<IActionResult> ReportperSitio([FromBody]Report report)
+        public async Task<IActionResult> ReportperSitio([FromBody] Report report)
         {
             var result = await _repo.LoadReportperSitio(report);
             if (result.result == Results.Success)
@@ -41,6 +41,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> DataAnalytics([FromBody] Report report)
         {
             var result = await _repo.DataAnalytics(report);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reporting/statisticalData")]
+        public async Task<IActionResult> GetStatistics([FromBody] StatisticalData data)
+        {
+            var result = await _repo.GetStatisticalData(data);
             if (result.result == Results.Success)
                 return Ok(result.household);
             return NotFound();
