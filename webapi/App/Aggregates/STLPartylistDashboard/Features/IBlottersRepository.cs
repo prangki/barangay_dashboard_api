@@ -34,7 +34,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object residents)> GetAllResidents();
         Task<(Results result, object document)> GetDocumentTemplate(string docname);
         Task<(Results result, string message)> Complaint(string caseno, string createby, string createdate);
-        Task<(Results result, string message)> Cancel(string caseno, string createby, string createdate);
+        Task<(Results result, string message)> Cancel(string caseno, string reason, string createby, string createdate);
         Task<(Results result, object report)> LoadReport();
         Task<(Results result, object report)> LoadCaseIdentifier(string name);
     }
@@ -392,7 +392,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, string message)> Cancel(string caseno, string createby, string createdate)
+        public async Task<(Results result, string message)> Cancel(string caseno, string reason, string createby, string createdate)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTRCSRC", new Dictionary<string, object>()
             {
@@ -401,7 +401,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parambrgycsno",caseno },
                 {"paramscncl", 1 },
                 {"parammodby", createby },
-                {"parammoddt", createdate }
+                {"parammoddt", createdate },
+                {"paramrsn", reason }
             }).FirstOrDefault();
 
             if (result != null)

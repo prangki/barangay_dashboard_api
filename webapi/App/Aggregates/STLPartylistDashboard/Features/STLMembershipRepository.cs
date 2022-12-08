@@ -31,13 +31,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> ChangeAccounttype(ChangeAccountType request);
         Task<(Results result, object parent)> Load_Parent(FilterRequest request);
         Task<(Results result, object children)> Load_Children(string userid);
-        Task<(Results result, object educatt)> Load_EducationalAttainment(string userid);
-        Task<(Results result, object emphist)> Load_EmploymentHistory(string userid);
-        Task<(Results result, object orgz)> Load_Organization(string userid);
-        Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string userid);
-        Task<(Results result, object prof)> Load_Profession();
-        Task<(Results result, object occ)> Load_Occupation();
-        Task<(Results result, object skl)> Load_Skills();
+        Task<(Results result, object educatt)> Load_EducationalAttainment(string plid, string pgrpid, string userid);
+        Task<(Results result, object emphist)> Load_EmploymentHistory(string plid, string pgrpid, string userid);
+        Task<(Results result, object orgz)> Load_Organization(string plid, string pgrpid, string userid);
+        Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string plid, string pgrpid, string userid);
+        Task<(Results result, object prof)> Load_Profession(string search);
+        Task<(Results result, object occ)> Load_Occupation(string search);
+        Task<(Results result, object skl)> Load_Skills(string search);
         Task<(Results result, String message)> AssigendSkin(string skin);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
@@ -348,12 +348,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object emphist)> Load_EmploymentHistory(string userid)
+        public async Task<(Results result, object emphist)> Load_EmploymentHistory(string plid, string pgrpid, string userid)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBEMPHST0A", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",plid},
+                {"parmpgrpid",pgrpid },
                 {"parmuserid", userid }
             });
             if (results != null)
@@ -361,12 +361,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object educatt)> Load_EducationalAttainment(string userid)
+        public async Task<(Results result, object educatt)> Load_EducationalAttainment(string plid, string pgrpid, string userid)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBEDUCAT0A", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",plid},
+                {"parmpgrpid",pgrpid },
                 {"parmuserid", userid }
             });
             if (results != null)
@@ -374,12 +374,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object orgz)> Load_Organization(string userid)
+        public async Task<(Results result, object orgz)> Load_Organization(string plid, string pgrpid, string userid)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBORGZ0A", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",plid},
+                {"parmpgrpid",pgrpid },
                 {"parmuserid", userid }
             });
             if (results != null)
@@ -387,12 +387,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string userid)
+        public async Task<(Results result, object prfpic)> Load_ProfilePictureHistory(string plid, string pgrpid, string userid)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_PRFPIC0A", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",plid},
+                {"parmpgrpid",pgrpid },
                 {"parmuserid", userid }
             });
             if (results != null)
@@ -400,36 +400,39 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object prof)> Load_Profession()
+        public async Task<(Results result, object prof)> Load_Profession(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBPROF", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
             });
             if (results != null)
                 return (Results.Success, results);
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object occ)> Load_Occupation()
+        public async Task<(Results result, object occ)> Load_Occupation(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBOCC0A", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
             });
             if (results != null)
                 return (Results.Success, results);
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object skl)> Load_Skills()
+        public async Task<(Results result, object skl)> Load_Skills(string search)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBSKLA", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsearch", search }
             });
             if (results != null)
                 return (Results.Success, results);

@@ -26,9 +26,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
         [HttpPost]
         [Route("organization")]
-        public async Task<IActionResult> Task0a(string organization)
+        public async Task<IActionResult> Task0a(string plid, string pgrpid, string organization)
         {
-            var result = await _repo.Load_Organization(organization);
+            var result = await _repo.Load_Organization(plid, pgrpid, organization);
             if (result.result == Results.Success)
                 return Ok(result.org);
             return NotFound();

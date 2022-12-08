@@ -36,8 +36,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BDBGOVVALID0A", new Dictionary<string, object>()
             {
-                {"parmplid",account.PL_ID },
-                {"parmpgrpid",account.PGRP_ID },
+                {"parmplid",request.PL_ID },
+                {"parmpgrpid",request.PGRP_ID },
                 {"parmuserid", request.Userid }
             });
             if (result != null)

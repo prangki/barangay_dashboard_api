@@ -577,6 +577,7 @@ namespace webapi.App.Aggregates.Common
             o.ParentResideBrgy = (data["Parent_Reside_Brgy"].Str() == "") ? 0 : Convert.ToInt32(data["Parent_Reside_Brgy"].Str());
             o.TotalRequest = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REQ"].Str());
             o.TotalReceived = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REC"].Str());
+            o.TotalSummon = (data["TTL_SUMMON"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_SUMMON"].Str());
 
             //o.PermanentResidence = (data["PERM_RES"].Str() == "") ? 0 : Convert.ToInt32(data["PERM_RES"].Str());
 
