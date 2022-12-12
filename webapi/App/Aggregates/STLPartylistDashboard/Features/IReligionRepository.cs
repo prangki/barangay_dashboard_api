@@ -14,6 +14,7 @@ using webapi.Commons.AutoRegister;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
+
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
     [Service.ITransient(typeof(ReligionRepository))]
@@ -72,6 +73,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONDELETE", new Dictionary<string, object>()
             {
+                {"paramplid", account.PL_ID},
+                {"parampgrpid", account.PGRP_ID},
                 {"paramdescription", description},
                 
             });
@@ -108,7 +111,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         public async Task<(Results result, object position)> LoadReligion(string plid)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONSHOW", new Dictionary<string, object>()
-                );
+            {
+
+                {"paramplid", account.PL_ID},
+                {"parampgrpid", account.PGRP_ID},
+
+            }).FirstOrDefault();
             if (result != null)
                 return (Results.Success, result);
             return (Results.Null, null);

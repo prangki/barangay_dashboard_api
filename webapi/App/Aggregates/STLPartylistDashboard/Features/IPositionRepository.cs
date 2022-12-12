@@ -73,6 +73,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONDELETE", new Dictionary<string, object>()
             {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
                 {"paramid", plid},
 
             });
@@ -112,7 +114,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         public async Task<(Results result, object position)> LoadPosition()
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONSHOW", new Dictionary<string, object>()
-                );
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+
+            }).FirstOrDefault();
             if (result != null)
                 return (Results.Success, result);
             return (Results.Null, null);
