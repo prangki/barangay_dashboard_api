@@ -21,12 +21,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object hsspersit)> GetNumOfHousesPerSitio(string code);
         Task<(Results result, object residents)> LoadResidents();
         Task<(Results result, string message)> SaveHouseNo(HouseDetails details);
-        Task<(Results result, object houses)> LoadHouses();
+        Task<(Results result, object houses)> LoadHouses(int currentRow);
         Task<(Results result, string message)> SaveHousehold(HouseDetails details);
-        Task<(Results result, object households)> LoadHouseholds();
+        Task<(Results result, object households)> LoadHouseholds(int currentRow);
         Task<(Results result, object households)> LoadSpecificHouseholds(string houseid);
         Task<(Results result, string message)> SaveFamilyMember(HouseDetails details);
-        Task<(Results result, object family)> LoadFamilyMembers();
+        Task<(Results result, object family)> LoadFamilyMembers(int currentRow);
         Task<(Results result, object family)> LoadSpecificFamilyMembers(string householdid);
         Task<(Results result, object houseinfo)> LoadHouseInfo();
         Task<(Results result, string message)> RemoveHouseNo(string houseno);
@@ -42,6 +42,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object classifications)> LoadHouseClassifications();
         Task<(Results result, string message)> RemoveHouseClassifications(string classification);
         Task<(Results result, object report)> LoadHouseReport(string brgyloc, string from, string to);
+        Task<(Results result, object numbers)> LoadHouseNumbers();
+
 
     }
 
@@ -109,12 +111,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object houses)> LoadHouses()
+        public async Task<(Results result, object houses)> LoadHouses(int currentRow)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHOUSENO", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
-                    {"parmpgrpid", account.PGRP_ID}
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmcurrow", currentRow}
                 });
             if (result != null)
                 return (Results.Success, result);
@@ -160,12 +163,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object households)> LoadHouseholds()
+        public async Task<(Results result, object households)> LoadHouseholds(int currentRow)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHOUSEHOLD", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
-                    {"parmpgrpid", account.PGRP_ID}
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmcurrow", currentRow}
                 });
             if (result != null)
                 return (Results.Success, result);
@@ -212,12 +216,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object family)> LoadFamilyMembers()
+        public async Task<(Results result, object family)> LoadFamilyMembers(int currentRow)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYFMLYMMBR", new Dictionary<string, object>()
                 {
                     {"parmplid", account.PL_ID},
-                    {"parmpgrpid", account.PGRP_ID}
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmcurrow", currentRow}
                 });
             if (result != null)
                 return (Results.Success, result);
@@ -525,6 +530,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmbrgyloc", brgyloc},
                 {"parmfrom", from},
                 {"parmto", to}
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object numbers)> LoadHouseNumbers()
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYHSENOLIST", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmbrgyid", account.LOC_BRGY}
             });
             if (result != null)
                 return (Results.Success, result);
