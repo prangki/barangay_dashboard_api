@@ -12,6 +12,7 @@ using webapi.App.Aggregates.Common.Dto;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using System.Globalization;
 using webapi.App.RequestModel.Common;
+using webapi.App.STLDashboardModel;
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
@@ -39,6 +40,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object occ)> Load_Occupation(string search);
         Task<(Results result, object skl)> Load_Skills(string search);
         Task<(Results result, String message)> AssigendSkin(string skin);
+        Task<(Results result, String message)> ResidenceDODAsyn(DOD req, bool isUpdate = false);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -455,6 +457,53 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                     return (Results.Success, "Successfully update!");
                 return (Results.Failed, "Something wrong in your data, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, String message)> ResidenceDODAsyn(DOD req, bool isUpdate = false)
+        {
+            var results = _repo.DSpQueryMultiple($"dbo.spfn_BIMSDC0A", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmdcid", req.DCID },
+                {"parmcontrolno", req.ControlNo },
+                {"parmuserid", req.UserID },
+                {"parmcauseofdeath", req.CauseofDeath },
+                {"parmdieddate", req.DiedDate },
+                {"parmdiedtime", req.DiedTime },
+                {"parmorno",req.ORNumber },
+                {"parmordoi",req.ORIssuedDate },
+                {"parmamountpaid",req.AmountPaid },
+                {"parmdocstamp",req.DocStamp },
+
+                {"parmenablectc",req.EnableCommunityTax },
+                {"parmctcno",req.CTCNo },
+                {"parmctcissuedat",req.CTCIssuedAt },
+                {"parmctcissuedon",req.CTCIssuedOn },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    if (!isUpdate)
+                    {
+                        req.DCID = row["DC_ID"].Str();
+                        req.DeathCertificateNo = row["DC_ID"].Str();
+                        req.ControlNo = row["CNTRL_NO"].Str();
+                        req.VerifiedBy = row["VERIFIEDBY"].Str();
+                        req.CertifiedBy = row["CERTIFIEDBY"].Str();
+                    }
+                    return (Results.Success, "Clearance succesfully save!");
+                }
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!");
+                else if (ResultCode == "2")
+                    return (Results.Failed, "This Account was In-Active!");
             }
             return (Results.Null, null);
         }

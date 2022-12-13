@@ -388,6 +388,32 @@ namespace webapi.App.STLDashboardModel
         public int StatusRequest;
         public string AppointmentDate;
     }
+
+    public class DOD
+    {
+        public string PLID;
+        public string PGRPID;
+        public string DCID;
+        public string DeathCertificateNo;
+        public string ControlNo;
+        public string CauseofDeath;
+        public string DiedDate;
+        public string DiedTime;
+        public string ORNumber;
+        public string ORIssuedDate;
+        public string AmountPaid;
+        public string DocStamp;
+        public int EnableCommunityTax;
+        public string CTCNo;
+        public string CTCIssuedAt;
+        public string CTCIssuedOn;
+        public string UserID;
+        public string ResidenceName;
+        public string VerifiedBy;
+        public string CertifiedBy;
+
+        public string IssuedDate;
+    }
     public class BrgyBusinessClearance
     {
         public string PLID;

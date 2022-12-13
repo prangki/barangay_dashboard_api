@@ -221,5 +221,27 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("templateforms/update")]
+        public async Task<IActionResult> Task0p([FromBody] FormTemplate req)
+        {
+            var result = await _repo.FormTemplateAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, Content = req });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("templateforms")]
+        public async Task<IActionResult> Task0q([FromBody] FormTemplate req)
+        {
+            var result = await _repo.Load_TemplateForm(req);
+            if (result.result == Results.Success)
+                return Ok(result.templateform);
+            return NotFound();
+        }
     }
 }

@@ -20,6 +20,7 @@ using webapi.App.Aggregates.Common.Dto;
 using System.Text;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using webapi.App.RequestModel.Common;
+using webapi.App.STLDashboardModel;
 
 namespace webapi.Controllers.STLPartylistMembership.Features
 {
@@ -54,6 +55,18 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             var reporesult = await _repo.MembershipAsync(request);
             if (reporesult.result == Results.Success)
                 return Ok(new { result = reporesult.result, Message = reporesult.message });
+            else if (reporesult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = reporesult.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("membership/decd")]
+        public async Task<IActionResult> Task0b1([FromBody] DOD req)
+        {
+            var reporesult = await _repo.ResidenceDODAsyn(req);
+            if (reporesult.result == Results.Success)
+                return Ok(new { Status = "ok", Message = reporesult.message, Content=req });
             else if (reporesult.result == Results.Failed)
                 return Ok(new { Status = "error", Message = reporesult.message });
             return NotFound();

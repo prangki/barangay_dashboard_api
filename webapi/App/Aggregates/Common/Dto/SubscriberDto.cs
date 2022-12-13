@@ -548,6 +548,8 @@ namespace webapi.App.Aggregates.Common
             o.OCCPTN = textInfo.ToTitleCase(textInfo.ToLower(data["OCCPTN"].Str()));
             o.SKLLS = textInfo.ToTitleCase(textInfo.ToLower(data["SKLLS"].Str()));
             o.PRF_PIC = data["PRF_PIC"].Str();
+            o.LeftThumb = "";
+            o.RightThumb = "";
             o.Taken_ProfPic = data["TAKEN_PIC"].Str();
             o.FR_ID = data["FR_ID"].Str();
             o.MO_ID = data["MO_ID"].Str();
@@ -578,7 +580,9 @@ namespace webapi.App.Aggregates.Common
             o.TotalRequest = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REQ"].Str());
             o.TotalReceived = (data["TTL_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_REC"].Str());
             o.TotalSummon = (data["TTL_SUMMON"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_SUMMON"].Str());
-
+            o.CauseofDeath = data["CAUSEOFDEATH"].Str();
+            o.DiedDate = data["DCDATE"].Str();
+            o.DiedTime = data["DCTIME"].Str();
             //o.PermanentResidence = (data["PERM_RES"].Str() == "") ? 0 : Convert.ToInt32(data["PERM_RES"].Str());
 
             o.PermanentResidence = (data["PERM_RES"].Str() == "") ? 0 : Convert.ToInt32(data["PERM_RES"]);

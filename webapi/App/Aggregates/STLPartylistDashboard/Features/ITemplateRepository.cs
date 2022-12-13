@@ -21,7 +21,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object tpl)> Load_TemplateType();
         Task<(Results result, object tpl)> Load_TemplateType1(string plid, string pgrpid);
         Task<(Results result, String message, String tplid)> TemplateTypeAsync(TemplateType req);
+        Task<(Results result, String message)> FormTemplateAsync(FormTemplate req);
         Task<(Results result, object tpl)> Load_TemplateDoc(string templateid);
+        Task<(Results result, object templateform)> Load_TemplateForm(FormTemplate req);
         Task<(Results result, object tpl)> Load_TemplateDoc1(string plid, string pgrpid, string templateid);
         Task<(Results result, String message, string tplid)> TemplateDocAsync(TemplateDocument req);
         Task<(Results result, String message, String descid)> ItemTabAsyn(ItemDescription req);
@@ -319,6 +321,52 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check Details, Please try again");
             }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> FormTemplateAsync(FormTemplate req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BIMSFRM0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbarangaycode",req.BarangayCode },
+                {"parmdoccontent",req.FormContent },
+                {"parmbarangayformsid",req.FormID },
+                {"parmbarangayformname",req.FormName },
+                {"parmoptrid",account.USR_ID }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    if (req.FormID.IsEmpty())
+                        req.FormID = row["FORMS_ID"].Str();
+                    return (Results.Success, "Successfully save");
+                }
+
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Form already Exist, Please try again");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check this Form Template, Please try again");
+                return (Results.Failed, "Something wrong in your data, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object templateform)> Load_TemplateForm(FormTemplate req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSFRM0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbarangayformname", req.FormName },
+                {"parmbarangaycode", req.BarangayCode }
+            });
+            if (result != null)
+                return (Results.Success, result);
             return (Results.Null, null);
         }
     }

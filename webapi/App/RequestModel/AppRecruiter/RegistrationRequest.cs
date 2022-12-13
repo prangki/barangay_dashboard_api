@@ -427,6 +427,15 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string TemplateTypeID;
         public string Description;
     }
+    public class FormTemplate
+    {
+        public string PLID;
+        public string PGRPID;
+        public string FormID;
+        public string BarangayCode;
+        public string FormContent;
+        public string FormName;
+    }
     public class ResidentType
     {
         public string RestTypId;
