@@ -65,9 +65,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/load")]
-        public async Task<IActionResult> LoadBlotter(int id, string from, string to)
+        public async Task<IActionResult> LoadBlotter(int id, int row, string from, string to)
         {
-            var result = await _repo.LoadBlotter(id,from,to);
+            var result = await _repo.LoadBlotter(id,row,from, to);
             if (result.result == Results.Success)
                 return Ok(result.blotter);
             return NotFound();
@@ -75,9 +75,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/summon/load")]
-        public async Task<IActionResult> LoadSummon(string plid, string pgrpid, bool isSummon = true)
+        public async Task<IActionResult> LoadSummon(int row, bool isSummon = true)
         {
-            var result = await _repo.LoadSummon(plid, pgrpid);
+            var result = await _repo.LoadSummon(row);
             if (result.result == Results.Success)
                 return Ok(result.summon);
             return NotFound();
