@@ -20,12 +20,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, string message)> SaveBlotter(Blotter info);
         Task<(Results result, string message)> UpdateBlotter(Blotter info);
-        Task<(Results result, object blotter)> LoadBlotter(int id, string from, string to);
+        Task<(Results result, object blotter)> LoadBlotter(int id, int currentRow, string from, string to);
         Task<(Results result, string message)> SaveSummon(Blotter info);
         Task<(Results result, string message)> UpdateSummon(Blotter info);
         Task<(Results result, string message)> ResolveSummon(Blotter info);
         Task<(Results result, string message)> RemoveSummon(Blotter info);
-        Task<(Results result, object summon)> LoadSummon(string plid, string pgrpid);
+        Task<(Results result, object summon)> LoadSummon(int currentRow);
         Task<(Results result, object caseNo)> UpdatedCaseNo(string plid, string pgrpid);
         Task<(Results result, object brgycpt)> GetBrgyCpt(string plid, string pgrpid);
         Task<(Results result, object docpath)> Reprint(string plid, string pgrpid, string brgycsno, string colname);
@@ -58,22 +58,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"paramplid",account.PL_ID},
                 {"parampgrpid",account.PGRP_ID},
                 {"parambrgycsno",info.BarangayCaseNo},
-                {"paramrgncd",info.RegionCode},
-                {"paramprvcd",info.ProvinceCode},
-                {"parammncpl",info.MunicipalCode},
-                {"parambrgycd",info.BrgyCode},
                 {"paramprk",info.PurokOrSitio},
                 {"parambrgycpt",info.BarangayCaptain},
                 {"paramcmpnm",info.ComplainantsName},
                 {"paramrspnm",info.RespondentsName},
+                {"paramcmplnttyp",info.ComplaintType},
                 {"paramjsonacmplc",info.JsonStringAccomplice},
                 {"paramacstn",info.Accusations},
                 {"paramincp",info.PlaceOfIncident},
                 {"paramstmt",info.NarrativeOfIncident},
                 {"paramincdt",info.DateTimeOfIncident},
                 {"paramcrtdby",info.BarangaySecretary},
-                {"paramcrtddt",info.DateCreated},
-                {"paramdocpath",info.ReportPath}
+                {"paramcrtddt",info.DateCreated}
             }).FirstOrDefault();
 
             if (result != null)
@@ -101,6 +97,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"paramprk",info.PurokOrSitio},
                 {"paramcmpnm",info.ComplainantsName},
                 {"paramrspnm",info.RespondentsName},
+                {"paramcmplnttyp",info.ComplaintType},
                 {"paramacstn",info.Accusations},
                 {"paramincp",info.PlaceOfIncident},
                 {"paramstmt",info.NarrativeOfIncident},
@@ -124,7 +121,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
         }
 
-        public async Task<(Results result, object blotter)> LoadBlotter(int id, string from, string to)
+        public async Task<(Results result, object blotter)> LoadBlotter(int id, int currentRow, string from, string to)
         {
             try
             {
@@ -134,7 +131,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parampgrpid",account.PGRP_ID },
                     {"paramvwtyp", id },
                     {"paramfrom", from },
-                    {"paramto", to }
+                    {"paramto", to },
+                    {"paramcurrow", currentRow }
                 });
                     if (result != null)
                         return (Results.Success, result);
@@ -146,14 +144,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             }
         }
 
-        public async Task<(Results result, object summon)> LoadSummon(string plid, string pgrpid)
+        public async Task<(Results result, object summon)> LoadSummon(int currentRow)
         {
             try
             {
                 var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLOTTERUO", new Dictionary<string, object>()
             {
-                {"paramplid",account.PL_ID },
-                {"parampgrpid",account.PGRP_ID }
+                {"paramplid", account.PL_ID },
+                {"parampgrpid", account.PGRP_ID },
+                {"parmcurrow", currentRow }
             });
                 if (result != null)
                     return (Results.Success, result);
