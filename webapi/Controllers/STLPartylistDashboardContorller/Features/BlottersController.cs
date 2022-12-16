@@ -75,9 +75,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("blotter/summon/load")]
-        public async Task<IActionResult> LoadSummon(int row, bool isSummon = true)
+        public async Task<IActionResult> LoadSummon(int row, string from, string to, bool isSummon = true)
         {
-            var result = await _repo.LoadSummon(row);
+            var result = await _repo.LoadSummon(row,from,to);
             if (result.result == Results.Success)
                 return Ok(result.summon);
             return NotFound();
