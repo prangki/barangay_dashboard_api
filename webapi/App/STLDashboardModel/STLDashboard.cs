@@ -310,6 +310,9 @@ namespace webapi.App.STLDashboardModel
         public string brgyCode;
         public int typeOfReport;
         public string columnBits;
+        public string filterBits;
+        public int? agefrom = null;
+        public int? ageto = null;
         public string code = null;
         public int loctype;
     }
@@ -320,6 +323,13 @@ namespace webapi.App.STLDashboardModel
         public string code = null;
         public int loctype;
         public string xml = null;
+    }
+
+    public class DocumentStatistics
+    {
+        public int type;
+        public string dtfrom;
+        public string dtto;
     }
 
     public class Religion

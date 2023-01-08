@@ -68,7 +68,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         {
             var result = await _repo.LoadPosition();
             if (result.result == Results.Success)
-                return Ok(result.position);
+                return Ok(result.household);
             return NotFound();
         }
 
