@@ -248,6 +248,7 @@ namespace webapi.App.STLDashboardModel
         public string PurokOrSitio;
         public string BarangayCaptain;
         public string BarangaySecretary;
+        public string ComplaintType;
         public string Accusations;
         public string PlaceOfIncident;
         public string JsonStringAccomplice;

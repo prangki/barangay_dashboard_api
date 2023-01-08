@@ -712,6 +712,7 @@ namespace webapi.App.Aggregates.Common.Dto
             o.BusinessOwnershipTypeNM = textInfo.ToUpper(textInfo.ToLower(data["OWNRSHP_TYP_NM"].Str()));
             o.isInActive = Convert.ToBoolean(data["nSTATUS"].Str());
             o.Owner_ID = data["OWN_ID"].Str();
+            o.Owner_Title = data["OWNR_TTL"].Str();
             o.Owner_NM = textInfo.ToUpper(textInfo.ToLower(data["OWNR_NM"].Str()));
             o.OwnerAddres = textInfo.ToUpper(textInfo.ToLower(data["OWNR_ADDRESS"].Str()));
             o.Owner_ContactNo = data["MOB_NO"].Str();

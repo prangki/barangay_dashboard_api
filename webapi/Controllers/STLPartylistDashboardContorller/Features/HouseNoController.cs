@@ -65,9 +65,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/houseno/load")]
-        public async Task<IActionResult> LoadHouses()
+        public async Task<IActionResult> LoadHouses(int currentRow)
         {
-            var result = await _repo.LoadHouses();
+            var result = await _repo.LoadHouses(currentRow);
             if (result.result == Results.Success)
                 return Ok(result.houses);
             return NotFound();
@@ -97,9 +97,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/household/load")]
-        public async Task<IActionResult> LoadHouseholds()
+        public async Task<IActionResult> LoadHouseholds(int currentRow)
         {
-            var result = await _repo.LoadHouseholds();
+            var result = await _repo.LoadHouseholds(currentRow);
             if (result.result == Results.Success)
                 return Ok(result.households);
             return NotFound();
@@ -129,9 +129,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/family/load")]
-        public async Task<IActionResult> LoadFamilyMembers()
+        public async Task<IActionResult> LoadFamilyMembers(int currentRow)
         {
-            var result = await _repo.LoadFamilyMembers();
+            var result = await _repo.LoadFamilyMembers(currentRow);
             if (result.result == Results.Success)
                 return Ok(result.family);
             return NotFound();
@@ -299,11 +299,21 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/report")]
-        public async Task<IActionResult> LoadHoueReport(string brgyloc, string from, string to)
+        public async Task<IActionResult> LoadHouseReport(string brgyloc, string from, string to)
         {
             var result = await _repo.LoadHouseReport(brgyloc, from, to);
             if (result.result == Results.Success)
                 return Ok(result.report);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/numbers")]
+        public async Task<IActionResult> LoadHouseNumbers()
+        {
+            var result = await _repo.LoadHouseNumbers();
+            if (result.result == Results.Success)
+                return Ok(result.numbers);
             return NotFound();
         }
     }

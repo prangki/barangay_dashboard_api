@@ -23,7 +23,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, string message)> Save(BrgyCedula param);
         Task<(Results result, string message)> Update(BrgyCedula param);
-        Task<(Results result, object list)> Load(string filterId, string from, string to);
+        Task<(Results result, object list)> Load(string filterId, string from, string to, int currentRow);
         Task<(Results result, string message)> Release(string ctcno, string releasedDate, string releasedBy);
         Task<(Results result, string message)> Reschedule(string ctcno, string releasedDate);
         Task<(Results result, string message)> Cancel(string ctcno, string reason, string canceledDate, string canceledBy);
@@ -118,7 +118,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object list)> Load(string filterId, string from, string to)
+        public async Task<(Results result, object list)> Load(string filterId, string from, string to, int currentRow)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYRQCTC00", new Dictionary<string, object>()
             {
@@ -126,7 +126,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpgrpid", account.PGRP_ID},
                 {"parmfltr", int.Parse(filterId)},
                 {"parmfrom", from},
-                {"parmto", to}
+                {"parmto", to},
+                {"parmcurrow", currentRow}
             });
 
             if (result != null)

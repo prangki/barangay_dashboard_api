@@ -41,9 +41,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("request/cedula/load")]
-        public async Task<IActionResult> Load(string filterId, string from, string to)
+        public async Task<IActionResult> Load(string filterId, int row, string from, string to)
         {
-            var result = await _repo.Load(filterId, from, to);
+            var result = await _repo.Load(filterId, from, to, row);
             if (result.result == Results.Success)
                 return Ok(result.list);
             else
