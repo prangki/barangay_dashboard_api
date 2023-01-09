@@ -25,6 +25,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object household)> GetStatisticalData(StatisticalData data);
         Task<(Results result, object household)> DynamicReportData(Report report);
 
+        Task<(Results result, object household)> GetComplaints(string from, string to, string plid = "0002", string pgrpid = "002");
+
 
     }
     public class BarangayReportRepository : IBarangayReportRepository
@@ -97,7 +99,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
         public async Task<(Results result, object household)> DynamicReportData(Report report)
         {
-            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DynamicSelectPractice", new Dictionary<string, object>()
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTINGCustom", new Dictionary<string, object>()
             {
                 //{"parmplid",account.PL_ID },
                 {"parmplid", account.PL_ID },
@@ -105,9 +107,28 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmxml", report.XML },
                 {"parmbrgycode", report.brgyCode },
                 {"parmcolumnBitString", report.columnBits },
+                {"parmfilterBitString", report.filterBits },
+                {"parmagefrom", report.agefrom },
+                {"parmageto", report.ageto },
                 {"parmcode", report.code },
                 {"parmloctype", report.loctype },
                 {"parmaccttype", account.ACT_TYP },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> GetComplaints(string from, string to , string plid = "0002", string pgrpid = "002")
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_COMPLAINTSSHOW", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmfrom", from },
+                {"parmto", to},
 
             });
             if (results != null)

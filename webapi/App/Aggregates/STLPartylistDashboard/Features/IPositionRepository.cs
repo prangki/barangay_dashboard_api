@@ -22,7 +22,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> AddPosition(Position position);
         Task<(Results result, object message)> DeletePosition(int plid);
         Task<(Results result, string message)> UpdatePosition(Position position);
-        Task<(Results result, object position)> LoadPosition();
+        Task<(Results result, object household)> LoadPosition();
 
     }
 
@@ -111,16 +111,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
         }
 
-        public async Task<(Results result, object position)> LoadPosition()
-        {
-            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONSHOW", new Dictionary<string, object>()
-            {
-                {"parmplid", account.PL_ID},
-                {"parmpgrpid", account.PGRP_ID},
+        //public async Task<(Results result, object position)> LoadPosition()
+        //{
+        //    var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONSHOW", new Dictionary<string, object>()
+        //    {
+        //        {"parmplid", account.PL_ID},
+        //        {"parmpgrpid", account.PGRP_ID},
 
-            }).FirstOrDefault();
-            if (result != null)
-                return (Results.Success, result);
+        //    }).FirstOrDefault();
+        //    if (result != null)
+        //        return (Results.Success, result);
+        //    return (Results.Null, null);
+        //}
+
+        public async Task<(Results result, object household)> LoadPosition()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONSHOW", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", account.PL_ID },
+                {"parmpgrpid", account.PGRP_ID },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
             return (Results.Null, null);
         }
     }

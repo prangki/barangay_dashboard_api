@@ -65,5 +65,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.household);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("reporting/reportComplaints")]
+        public async Task<IActionResult> ShowComplaints(string from, string to)
+        {
+            var result = await _repo.GetComplaints(from, to);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 
                 //{ "json", jsonString },
                 {"paramcode", code},
-                {"paramplid", account.PL_ID},
+                {"paramplid",  account.PL_ID},
                 {"parampgrpid", account.PGRP_ID},
                 {"paramdescription", religion.Description},
                 {"paramuserid", account.USR_ID},
