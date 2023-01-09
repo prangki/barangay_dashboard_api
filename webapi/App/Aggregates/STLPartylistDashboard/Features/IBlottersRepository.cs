@@ -25,7 +25,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> UpdateSummon(Blotter info);
         Task<(Results result, string message)> ResolveSummon(Blotter info);
         Task<(Results result, string message)> RemoveSummon(Blotter info);
-        Task<(Results result, object summon)> LoadSummon(int currentRow);
+        Task<(Results result, object summon)> LoadSummon(int currentRow, string from, string to);
         Task<(Results result, object caseNo)> UpdatedCaseNo(string plid, string pgrpid);
         Task<(Results result, object brgycpt)> GetBrgyCpt(string plid, string pgrpid);
         Task<(Results result, object docpath)> Reprint(string plid, string pgrpid, string brgycsno, string colname);
@@ -144,7 +144,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             }
         }
 
-        public async Task<(Results result, object summon)> LoadSummon(int currentRow)
+        public async Task<(Results result, object summon)> LoadSummon(int currentRow, string from, string to)
         {
             try
             {
@@ -152,6 +152,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"paramplid", account.PL_ID },
                 {"parampgrpid", account.PGRP_ID },
+                {"paramfrom", from },
+                {"paramto", to },
                 {"parmcurrow", currentRow }
             });
                 if (result != null)
