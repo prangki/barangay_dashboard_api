@@ -96,6 +96,7 @@ namespace webapi.App.RequestModel.AppRecruiter
 
         public int isProfilePictureChange;
         public string Img;
+        public string Signature;
         public string ImageUrl;
         public int isSignatureChange;
         public string SignatureURL;

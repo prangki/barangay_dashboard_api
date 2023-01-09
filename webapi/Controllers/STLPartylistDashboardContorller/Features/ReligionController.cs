@@ -62,9 +62,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("religion/load")]
-        public async Task<IActionResult> LoadReligion(string plid)
+        public async Task<IActionResult> LoadReligion(string plid, string pgrpid)
         {
-            var result = await _repo.LoadReligion("0002");
+            var result = await _repo.LoadReligion(plid, pgrpid);
             if (result.result == Results.Success)
                 return Ok(result.position);
             return NotFound();

@@ -81,6 +81,11 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             //    return Ok(new { Status = "error", Message = valresult.message });
             //if (valresult.result != Results.Success)
             //    return NotFound();
+            var valresult = await validitysignatue(request);
+            if (valresult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult.result != Results.Success)
+                return NotFound();
 
             var reporesult = await _repo.MembershipAsync(request, true);
             if (reporesult.result == Results.Success)
@@ -99,6 +104,12 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             //    return Ok(new { Status = "error", Message = valresult.message });
             //if (valresult.result != Results.Success)
             //    return NotFound();
+
+            var valresult = await validitysignatue(request);
+            if (valresult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult.result != Results.Success)
+                return NotFound();
 
             var reporesult = await _repo.MembershipAsync(request,true);
             if (reporesult.result == Results.Success)
@@ -289,6 +300,32 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(result.skl);
             return NotFound();
         }
+
+        //validitysignature
+        private async Task<(Results result, string message)> validitysignatue(STLMembership request)
+        {
+            if (request == null)
+                return (Results.Null, null);
+            if (!request.SignatureURL.IsEmpty())
+                return (Results.Success, null);
+            if (request.Signature.IsEmpty())
+                return (Results.Failed, "Please select an Signature.");
+            byte[] bytes = Convert.FromBase64String(request.Signature.Str());
+            if (bytes.Length == 0)
+                return (Results.Failed, "Make sure selected image is invalid.");
+            var res = await ImgService.SendAsync(bytes);
+            bytes.Clear();
+            if (res == null)
+                return (Results.Failed, "Please contact to admin.");
+            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+            if (json["status"].Str() != "error")
+            {
+                request.SignatureURL = json["url"].Str();
+                return (Results.Success, null);
+            }
+            return (Results.Null, "Make sure selected image is invalid");
+        }
+
         private async Task<(Results result, string message)> validity(STLMembership request)
         {
             if (request == null)

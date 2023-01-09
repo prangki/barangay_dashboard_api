@@ -538,7 +538,8 @@ namespace webapi.App.Aggregates.Common
             o.MRTL_STAT = data["MRTL_STAT"].Str();
             o.MRTL_STAT_NM = data["MRTL_STAT_NM"].Str();
             o.CTZNSHP = data["CTZNSHP"].Str();
-            o.Religion = data["REL"].Str();
+            o.ReligionCode = data["REL"].Str();
+            o.Religion = data["Religion"].Str();
             o.IMG_URL = data["IMG_URL"].Str();
             o.BRT_DT = data["BRT_DT"].Str();
             o.PlaceOfBirth = data["PLC_BRT"].Str();

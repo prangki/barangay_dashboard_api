@@ -23,7 +23,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> AddReligion(Religion religion);
         Task<(Results result, object message)> DeleteReligion(string code);
         Task<(Results result, string message)> UpdateReligion(Religion religion);
-        Task<(Results result, object position)> LoadReligion(string plid);
+        Task<(Results result, object position)> LoadReligion(string plid, string pgrpid);
     }
 
     public class ReligionRepository : IReligionRepository
@@ -108,15 +108,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object position)> LoadReligion(string plid)
+        public async Task<(Results result, object position)> LoadReligion(string plid, string pgrpid)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONSHOW", new Dictionary<string, object>()
             {
 
-                {"paramplid", account.PL_ID},
-                {"parampgrpid", account.PGRP_ID},
+                {"parmplid", plid},
+                {"parmpgrpid", pgrpid},
 
-            }).FirstOrDefault();
+            });
             if (result != null)
                 return (Results.Success, result);
             return (Results.Null, null);
