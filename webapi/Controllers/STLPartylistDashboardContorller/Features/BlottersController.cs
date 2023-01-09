@@ -146,10 +146,10 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
-        [Route("blotter/maxcaseno")]
-        public async Task<IActionResult> GetMaxCaseNo(string plid, string pgrpid)
+        [Route("blotter/controlno")]
+        public async Task<IActionResult> GetControlNo()
         {
-            var result = await _repo.UpdatedCaseNo(plid, pgrpid);
+            var result = await _repo.GetControlNo();
             if (result.result == Results.Success)
                 return Ok(result.caseNo);
             return NotFound();
@@ -195,27 +195,50 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
-        private async Task<(Results result, string message)> validityReport(Blotter request)
+        private async Task<(Results result, object attachments)> validityReport(Blotter request)
         {
+            List<string> tempList = new List<string>();
             if (request == null)
                 return (Results.Null, null);
-            if (request.ReportPath.IsEmpty())
+            if (request.Attachments.Count < 1)
                 return (Results.Success, null);
-            byte[] bytes = Convert.FromBase64String(request.ReportPath.Str());
-            if (bytes.Length == 0)
-                return (Results.Failed, "Make sure selected document path is invalid.");
-            var res = await ReportService.SendAsync(bytes, request.Docname);
-            bytes.Clear();
-            if (res == null)
-                return (Results.Failed, "Please contact to admin.");
-            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
-            if (json["status"].Str() != "error")
+            byte[] bytes = null;
+            foreach (var item in request.Attachments)
             {
-                request.ReportPath = json["url"].Str();
-
-                return (Results.Success, null);
+                bytes = Convert.FromBase64String(item);
+                if (bytes.Length == 0)
+                    return (Results.Failed, "Make sure selected document path is invalid.");
+                var res = await ImgService.SendAsync(bytes);
+                bytes.Clear();
+                if (res == null)
+                    return (Results.Failed, "Please contact to admin.");
+                var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                if (json["status"].Str() != "error")
+                    tempList.Add(json["url"].Str().Replace("www.",""));
             }
-            return (Results.Null, "Make sure selected image is invalid");
+            request.Attachments = null;
+            request.Attachments = tempList;
+            return (Results.Success, request.Attachments);
+
+            //if (request == null)
+            //    return (Results.Null, null);
+            //if (request.ReportPath.IsEmpty())
+            //    return (Results.Success, null);
+            //byte[] bytes = Convert.FromBase64String(request.ReportPath.Str());
+            //if (bytes.Length == 0)
+            //    return (Results.Failed, "Make sure selected document path is invalid.");
+            //var res = await ReportService.SendAsync(bytes, request.Docname);
+            //bytes.Clear();
+            //if (res == null)
+            //    return (Results.Failed, "Please contact to admin.");
+            //var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+            //if (json["status"].Str() != "error")
+            //{
+            //    request.ReportPath = json["url"].Str();
+
+            //    return (Results.Success, null);
+            //}
+            //return (Results.Null, "Make sure selected image is invalid");
         }
 
         [HttpPost]
@@ -265,6 +288,27 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             var result = await _repo.LoadCaseIdentifier(name);
             if (result.result == Results.Success)
                 return Ok(result.report);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/save/attachment")]
+        public async Task<IActionResult> SaveAttachment(Blotter info)
+        {
+            var valResult = await validityReport(info);
+            if (valResult.result != Results.Success)
+                return NotFound();
+
+            return Ok(valResult.attachments);
+        }
+
+        [HttpPost]
+        [Route("blotter/load/attachment")]
+        public async Task<IActionResult> LoadAttachment(string caseno)
+        {
+            var result = await _repo.LoadAttachment(caseno);
+            if (result.result == Results.Success)
+                return Ok(result.attachment);
             return NotFound();
         }
     }

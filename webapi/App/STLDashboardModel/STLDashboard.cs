@@ -252,14 +252,16 @@ namespace webapi.App.STLDashboardModel
         public string Accusations;
         public string PlaceOfIncident;
         public string JsonStringAccomplice;
-        public string DateTimeOfIncident;
+        public DateTime DateOfIncident;
+        public string TimeOfIncident;
         public string NarrativeOfIncident;
         public string DateCreated;
         public string ModifiedBy;
         public string DTModified;
-        public string ReportPath;
+        public string JsonAttachment;
         public string Docname;
         public string SummonDate;
+        public List<string> Attachments;
     }
 
     public class HouseDetails

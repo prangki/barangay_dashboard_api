@@ -26,7 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> ResolveSummon(Blotter info);
         Task<(Results result, string message)> RemoveSummon(Blotter info);
         Task<(Results result, object summon)> LoadSummon(int currentRow, string from, string to);
-        Task<(Results result, object caseNo)> UpdatedCaseNo(string plid, string pgrpid);
+        Task<(Results result, object caseNo)> GetControlNo();
         Task<(Results result, object brgycpt)> GetBrgyCpt(string plid, string pgrpid);
         Task<(Results result, object docpath)> Reprint(string plid, string pgrpid, string brgycsno, string colname);
         Task<(Results result, object signatures)> GetSignature(string plid, string pgrpid);
@@ -37,6 +37,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> Cancel(string caseno, string reason, string createby, string createdate);
         Task<(Results result, object report)> LoadReport();
         Task<(Results result, object report)> LoadCaseIdentifier(string name);
+        Task<(Results result, object attachment)> LoadAttachment(string caseno);
     }
 
     public class BlotterRepository : IBlottersRepository
@@ -57,6 +58,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"paramplid",account.PL_ID},
                 {"parampgrpid",account.PGRP_ID},
+                {"parambrgyid",account.LOC_BRGY},
                 {"parambrgycsno",info.BarangayCaseNo},
                 {"paramprk",info.PurokOrSitio},
                 {"parambrgycpt",info.BarangayCaptain},
@@ -64,10 +66,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"paramrspnm",info.RespondentsName},
                 {"paramcmplnttyp",info.ComplaintType},
                 {"paramjsonacmplc",info.JsonStringAccomplice},
+                {"paramjsonattchmnt",info.JsonAttachment},
                 {"paramacstn",info.Accusations},
                 {"paramincp",info.PlaceOfIncident},
                 {"paramstmt",info.NarrativeOfIncident},
-                {"paramincdt",info.DateTimeOfIncident},
+                {"paramincdt",info.DateOfIncident},
+                {"paraminctm",info.TimeOfIncident},
                 {"paramcrtdby",info.BarangaySecretary},
                 {"paramcrtddt",info.DateCreated}
             }).FirstOrDefault();
@@ -100,10 +104,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"paramcmplnttyp",info.ComplaintType},
                 {"paramacstn",info.Accusations},
                 {"paramincp",info.PlaceOfIncident},
+                {"paramincdt",info.DateOfIncident},
+                {"paraminctm",info.TimeOfIncident},
+                {"paramjsonattchmnt",info.JsonAttachment},
                 {"paramstmt",info.NarrativeOfIncident},
-                {"paramincdt",info.DateTimeOfIncident},
-                {"parammodby", info.ModifiedBy },
-                {"parammoddt", info.DTModified }
+                {"parammodby", info.ModifiedBy},
+                {"parammoddt", info.DTModified}
             }).FirstOrDefault();
 
             if (result != null)
@@ -284,12 +290,24 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object caseNo)> UpdatedCaseNo(string plid, string pgrpid)
+        public async Task<(Results result, object caseNo)> GetControlNo()
         {
-            var result = _repo.DQuery<dynamic>($"Select TOP(1) MAX(BRGY_CASE_NO) as CASENO from dbo.BIMSBLTR where PL_ID='{account.PL_ID}' and PGRP_ID='{account.PGRP_ID}'");
-            if (result != null)
-                return (Results.Success, result);
-            return (Results.Null, null);
+            try
+            {
+                var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTRCNTRL", new Dictionary<string, object>()
+                {
+                    {"parmplid",account.PL_ID },
+                    {"parmpgrpid",account.PGRP_ID },
+                    {"parmbrgyid",account.LOC_BRGY }
+                 });
+                if (result != null)
+                    return (Results.Success, result);
+                return (Results.Null, null);
+            }
+            catch (System.Exception)
+            {
+                return (Results.Null, null);
+            }
         }
 
         public async Task<(Results result, object docpath)> Reprint(string plid, string pgrpid, string brgycsno, string colname)
@@ -458,6 +476,20 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 return (Results.Null, null);
             }
+        }
+
+        public async Task<(Results result, object attachment)> LoadAttachment(string caseno)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLOTTERLA", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmcaseno", caseno}
+            });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
         }
     }
 }
