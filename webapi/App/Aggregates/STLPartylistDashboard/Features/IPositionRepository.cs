@@ -45,15 +45,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 //{ "json", jsonString },
                 //{"paramid", position.PositionId },
-                {"paramplid", account.PL_ID},
-                {"parampgrpid", account.PGRP_ID},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramlocbrgy", account.LOC_BRGY},
                 {"paramposition", position.Positionn },
                 {"paramcategory", position.Category},
                 {"paramuserid", account.USR_ID }
 
 
-            }).FirstOrDefault();
+            });
 
             if (result != null)
             {
@@ -73,8 +73,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONDELETE", new Dictionary<string, object>()
             {
-                {"parmplid", account.PL_ID},
-                {"parmpgrpid", account.PGRP_ID},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramid", plid},
 
             });
@@ -89,13 +89,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONUPDATE", new Dictionary<string, object>()
             {
                 {"paramid", position.PositionId },
-                {"paramplid", account.PL_ID},
-                {"parampgrpid", account.PGRP_ID},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramlocbrgy", account.LOC_BRGY},
                 {"paramposition", position.Positionn},
                 {"paramcategory", position.Category},
                 {"paramuserid", account.USR_ID}
-            }).FirstOrDefault();
+            });
 
             if (result != null)
             {
@@ -129,8 +129,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONSHOW", new Dictionary<string, object>()
             {
                 //{"parmplid",account.PL_ID },
-                {"parmplid", account.PL_ID },
-                {"parmpgrpid", account.PGRP_ID },
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (results != null)
