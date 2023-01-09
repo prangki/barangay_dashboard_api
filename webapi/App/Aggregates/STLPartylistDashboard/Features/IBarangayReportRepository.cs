@@ -125,8 +125,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_COMPLAINTSSHOW", new Dictionary<string, object>()
             {
                 //{"parmplid",account.PL_ID },
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", from },
                 {"parmto", to},
 

@@ -61,8 +61,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocStatsBrgyClearance", new Dictionary<string, object>()
             {
                 {"parmtype", docstat.type},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", docstat.dtfrom},
                 {"parmto", docstat.dtto},
 
@@ -77,8 +77,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocStatsBusinessClearance", new Dictionary<string, object>()
             {
                 {"parmtype", docstat.type},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", docstat.dtfrom},
                 {"parmto", docstat.dtto},
 
@@ -93,8 +93,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocStatsLegalDocs", new Dictionary<string, object>()
             {
                 {"parmtype", docstat.type},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", docstat.dtfrom},
                 {"parmto", docstat.dtto},
 
@@ -110,8 +110,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocStatsDeathCertificate", new Dictionary<string, object>()
             {
                 {"parmtype", docstat.type},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", docstat.dtfrom},
                 {"parmto", docstat.dtto},
 
@@ -128,8 +128,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmtypestatus", statustype},
                 {"parmtypedate", datetype},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", fromdate},
                 {"parmto", todate},
 
@@ -145,8 +145,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmtypestatus", statustype},
                 {"parmtypedate", datetype},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", fromdate},
                 {"parmto", todate},
 
@@ -162,8 +162,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmtypestatus", statustype},
                 {"parmtypedate", datetype},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", fromdate},
                 {"parmto", todate},
 
@@ -179,8 +179,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmtypestatus", statustype},
                 {"parmtypedate", datetype},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", fromdate},
                 {"parmto", todate},
 
@@ -195,8 +195,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyOrdersBrgyClearance02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -209,8 +209,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyOrdersBusinessClearance02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -222,8 +222,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyOrdersLegalDocs02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -236,8 +236,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyOrdersDeathCertificate02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -253,8 +253,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyRevenueBrgyClearance02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -267,8 +267,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyRevenueBusinessClearance02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -281,8 +281,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyRevenueLegalDocs02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
@@ -295,8 +295,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyRevenueDeathCertificate02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "1") ? pgrpid : "002"},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)

@@ -13,6 +13,7 @@ using webapi.App.STLDashboardModel;
 using webapi.Commons.AutoRegister;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
@@ -23,7 +24,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> AddReligion(Religion religion);
         Task<(Results result, object message)> DeleteReligion(string code);
         Task<(Results result, string message)> UpdateReligion(Religion religion);
-        Task<(Results result, object position)> LoadReligion(string plid, string pgrpid);
+        Task<(Results result, object position)> LoadReligion();
     }
 
     public class ReligionRepository : IReligionRepository
@@ -47,13 +48,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 
                 //{ "json", jsonString },
                 {"paramcode", code},
-                {"paramplid",  account.PL_ID},
-                {"parampgrpid", account.PGRP_ID},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramdescription", religion.Description},
                 {"paramuserid", account.USR_ID},
 
 
-            }).FirstOrDefault();
+            });
 
             if (result != null)
             {
@@ -73,8 +74,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONDELETE", new Dictionary<string, object>()
             {
-                {"paramplid", account.PL_ID},
-                {"parampgrpid", account.PGRP_ID},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramdescription", description},
                 
             });
@@ -90,10 +91,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"paramcode", religion.Code },
                 {"paramdescription", religion.Description},
-                {"paramplid", account.PL_ID},
-                {"parampgrpid", account.PGRP_ID},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramuserid", account.USR_ID},
-            }).FirstOrDefault();
+            });
 
             if (result != null)
             {
@@ -108,13 +109,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object position)> LoadReligion(string plid, string pgrpid)
+        public async Task<(Results result, object position)> LoadReligion()
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONSHOW", new Dictionary<string, object>()
             {
 
-                {"parmplid", plid},
-                {"parmpgrpid", pgrpid},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
             });
             if (result != null)
