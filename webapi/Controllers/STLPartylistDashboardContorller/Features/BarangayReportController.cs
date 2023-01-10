@@ -75,5 +75,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.household);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("reporting/reportOrgs")]
+        public async Task<IActionResult> ShowOrgs(string xml)
+        {
+            var result = await _repo.GetOrgs(xml);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
     }
 }

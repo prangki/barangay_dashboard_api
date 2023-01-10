@@ -26,6 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object household)> DynamicReportData(Report report);
 
         Task<(Results result, object household)> GetComplaints(string from, string to, string plid = "0002", string pgrpid = "002");
+        Task<(Results result, object household)> GetOrgs(string xml);
 
 
     }
@@ -129,6 +130,22 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"parmfrom", from },
                 {"parmto", to},
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> GetOrgs(string xml)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTINGorgz", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmxml", xml },
+
 
             });
             if (results != null)
