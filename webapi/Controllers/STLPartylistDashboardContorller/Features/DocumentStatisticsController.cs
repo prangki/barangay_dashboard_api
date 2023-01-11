@@ -66,6 +66,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("docstat/cedula")]
+        public async Task<IActionResult> StatCedula(DocumentStatistics docstat)
+        {
+            var result = await _repo.GetDocStatCedula(docstat);
+            if (result.result == Results.Success)
+                return Ok(result.position);
+            return NotFound();
+        }
+
         //==============status=====================//
         [HttpPost]
         [Route("docstat/showbystatusbrgyclearance")]
@@ -102,6 +112,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> ShowByStatusDeathCertificate(int statustype, int datetype, string fromdate, string todate)
         {
             var result = await _repo.GetDocShowByStatusDeathCertificate(statustype, datetype, fromdate, todate);
+            if (result.result == Results.Success)
+                return Ok(result.position);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("docstat/showbystatuscedula")]
+        public async Task<IActionResult> ShowByStatusCedula(int statustype, int datetype, string fromdate, string todate)
+        {
+            var result = await _repo.GetDocShowByStatusCedula(statustype, datetype, fromdate, todate);
             if (result.result == Results.Success)
                 return Ok(result.position);
             return NotFound();
@@ -189,6 +209,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("docstat/cedulamonthlyrevenue02")]
+        public async Task<IActionResult> MonthlyRevenueCedula02(string year)
+        {
+            var result = await _repo.GetDocMonthlyRevenueCedula02(year);
+            if (result.result == Results.Success)
+                return Ok(result.position);
+            return NotFound();
+        }
 
     }
 }
