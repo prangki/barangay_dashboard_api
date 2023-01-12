@@ -309,7 +309,8 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             if (!request.SignatureURL.IsEmpty())
                 return (Results.Success, null);
             if (request.Signature.IsEmpty())
-                return (Results.Failed, "Please select an Signature.");
+                //return (Results.Failed, "Please select an Signature.");
+                return (Results.Success, "Please select an Signature.");
             byte[] bytes = Convert.FromBase64String(request.Signature.Str());
             if (bytes.Length == 0)
                 return (Results.Failed, "Make sure selected image is invalid.");
