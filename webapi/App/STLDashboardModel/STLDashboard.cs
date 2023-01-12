@@ -460,5 +460,25 @@ namespace webapi.App.STLDashboardModel
         public string AppointmentDate;
         public int StatusRequest;
     }
+
+    public class Fingerprint
+    {
+        public List<FingerImage> ImageList;
+        public string UserId;
+        public string Json;
+        public string RegisterDate;
+        public string RegisterTime;
+        public DateTime RegisterTimeStamp;
+        public string UpdateDate;
+        public string UpdateTime;
+        public DateTime UpdateTimeStamp;
+        public string Operator;
+        public class FingerImage
+        {
+            public int Id;
+            public string Index;
+            public string Image;
+        }
+    }
 }
 
