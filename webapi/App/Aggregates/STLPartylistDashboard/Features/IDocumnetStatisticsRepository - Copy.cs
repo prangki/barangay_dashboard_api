@@ -25,11 +25,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object position)> GetDocStatBusinessClearance(DocumentStatistics docstat, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocStatLegalDocs(DocumentStatistics docstat, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocStatDeathCertificate(DocumentStatistics docstat, string plid = "0002", string pgrpid = "002");
+        Task<(Results result, object position)> GetDocStatCedula(DocumentStatistics docstat, string plid = "0002", string pgrpid = "002");
         //==================================ShowByStatus=============================================================//
         Task<(Results result, object position)> GetDocShowByStatusBrgyClearance(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocShowByStatusBusinessClearance(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocShowByStatusLegalDocs(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocShowByStatusDeathCertificate(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002");
+        Task<(Results result, object position)> GetDocShowByStatusCedula(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002");
         //==================================MonthlyOrders=============================================================//
         Task<(Results result, object position)> GetDocMonthlyOrdersBrgyClearance02(string year, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocMonthlyOrdersBusinessClearance02(string year, string plid = "0002", string pgrpid = "002");
@@ -40,6 +42,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object position)> GetDocMonthlyRevenueBusinessClearance02(string year, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocMonthlyRevenueLegalDocs02(string year, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object position)> GetDocMonthlyRevenueDeathCertificate02(string year, string plid = "0002", string pgrpid = "002");
+        Task<(Results result, object position)> GetDocMonthlyRevenueCedula02(string year, string plid = "0002", string pgrpid = "002");
 
     }
 
@@ -121,6 +124,22 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, object position)> GetDocStatCedula(DocumentStatistics docstat, string plid = "0002", string pgrpid = "002")
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocStatsCedula", new Dictionary<string, object>()
+            {
+                {"parmtype", docstat.type},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmfrom", docstat.dtfrom},
+                {"parmto", docstat.dtto},
+
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
         //==============Show By Status=====================//
         public async Task<(Results result, object position)> GetDocShowByStatusBrgyClearance(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002")
         {
@@ -176,6 +195,23 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         public async Task<(Results result, object position)> GetDocShowByStatusLegalDocs(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002")
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocShowByStatusLegalDocs", new Dictionary<string, object>()
+            {
+                {"parmtypestatus", statustype},
+                {"parmtypedate", datetype},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmfrom", fromdate},
+                {"parmto", todate},
+
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object position)> GetDocShowByStatusCedula(int statustype, int datetype, string fromdate, string todate, string plid = "0002", string pgrpid = "002")
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocShowByStatusCedula", new Dictionary<string, object>()
             {
                 {"parmtypestatus", statustype},
                 {"parmtypedate", datetype},
@@ -293,6 +329,20 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         public async Task<(Results result, object position)> GetDocMonthlyRevenueDeathCertificate02(string year, string plid = "0002", string pgrpid = "002")
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyRevenueDeathCertificate02", new Dictionary<string, object>()
+            {
+                {"parmyear", year},
+                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object position)> GetDocMonthlyRevenueCedula02(string year, string plid = "0002", string pgrpid = "002")
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DocMonthlyRevenueCedula02", new Dictionary<string, object>()
             {
                 {"parmyear", year},
                 {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
