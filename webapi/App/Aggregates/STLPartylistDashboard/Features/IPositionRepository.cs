@@ -45,8 +45,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 //{ "json", jsonString },
                 //{"paramid", position.PositionId },
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                //{"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                //{"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"paramplid", account.PL_ID},
+                {"parampgrpid", account.PGRP_ID},
                 {"paramlocbrgy", account.LOC_BRGY},
                 {"paramposition", position.Positionn },
                 {"paramcategory", position.Category},
@@ -89,8 +91,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_POSITIONUPDATE", new Dictionary<string, object>()
             {
                 {"paramid", position.PositionId },
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"paramplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parampgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramlocbrgy", account.LOC_BRGY},
                 {"paramposition", position.Positionn},
                 {"paramcategory", position.Category},
