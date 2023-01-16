@@ -76,15 +76,15 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         [Route("registration/new")]
         public async Task<IActionResult> Task0c([FromBody] STLMembership request)
         {
-            //var valresult = await validity(request);
-            //if (valresult.result == Results.Failed)
-            //    return Ok(new { Status = "error", Message = valresult.message });
-            //if (valresult.result != Results.Success)
-            //    return NotFound();
-            var valresult = await validitysignatue(request);
+            var valresult = await validity(request);
             if (valresult.result == Results.Failed)
                 return Ok(new { Status = "error", Message = valresult.message });
             if (valresult.result != Results.Success)
+                return NotFound();
+            var valresult1 = await validitysignatue(request);
+            if (valresult1.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult1.result != Results.Success)
                 return NotFound();
 
             var reporesult = await _repo.MembershipAsync(request, true);
@@ -99,17 +99,27 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         [Route("registration/edit")]
         public async Task<IActionResult> Task0c1([FromBody] STLMembership request)
         {
-            //var valresult = await validity(request);
+            var valresult = await validity(request);
             //if (valresult.result == Results.Failed)
             //    return Ok(new { Status = "error", Message = valresult.message });
             //if (valresult.result != Results.Success)
             //    return NotFound();
-
-            var valresult = await validitysignatue(request);
-            if (valresult.result == Results.Failed)
+            var valresult1 = await validitysignatue(request);
+            if (valresult1.result == Results.Failed)
                 return Ok(new { Status = "error", Message = valresult.message });
-            if (valresult.result != Results.Success)
+            if (valresult1.result != Results.Success)
                 return NotFound();
+
+
+            if (request.ImageList != null)
+            {
+                var valResult = await validityReport(request);
+                if (valResult.result == Results.Failed)
+                    return Ok(new { Status = "error", Message = valResult.message });
+                if (valResult.result != Results.Success)
+                    return NotFound();
+            }
+            
 
             var reporesult = await _repo.MembershipAsync(request,true);
             if (reporesult.result == Results.Success)
@@ -349,6 +359,39 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return (Results.Success, null);
             }
             return (Results.Null, "Make sure selected image is invalid");
+        }
+
+        private async Task<(Results result, string message)> validityReport(STLMembership request)
+        {
+            List<STLMembership.FingerImage> _tempList = new List<STLMembership.FingerImage>();
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            if (request == null)
+                return (Results.Null, null);
+            if (request.ImageList.Count < 1)
+                return (Results.Success, null);
+            byte[] bytes = null;
+            foreach (var item in request.ImageList)
+
+            {
+                if (item.Image != null)
+                {
+                    bytes = Convert.FromBase64String(item.Image);
+                    if (bytes.Length == 0)
+                        return (Results.Failed, "Make sure selected document path is invalid.");
+                    var res = await ImgService.SendAsync(bytes);
+                    bytes.Clear();
+                    if (res == null)
+                        return (Results.Failed, "Please contact to admin.");
+                    var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                    if (json["status"].Str() != "error")
+                        dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
+                }
+                else
+                    dictionary.Add(item.Index, null);
+
+            }
+            request.Json = JsonConvert.SerializeObject(dictionary, Formatting.None);
+            return (Results.Success, null);
         }
 
         private object CreateToken(STLAccount user)

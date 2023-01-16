@@ -144,6 +144,14 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string iOrganization;
         public string iEducationalAttainment;
         public string iEmployement;
+        public string Json;
+        public List<FingerImage> ImageList;
+        public class FingerImage
+        {
+            public int Id;
+            public string Index;
+            public string Image;
+        }
     }
     public class DateRangeModel
     {

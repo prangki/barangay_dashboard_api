@@ -222,6 +222,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmisprfpicChange", membership.isProfilePictureChange },
                 {"parmprfpic",membership.ImageUrl },
                 {"parmisSignatureChange", membership.isSignatureChange },
+                {"parmjson", membership.Json },
                 {"parmImgUrl",membership.ImageUrl },
                 {"parmsignature",membership.SignatureURL },
 
