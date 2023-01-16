@@ -48,8 +48,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 
                 //{ "json", jsonString },
                 {"paramcode", code},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"paramplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parampgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramdescription", religion.Description},
                 {"paramuserid", account.USR_ID},
 
@@ -58,7 +58,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
             if (result != null)
             {
-                var row = ((IDictionary<string, object>)result);
+                var row = (Dictionary<string, object>)result;
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                     return (Results.Success, "Successfully saved");
@@ -91,8 +91,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"paramcode", religion.Code },
                 {"paramdescription", religion.Description},
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"paramplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
+                {"parampgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
                 {"paramuserid", account.USR_ID},
             });
 
