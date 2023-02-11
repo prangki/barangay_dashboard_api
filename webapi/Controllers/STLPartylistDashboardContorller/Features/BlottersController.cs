@@ -41,7 +41,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             //if (valResult.result != Results.Success)
             //    return NotFound();
 
-            var result = await _repo.SaveBlotter(info);
+            var result = await _repo.SaveBlotterV2(info);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
@@ -57,17 +57,32 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             //if (valResult.result != Results.Success)
             //    return NotFound();
 
-            var result = await _repo.UpdateBlotter(info);
+            //var result = await _repo.UpdateBlotter(info);
+            //if (result.result == Results.Success)
+            //    return Ok(new { result = result.result, message = result.message });
+            //return NotFound();
+
+            var result = await _repo.UpdateBlotterV2(info);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
 
+        //[HttpPost]
+        //[Route("blotter/load")]
+        //public async Task<IActionResult> LoadBlotter(int id, int row, string from, string to)
+        //{
+        //    var result = await _repo.LoadBlotter(id,row,from, to);
+        //    if (result.result == Results.Success)
+        //        return Ok(result.blotter);
+        //    return NotFound();
+        //}
+
         [HttpPost]
         [Route("blotter/load")]
-        public async Task<IActionResult> LoadBlotter(int id, int row, string from, string to)
+        public async Task<IActionResult> LoadBlotter(int status)
         {
-            var result = await _repo.LoadBlotter(id,row,from, to);
+            var result = await _repo.LoadBlotterV2(status);
             if (result.result == Results.Success)
                 return Ok(result.blotter);
             return NotFound();
@@ -309,6 +324,46 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             var result = await _repo.LoadAttachment(caseno);
             if (result.result == Results.Success)
                 return Ok(result.attachment);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/get/complainants")]
+        public async Task<IActionResult> LoadComplainants(string caseno, string complainantId)
+        {
+            var result = await _repo.LoadComplainants(caseno, complainantId);
+            if (result.result == Results.Success)
+                return Ok(result.attachment);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/get/respondents")]
+        public async Task<IActionResult> LoadRespondents(string caseno, string respondentId)
+        {
+            var result = await _repo.LoadRespondents(caseno, respondentId);
+            if (result.result == Results.Success)
+                return Ok(result.attachment);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/save/form")]
+        public async Task<IActionResult> SaveForm(Blotter info)
+        {
+            var result = await _repo.SaveForm(info);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("blotter/load/form")]
+        public async Task<IActionResult> LoadForm()
+        {
+            var result = await _repo.LoadForm();
+            if (result.result == Results.Success)
+                return Ok(result.template);
             return NotFound();
         }
     }
