@@ -19,8 +19,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     public interface IBlottersRepository
     {
         Task<(Results result, string message)> SaveBlotter(Blotter info);
+        Task<(Results result, string message)> SaveBlotterV2(Blotter info);
         Task<(Results result, string message)> UpdateBlotter(Blotter info);
+        Task<(Results result, string message)> UpdateBlotterV2(Blotter info);
         Task<(Results result, object blotter)> LoadBlotter(int id, int currentRow, string from, string to);
+        Task<(Results result, object blotter)> LoadBlotterV2(int status);
         Task<(Results result, string message)> SaveSummon(Blotter info);
         Task<(Results result, string message)> UpdateSummon(Blotter info);
         Task<(Results result, string message)> ResolveSummon(Blotter info);
@@ -38,6 +41,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object report)> LoadReport();
         Task<(Results result, object report)> LoadCaseIdentifier(string name);
         Task<(Results result, object attachment)> LoadAttachment(string caseno);
+        Task<(Results result, object attachment)> LoadComplainants(string caseNo, string complaintId);
+        Task<(Results result, object attachment)> LoadRespondents(string caseNo, string respondentId);
+        Task<(Results result, string message)> SaveForm(Blotter info);
+        Task<(Results result, object template)> LoadForm();
     }
 
     public class BlotterRepository : IBlottersRepository
@@ -56,24 +63,64 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLOTTERIO", new Dictionary<string, object>()
             {
-                {"paramplid",account.PL_ID},
-                {"parampgrpid",account.PGRP_ID},
-                {"parambrgyid",account.LOC_BRGY},
-                {"parambrgycsno",info.BarangayCaseNo},
-                {"paramprk",info.PurokOrSitio},
-                {"parambrgycpt",info.BarangayCaptain},
-                {"paramcmpnm",info.ComplainantsName},
-                {"paramrspnm",info.RespondentsName},
-                {"paramcmplnttyp",info.ComplaintType},
-                {"paramjsonacmplc",info.JsonStringAccomplice},
-                {"paramjsonattchmnt",info.JsonAttachment},
-                {"paramacstn",info.Accusations},
-                {"paramincp",info.PlaceOfIncident},
-                {"paramstmt",info.NarrativeOfIncident},
-                {"paramincdt",info.DateOfIncident},
-                {"paraminctm",info.TimeOfIncident},
-                {"paramcrtdby",info.BarangaySecretary},
-                {"paramcrtddt",info.DateCreated}
+                //{"paramplid",account.PL_ID},
+                //{"parampgrpid",account.PGRP_ID},
+                //{"parambrgyid",account.LOC_BRGY},
+                //{"parambrgycsno",info.BarangayCaseNo},
+                //{"paramprk",info.PurokOrSitio},
+                //{"parambrgycpt",info.BarangayCaptain},
+                //{"paramcmpnm",info.ComplainantsName},
+                //{"paramrspnm",info.RespondentsName},
+                //{"paramcmplnttyp",info.ComplaintType},
+                //{"paramjsonacmplc",info.JsonStringAccomplice},
+                //{"paramjsonattchmnt",info.JsonAttachment},
+                //{"paramacstn",info.Accusations},
+                //{"paramincp",info.PlaceOfIncident},
+                //{"paramstmt",info.NarrativeOfIncident},
+                //{"paramincdt",info.DateOfIncident},
+                //{"paraminctm",info.TimeOfIncident},
+                //{"paramcrtdby",info.BarangaySecretary},
+                //{"paramcrtddt",info.DateCreated}
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already Exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+
+        }
+
+        public async Task<(Results result, string message)> SaveBlotterV2(Blotter info)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR00", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID},
+                {"parmbrgyid",account.LOC_BRGY},
+                {"parmjsoncmplnnt",info.JsonStringComplainant},
+                {"parmcsit",info.ComplainantSitio},
+                {"parmjsonrspndt",info.JsonRespondent},
+                {"parmdsit",info.RespondentSitio},
+                {"parmwtns",info.Witness},
+                {"parmacstn",info.Accusations},
+                {"parmcstyp",info.CaseType},
+                {"parmplcinc",info.PlaceOfIncident},
+                {"parmincdt",info.DateOfIncident},
+                {"parminctm",info.TimeOfIncident},
+                {"parmstmt",info.Statement},
+                {"parmjsonattchmt",info.JsonAttachment},
+                {"parmcrtdby",info.BarangaySecretary}
+                //{"paraminctm",info.TimeOfIncident},
+                //{"paramcrtdby",info.BarangaySecretary},
+                //{"paramcrtddt",info.DateCreated}
             }).FirstOrDefault();
 
             if (result != null)
@@ -95,21 +142,67 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLOTTERUO", new Dictionary<string, object>()
             {
-                {"paramplid",account.PL_ID},
-                {"parampgrpid",account.PGRP_ID},
-                {"parambrgycsno",info.BarangayCaseNo},
-                {"paramprk",info.PurokOrSitio},
-                {"paramcmpnm",info.ComplainantsName},
-                {"paramrspnm",info.RespondentsName},
-                {"paramcmplnttyp",info.ComplaintType},
-                {"paramacstn",info.Accusations},
-                {"paramincp",info.PlaceOfIncident},
-                {"paramincdt",info.DateOfIncident},
-                {"paraminctm",info.TimeOfIncident},
-                {"paramjsonattchmnt",info.JsonAttachment},
-                {"paramstmt",info.NarrativeOfIncident},
-                {"parammodby", info.ModifiedBy},
-                {"parammoddt", info.DTModified}
+                //{"paramplid",account.PL_ID},
+                //{"parampgrpid",account.PGRP_ID},
+                //{"parambrgycsno",info.BarangayCaseNo},
+                //{"paramprk",info.PurokOrSitio},
+                //{"paramcmpnm",info.ComplainantsName},
+                //{"paramrspnm",info.RespondentsName},
+                //{"paramcmplnttyp",info.ComplaintType},
+                //{"paramacstn",info.Accusations},
+                //{"paramincp",info.PlaceOfIncident},
+                //{"paramincdt",info.DateOfIncident},
+                //{"paraminctm",info.TimeOfIncident},
+                //{"paramjsonattchmnt",info.JsonAttachment},
+                //{"paramstmt",info.NarrativeOfIncident},
+                //{"parammodby", info.ModifiedBy},
+                //{"parammoddt", info.DTModified}
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully updated");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already Exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+
+        }
+
+        public async Task<(Results result, string message)> UpdateBlotterV2(Blotter info)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR02", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID},
+                {"parmbrgycsno",info.BarangayCaseNo},
+                //{"parmjsoncmplnnt",info.JsonStringComplainant},
+                {"parmcsit",info.ComplainantSitio},
+                //{"parmjsonrspndt",info.JsonRespondent},
+                {"parmdsit",info.RespondentSitio},
+                {"parmwtns",info.Witness},
+                {"parmacstn",info.Accusations},
+                {"parmcstyp",info.CaseType},
+                {"parmplcinc",info.PlaceOfIncident},
+                {"parmincdt",info.DateOfIncident},
+                {"parminctm",info.TimeOfIncident},
+                {"parmstmt",info.Statement},
+                //{"parmjsonattchmt",info.JsonAttachment},
+                {"parmstlmt",info.TermsOfSettlement},
+                {"parmawrd",info.Award},
+                {"parmsumdt",info.SummonDate},
+                {"parmsumtm",info.SummonTime},
+                {"parmpktchrmn",info.PangkatChairman},
+                {"parmpktscrty",info.PangkatSecretary},
+                {"parmpktfmbr",info.PangkatFMember},
+                {"parmpktsmbr",info.PangkatSMember},
+                {"parmcrtdby",info.BarangaySecretary},
+                {"parmsts",info.Status}
             }).FirstOrDefault();
 
             if (result != null)
@@ -143,6 +236,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     if (result != null)
                         return (Results.Success, result);
                     return (Results.Null, null);
+            }
+            catch (System.Exception)
+            {
+                return (Results.Null, null);
+            }
+        }
+
+        public async Task<(Results result, object blotter)> LoadBlotterV2(int status)
+        {
+            try
+            {
+                var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR01", new Dictionary<string, object>()
+                {
+                    {"parmplid",account.PL_ID },
+                    {"parmpgrpid",account.PGRP_ID },
+                    {"parmsts", status}
+                    //{"paramvwtyp", id },
+                    //{"paramfrom", from },
+                    //{"paramto", to },
+                    //{"paramcurrow", currentRow }
+                });
+                if (result != null)
+                    return (Results.Success, result);
+                return (Results.Null, null);
             }
             catch (System.Exception)
             {
@@ -491,5 +608,70 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 return (Results.Success, result);
             return (Results.Null, null);
         }
+
+        public async Task<(Results result, object attachment)> LoadComplainants(string caseNo, string complaintId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR0C01", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmcsno", caseNo},
+                {"parmcmplntid", complaintId}
+            });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object attachment)> LoadRespondents(string caseNo, string respondentId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR0R01", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmcsno", caseNo},
+                {"parmrspdtid", respondentId}
+            });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> SaveForm(Blotter info)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR0F00", new Dictionary<string, object>()
+            {
+                {"parmfrmid", info.TemplateId },
+                {"parmtmplnm", info.TemplateName },
+                {"parmtmplcnt", info.TemplateContent },   
+                {"parmrgsby", account.USR_ID }
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully save");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Already Exist");
+                else if (ResultCode == "2")
+                    return (Results.Null, null);
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object template)> LoadForm()
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR0F01", new Dictionary<string, object>(){ });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
     }
 }
