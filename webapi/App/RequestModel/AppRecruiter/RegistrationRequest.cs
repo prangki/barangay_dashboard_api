@@ -138,6 +138,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string ResidentType;
         public string DateReside;
         public string CompleteAddress;
+        public int SubscriberType;
 
         public string iChildren;
         public string iValidGovernmentID;
@@ -146,11 +147,21 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string iEmployement;
         public string Json;
         public List<FingerImage> ImageList;
+        public List<GovAttachment> GovIDList;
         public class FingerImage
         {
             public int Id;
             public string Index;
             public string Image;
+        }
+        public class GovAttachment
+        {
+            public int id;
+            public string govvalid;
+            public string govvalid_no;
+            public string attachment;
+            public string base64stringattachment;
+            public string newupload;
         }
     }
     public class DateRangeModel
@@ -239,6 +250,15 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string mun;
         public string brgy;
         public string sitio;
+    }
+    public class LicenseFilterRequest
+    {
+        public string num_row;
+        public string search;
+        public string reg;
+        public string prov;
+        public string mun;
+        public string brgy;
     }
     public class BarangayList
     {
@@ -342,10 +362,45 @@ namespace webapi.App.RequestModel.AppRecruiter
     }
     public class LicenseKey
     {
+        public string plid;
+        public string pgrpid;
         public string licensekey;
         public string licenseval;
         public string registereddevice;
         public string licenseexpiry;
+        public string mcaddress;
+        public string licmod;
+        public string location;
+        public string userid;
+    }
+    public class LicenseKeyAvailable
+    {
+        public string plid;
+        public string pgrpid;
+        public string licensekey;
+        public string licenseval;
+        public string registereddevice;
+        public string licenseexpiry;
+        public string licmod;
+        public string licnum;
+        public string productid;
+        public string mcaddress;
+
+    }
+    public class Generate_License_Key
+    {
+        public string ID;
+        public string PL_ID;
+        public string PGRP_ID;
+        public string ProductID;
+        public string LicenseType;
+        public string Expiry_Days;
+        public string LicenseKey;
+        public int Lic_Mod;
+        public string Location;
+        public string UserAccount;
+        public string Date_Register;
+        public string Date_Generated;
     }
     public class OfficialHeader
     {

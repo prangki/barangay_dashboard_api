@@ -96,6 +96,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         }
         public async Task<bool> PostAnnouncement(IDictionary<string, object> data)
         {
+            
             await Pusher.PushAsync($"/{account.PL_ID}/{account.PGRP_ID}/notify"
                 , new { type = "post-notification",content = SubscriberDto.EventNofitication(data) });
             return true;
@@ -105,7 +106,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_0CCCBACBB01", new Dictionary<string, object>()
             {
                 {"parmplid", account.PL_ID},
-                {"parmpgrpid",account.PGRP_ID }
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsubtype", account.SUB_TYP }
             });
             if (results != null)
                 return (Results.Success, results);

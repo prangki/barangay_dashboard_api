@@ -99,6 +99,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
                         S_ACTV = row["S_ACTV"].Str(),
                         SessionID = row["SSSN_ID"].Str(),
                         SKIN = row["SKIN"].Str(),
+                        SUB_TYP = row["SUB_TYP"].Str(),
                         sActive = true,
                         IsLogin = true
                     });

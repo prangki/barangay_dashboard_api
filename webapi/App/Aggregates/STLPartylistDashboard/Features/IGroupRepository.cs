@@ -19,6 +19,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> GroupAsyn(STLMembership membership, bool isUpdate = false);
         Task<(Results result, String message)> SiteLeaderAsyn(STLMembership leader, bool isUpdate = false);
         Task<(Results result, object grp)> Group();
+        Task<(Results result, object grp)> Subsrciber_List(string search, int row);
         Task<(Results result, object grp)> GroupLeader(int usrtype);
         Task<(Results result, object ldr)> SiteLeader(string plid, string pgrpid, string usrid, string num_row, string search);
         Task<(Results result, object ldr)> BarangayOfficial(string plid, string pgrpid, string usrid, string num_row, string search);
@@ -76,6 +77,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmntnlty",membership.Nationality },
                 {"parmoccptn",membership.Occupation },
                 {"parmsklls",membership.Skills },
+                {"parmsubtype",membership.SubscriberType },
 
                 {"parmusername",membership.Username },
                 {"parmpassword",membership.Userpassword },
@@ -590,6 +592,16 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        
+        public async Task<(Results result, object grp)> Subsrciber_List(string search, int row)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_CBABDB03", new Dictionary<string, object>()
+            {
+                {"parmsrch", search},
+                {"parmrownum",row }
+            });
+            if (results != null)
+                return (Results.Success, SubscriberDto.GetSubscriberList(results));
+            return (Results.Null, null);
+        }
     }
 }

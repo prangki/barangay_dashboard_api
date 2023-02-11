@@ -51,6 +51,7 @@ namespace webapi.App.Model.User
         public string SIGNATUREID;
         public string SKIN;
         public string S_ACTV;
+        public string SUB_TYP;
 
         public String SessionID;
         public bool sActive;

@@ -87,6 +87,12 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             if (valresult1.result != Results.Success)
                 return NotFound();
 
+            var valresult2 = await validitygov(request);
+            if (valresult2.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult2.result != Results.Success)
+                return NotFound();
+
             var reporesult = await _repo.MembershipAsync(request, true);
             if (reporesult.result == Results.Success)
                 return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID ,AcctID = reporesult.AcctID });
@@ -108,6 +114,12 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             if (valresult1.result == Results.Failed)
                 return Ok(new { Status = "error", Message = valresult.message });
             if (valresult1.result != Results.Success)
+                return NotFound();
+
+            var valresult2 = await validitygov(request);
+            if (valresult2.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult2.result != Results.Success)
                 return NotFound();
 
 
@@ -195,8 +207,6 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(result.account);
             return NotFound();
         }
-
-
 
         [HttpPost]
         [Route("totalregister")]
@@ -392,6 +402,51 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             }
             request.Json = JsonConvert.SerializeObject(dictionary, Formatting.None);
             return (Results.Success, null);
+        }
+
+        private async Task<(Results result, string message)> validitygov(STLMembership request)
+        {
+            List<STLMembership.GovAttachment> _tempList = new List<STLMembership.GovAttachment>();
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            if (request == null)
+                return (Results.Null, null);
+            if (request.GovIDList.Count < 1)
+                return (Results.Success, null);
+            byte[] bytes = null;
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in request.GovIDList)
+
+            {
+                if (item.base64stringattachment != null && item.newupload == "1")
+                {
+                    bytes = Convert.FromBase64String(item.base64stringattachment);
+                    if (bytes.Length == 0)
+                        return (Results.Failed, "Make sure selected document path is invalid.");
+                    var res = await ImgService.SendAsync(bytes);
+                    bytes.Clear();
+                    if (res == null)
+                        return (Results.Failed, "Please contact to admin.");
+                    var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                    if (json["status"].Str() != "error")
+                    {
+                        //dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
+                        string url = json["url"].Str();
+                        sb.Append($"<governemntid GOVVAL_ID=\"{item.govvalid}\" GOVVAL_ID_NO=\"{item.govvalid_no}\" ATTACHMENT=\"{url}\" />");
+                        //request.GovIDList[i] = url;
+                    }
+                    else
+                        sb.Append($"<governemntid GOVVAL_ID=\"{item.govvalid}\" GOVVAL_ID_NO=\"{item.govvalid_no}\" ATTACHMENT=\"\" />");
+                }
+                else
+                    sb.Append($"<governemntid GOVVAL_ID=\"{item.govvalid}\" GOVVAL_ID_NO=\"{item.govvalid_no}\" ATTACHMENT=\"{item.attachment}\" />");
+
+            }
+            if (sb.Length > 0)
+            {
+                request.iValidGovernmentID = sb.ToString();
+                return (Results.Success, null);
+            }
+            return (Results.Failed, "Make sure selected image is valid.");
         }
 
         private object CreateToken(STLAccount user)

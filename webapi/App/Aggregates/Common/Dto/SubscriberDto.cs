@@ -171,6 +171,142 @@ namespace webapi.App.Aggregates.Common
             return o;
         }
 
+
+        public static IEnumerable<dynamic> GetSubscriberList(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetSubscriber_List(data);
+            return items;
+        }
+        public static IEnumerable<dynamic> GetSubscriber_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_Subscriber_List(e));
+        }
+        public static IDictionary<string, object> Get_Subscriber_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Num_Row = (data["Num_Row"].Str() == "") ? 0 : Convert.ToInt32(data["Num_Row"].Str());
+            o.Company_ID = data["PL_ID"].Str();
+            o.Group_ID = data["PGRP_ID"].Str();
+            o.Subscriber_ID = data["PLTCL_ID"].Str();
+            o.Subscriber_NM = textInfo.ToTitleCase(data["PLTCL_NM"].Str());
+            o.Region = data["LOC_REG"].Str();
+            o.Province = data["LOC_PROV"].Str();
+            o.Municipality = data["LOC_MUN"].Str();
+            o.Barangay = data["LOC_BRGY"].Str();
+            o.BarangayNM = data["BRGY"].Str();
+            o.SubType = data["SUB_TYP"].Str();
+            o.SubTypeNM = data["SUB_TYP_NM"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetGenerateLicenseKeyList(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetGenerateLicenseKey_List(data);
+            return items;
+        }
+        public static IEnumerable<dynamic> GetGenerateLicenseKey_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_GenerateLicenseKey_List(e));
+        }
+        public static IDictionary<string, object> Get_GenerateLicenseKey_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Num_Row = (data["Num_Row"].Str() == "") ? 0 : Convert.ToInt32(data["Num_Row"].Str());
+            o.ID = data["ID"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.Subscriber_NM = textInfo.ToTitleCase(data["SUBSCRIBER"].Str());
+            o.ProductID = data["PRODUCT_ID"].Str();
+            o.License_type = data["LICENSE_TYP"].Str();
+            o.Expiry_Days = (data["LIC_NUM"].Str() == "") ? 0 : Convert.ToInt32(data["LIC_NUM"].Str());
+            o.LicenseKey = data["LICENSEKEY"].Str();
+            o.LicenseVal = data["LICENSE_VAL"].Str();
+            o.Date_Register = (data["DT_REGISTERED"].Str() == "") ? "" : Convert.ToDateTime(data["DT_REGISTERED"].Str()).ToString("MMMM dd, yyyy");
+            o.License_Expiry = (data["LICENSE_EXPIRY"].Str() == "") ? "" : Convert.ToDateTime(data["LICENSE_EXPIRY"].Str()).ToString("MMMM dd, yyyy");
+            o.Registered_Device = data["REGISTERED_DEVICE"].Str();
+            o.Registered_MCAddress = data["REGISTERED_MCADDRESS"].Str();
+            o.Activated = Convert.ToBoolean(data["S_ACTIVATED"].Str());
+            o.Lic_Mod = Convert.ToInt32(data["LIC_MOD"].Str());
+            o.License_Mod = data["LICENSE_MOD"].Str();
+            o.Region = data["LOC_REG"].Str();
+            o.Province = data["LOC_PROV"].Str();
+            o.Municipality = data["LOC_MUN"].Str();
+            o.Barangay = data["LOC_BRGY"].Str();
+            o.BarangayNM = data["BRGY"].Str();
+            o.SubType = data["SUB_TYP"].Str();
+            o.SubTypeNM = data["SUB_TYP_NM"].Str();
+            o.Date_Generated = (data["DT_GENERATED"].Str() == "") ? "" : Convert.ToDateTime(data["DT_GENERATED"].Str()).ToString("MMMM dd, yyyy");
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetActivateicenseKeyList(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetActivateicenseKey_List(data);
+            return items;
+        }
+        public static IEnumerable<dynamic> GetActivateicenseKey_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => GetActivateicenseKey_List(e));
+        }
+        public static IDictionary<string, object> Get_ActivateicenseKey_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.Lic_Mod = Convert.ToInt32(data["LIC_MOD"].Str());
+            o.ProductID = data["PRODUCT_ID"].Str();
+            o.License_type = data["LICENSE_TYP"].Str();
+            o.Expiry_Days = (data["LIC_NUM"].Str() == "") ? 0 : Convert.ToInt32(data["LIC_NUM"].Str());
+            o.LicenseKey = data["LICENSEKEY"].Str();
+            o.LicenseVal = data["LICENSE_VAL"].Str();
+            o.Date_Register = (data["DT_REGISTERED"].Str() == "") ? "" : Convert.ToDateTime(data["DT_REGISTERED"].Str()).ToString("MMMM dd, yyyy");
+            o.License_Expiry = (data["LICENSE_EXPIRY"].Str() == "") ? "" : Convert.ToDateTime(data["LICENSE_EXPIRY"].Str()).ToString("MMMM dd, yyyy");
+            o.Registered_Device = data["REGISTERED_DEVICE"].Str();
+            o.Registered_MCAddress = data["REGISTERED_MCADDRESS"].Str();
+            o.ServerDate = (data["Server_Date"].Str() == "") ? "" : Convert.ToDateTime(data["Server_Date"].Str()).ToString("MMM dd, yyyy");
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAvailableLicenseKeyList(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAvailableLicenseKey_List(data);
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAvailableLicenseKey_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AvailableLicenseKey_List(e));
+        }
+        public static IDictionary<string, object> Get_AvailableLicenseKey_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.LicenseMod = data["LIC_MOD"].Str();
+            o.ProductID = data["PRODUCT_ID"].Str();
+            o.License_type = data["LICENSE_TYP"].Str();
+            o.Expiry_Days = (data["LIC_NUM"].Str() == "") ? 0 : Convert.ToInt32(data["LIC_NUM"].Str());
+            o.LicenseKey = data["LICENSEKEY"].Str();
+            o.BarangayCode = (data["BARANGAY_CODE"].Str() == "") ? "" : data["BARANGAY_CODE"].Str();
+            return o;
+        }
+
+
+
         public static IEnumerable<dynamic> GetMemberAccountList(IEnumerable<dynamic> data, bool fullinfo = true)
         {
             if (data == null) return null;

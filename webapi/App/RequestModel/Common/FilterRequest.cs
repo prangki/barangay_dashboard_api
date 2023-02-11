@@ -20,6 +20,7 @@ namespace webapi.App.RequestModel.Common
         public String BaseFilter;
         public String Page;
         public String Type;
+        public int SubTyp;
         public String ID;
         public String Schedule;
         public string REF_GRP_ID;

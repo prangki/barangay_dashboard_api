@@ -580,7 +580,8 @@ namespace webapi.App.Aggregates.Common.Dto
             o.Sitio = data["SIT_NM"].Str();
             o.BarangayPositionID = data["BRGY_PSTN_ID"].Str();
             o.BarangayPosition = data["POSITION"].Str();
-            o.ElectedOfficial = data["FLL_NM"].Str();
+            o.ElectedOfficial = data["OFCL_NM"].Str();
+            o.ResidentName = data["FLL_NM"].Str();
             o.Userid = data["USR_ID"].Str();
             o.RankNo = data["RNK_NO"].Str();
             o.Committee = data["CMTE"].Str();

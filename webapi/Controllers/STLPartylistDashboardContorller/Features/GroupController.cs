@@ -33,6 +33,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
         [HttpPost]
+        [Route("subscriberlist")]
+        public async Task<IActionResult> subscriberlist(string search, int row)
+        {
+            var result = await _repo.Subsrciber_List(search, row);
+            if (result.result == Results.Success)
+                return Ok(result.grp);
+            return NotFound();
+        }
+        [HttpPost]
         [Route("account")]
         public async Task<IActionResult> Task0g()
         {

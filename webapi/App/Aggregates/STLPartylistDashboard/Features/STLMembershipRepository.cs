@@ -83,6 +83,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid", account.PL_ID},
                 {"parmpgrpid",account.PGRP_ID },
+                {"parmsubtype", account.SUB_TYP },
                 {"parmrownum",request.num_row },
                 {"parmsrch",request.search },
                 {"parmreg",request.reg },

@@ -25,9 +25,9 @@ namespace webapi.Controllers.SubscriberAppControllers.Features
         }
         [HttpPost]
         [Route("license")]
-        public async Task<IActionResult> License()
+        public async Task<IActionResult> License([FromBody] LicenseKey lic)
         {
-            var result = await _repo.LicenseRegister();
+            var result = await _repo.LicenseRegister(lic);
             if (result.result == Results.Success)
                 return Ok(result.licinfo);
             return NotFound();
@@ -41,6 +41,48 @@ namespace webapi.Controllers.SubscriberAppControllers.Features
                 return Ok(new { result = result.result, message = result.message });
             else if (result.result == Results.Failed)
                 return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("license/generate")]
+        public async Task<IActionResult> LicenseGenerated([FromBody] Generate_License_Key lic)
+        {
+            if (lic.ID == "")
+            {
+                var result = await _repo.GenerateLicenseKey(lic);
+                if (result.result == Results.Success)
+                    return Ok(new { result = result.result, message = result.message, Content = lic });
+                else if (result.result == Results.Failed)
+                    return Ok(new { result = result.result, message = result.message });
+                return NotFound();
+            }
+            else
+            {
+                var result = await _repo.GenerateLicenseKey(lic, true);
+                if (result.result == Results.Success)
+                    return Ok(new { result = result.result, message = result.message, Content = lic });
+                else if (result.result == Results.Failed)
+                    return Ok(new { result = result.result, message = result.message });
+                return NotFound();
+            }
+                
+        }
+        [HttpPost]
+        [Route("license/generatedkey")]
+        public async Task<IActionResult> GeneratedLicenseKey([FromBody] LicenseFilterRequest filter)
+        {
+            var result = await _repo.LoadGeneatedLicense(filter);
+            if (result.result == Results.Success)
+                return Ok(result.lic);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("license/availability")]
+        public async Task<IActionResult> AvailalbeLicenseKey([FromBody] LicenseKeyAvailable filter)
+        {
+            var result = await _repo.LicenseKeyAvilability(filter);
+            if (result.result == Results.Success)
+                return Ok(result.lic);
             return NotFound();
         }
     }

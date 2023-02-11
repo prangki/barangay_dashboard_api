@@ -62,6 +62,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
                     ACT_ID=user.ACT_ID,
                     MOB_NO=user.MOB_NO,
                     ACT_TYP=user.ACT_TYP,
+                    SUB_TYP=user.SUB_TYP,
                 }), guid)),
                 new Claim(ClaimTypes.Name, user.FLL_NM),
                 new Claim(JwtRegisteredClaimNames.Jti, guid),
