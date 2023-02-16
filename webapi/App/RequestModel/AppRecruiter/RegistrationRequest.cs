@@ -372,6 +372,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string licmod;
         public string location;
         public string userid;
+        public string localno;
     }
     public class LicenseKeyAvailable
     {
@@ -401,6 +402,8 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string UserAccount;
         public string Date_Register;
         public string Date_Generated;
+        public string Extension;
+        public string prevExtension;
     }
     public class OfficialHeader
     {

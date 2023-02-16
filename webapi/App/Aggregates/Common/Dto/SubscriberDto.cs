@@ -226,12 +226,14 @@ namespace webapi.App.Aggregates.Common
             o.ProductID = data["PRODUCT_ID"].Str();
             o.License_type = data["LICENSE_TYP"].Str();
             o.Expiry_Days = (data["LIC_NUM"].Str() == "") ? 0 : Convert.ToInt32(data["LIC_NUM"].Str());
+            o.Subscription = data["SUBSCRIPTION"].Str();
             o.LicenseKey = data["LICENSEKEY"].Str();
             o.LicenseVal = data["LICENSE_VAL"].Str();
             o.Date_Register = (data["DT_REGISTERED"].Str() == "") ? "" : Convert.ToDateTime(data["DT_REGISTERED"].Str()).ToString("MMMM dd, yyyy");
             o.License_Expiry = (data["LICENSE_EXPIRY"].Str() == "") ? "" : Convert.ToDateTime(data["LICENSE_EXPIRY"].Str()).ToString("MMMM dd, yyyy");
             o.Registered_Device = data["REGISTERED_DEVICE"].Str();
             o.Registered_MCAddress = data["REGISTERED_MCADDRESS"].Str();
+            o.Extension = data["EXTN_LOC_NO"].Str();
             o.Activated = Convert.ToBoolean(data["S_ACTIVATED"].Str());
             o.Lic_Mod = Convert.ToInt32(data["LIC_MOD"].Str());
             o.License_Mod = data["LICENSE_MOD"].Str();
@@ -302,6 +304,7 @@ namespace webapi.App.Aggregates.Common
             o.Expiry_Days = (data["LIC_NUM"].Str() == "") ? 0 : Convert.ToInt32(data["LIC_NUM"].Str());
             o.LicenseKey = data["LICENSEKEY"].Str();
             o.BarangayCode = (data["BARANGAY_CODE"].Str() == "") ? "" : data["BARANGAY_CODE"].Str();
+            o.LocalNo = data["EXTN_LOC_NO"].Str();
             return o;
         }
 

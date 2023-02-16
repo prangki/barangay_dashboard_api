@@ -43,6 +43,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmlicmod", lic.Lic_Mod},
                 {"parmbarangaycode", lic.Location },
                 {"parmproductid", lic.ProductID},
+                {"parmextension", lic.Extension},
+                {"parmprevextension", lic.prevExtension},
                 {"parmoptrid", lic.UserAccount},
             }).FirstOrDefault();
             if (result != null)
@@ -92,6 +94,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmmcaddress", lic.mcaddress },
                 {"parmlicmod", lic.licmod },
                 {"parmbarngaycode", lic.location },
+                {"parmextension", lic.localno },
                 {"parmoptrid", lic.userid},
             }).FirstOrDefault();
             if (result != null)
@@ -99,7 +102,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
+                {
+                    lic.localno = row["LOC_NO"].Str();
                     return (Results.Success, "Successfully save");
+                }
+                    
                 else if (ResultCode == "2")
                     return (Results.Failed, "License was not valid");
             }

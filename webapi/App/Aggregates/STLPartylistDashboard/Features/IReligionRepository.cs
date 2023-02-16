@@ -25,6 +25,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object message)> DeleteReligion(string code);
         Task<(Results result, string message)> UpdateReligion(Religion religion);
         Task<(Results result, object position)> LoadReligion();
+        Task<(Results result, object extension)> LoadExtension(string extension);
     }
 
     public class ReligionRepository : IReligionRepository
@@ -117,6 +118,17 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
                 {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
 
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object extension)> LoadExtension(string extension)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_EXTENSION", new Dictionary<string, object>()
+            {
+                {"parmextension", extension }
             });
             if (result != null)
                 return (Results.Success, result);

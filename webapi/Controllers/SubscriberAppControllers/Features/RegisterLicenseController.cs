@@ -38,7 +38,7 @@ namespace webapi.Controllers.SubscriberAppControllers.Features
         {
             var result = await _repo.LicenseKeyRegister(lic);
             if (result.result == Results.Success)
-                return Ok(new { result = result.result, message = result.message });
+                return Ok(new { result = result.result, message = result.message, Content = lic });
             else if (result.result == Results.Failed)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();

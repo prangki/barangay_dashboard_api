@@ -69,5 +69,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.position);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("extension/load")]
+        public async Task<IActionResult> LoadExtension(string extension)
+        {
+            var result = await _repo.LoadExtension(extension);
+            if (result.result == Results.Success)
+                return Ok(result.extension);
+            return NotFound();
+        }
     }
 }
