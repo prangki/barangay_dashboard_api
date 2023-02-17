@@ -57,5 +57,11 @@ namespace webapi.App.Model.User
         public bool sActive;
         public bool IsSessionExpired;
         public bool IsLogin;
+
+        public string PROFILE_ID;
+        public string CAN_CREATE;
+        public string CAN_UPDATE;
+        public string CAN_DELETE;
+        public string PROFILE_ACCESS;
     }
 }

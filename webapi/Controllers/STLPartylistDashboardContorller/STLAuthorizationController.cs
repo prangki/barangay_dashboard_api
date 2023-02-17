@@ -63,6 +63,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
                     MOB_NO=user.MOB_NO,
                     ACT_TYP=user.ACT_TYP,
                     SUB_TYP=user.SUB_TYP,
+                    CAN_CREATE = user.CAN_CREATE,
+                    CAN_UPDATE = user.CAN_UPDATE,
+                    CAN_DELETE = user.CAN_DELETE,
+                    PROFILE_ACCESS = user.PROFILE_ACCESS
+
                 }), guid)),
                 new Claim(ClaimTypes.Name, user.FLL_NM),
                 new Claim(JwtRegisteredClaimNames.Jti, guid),
@@ -72,9 +77,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
             string Issuer = _config["TokenSettings:Issuer"]
                 , Audience = _config["TokenSettings:Audience"]
                 , Key = _config["TokenSettings:Key"];
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
-            var signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-            var token = new JwtSecurityToken(
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
+                var signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+                var token = new JwtSecurityToken(
                 issuer: Issuer,
                 audience: Audience,
                 notBefore: now,
@@ -83,6 +88,23 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
                 signingCredentials: signInCred
             );
             return new { Token = new JwtSecurityTokenHandler().WriteToken(token), ExpirationDate = token.ValidTo, };
+        }
+
+        [HttpPost]
+        [Route("dashboardsignin02")]
+        public async Task<IActionResult> Task0a02([FromBody] STLSignInRequest request)
+        {
+            var result = await _repo.DashboardSignInAsync02(request);
+            if (result.result == Results.Success)
+            {
+                var token = CreateToken(result.account);
+                var menu = await _repo.LoadPGS02(result.account.PROFILE_ID.Str(), result.account.ACT_TYP);
+                var data = await _repo.MemberGroup(result.account);
+                return Ok(new { result = result.result, account = result.account, auth = token, Company = data.PartyList, group = data.Group, menupage = menu.menu });
+            }
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, Message = result.message });
+            return NotFound();
         }
 
     }

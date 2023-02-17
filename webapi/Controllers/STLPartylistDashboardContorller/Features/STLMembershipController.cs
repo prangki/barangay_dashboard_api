@@ -484,5 +484,107 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             );
             return new { Token = new JwtSecurityTokenHandler().WriteToken(token), ExpirationDate = token.ValidTo, };
         }
+
+        [HttpPost]
+        [Route("account/getprofiles")]
+        public async Task<IActionResult> Profile01()
+        {
+            var result = await _repo.ProfileGet();
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/getresidents")]
+        public async Task<IActionResult> SystemUser04()
+        {
+            var result = await _repo.GetResidents();
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/getsystemusers")]
+        public async Task<IActionResult> SystemUser01()
+        {
+            var result = await _repo.GetSystemUsers();
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/getsystemusersingle")]
+        public async Task<IActionResult> SystemUser02(string plid, string pgrpid, string userid)
+        {
+            var result = await _repo.SystemUserGetSingle(plid, pgrpid, userid);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/updatesystemuser")]
+        public async Task<IActionResult> SystemUser03([FromBody] SystemUser user)
+        {
+            //var result = await _repo.AddPosition(position.JsonString);
+            var result = await _repo.SystemUserUpdate(user);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/addaccessprofile")]
+        public async Task<IActionResult> Profile02([FromBody] AccessProfile profile)
+        {
+            var result = await _repo.ProfileAdd(profile);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/updateaccessprofile")]
+        public async Task<IActionResult> Profile04([FromBody] AccessProfile profile)
+        {
+            //var result = await _repo.AddPosition(position.JsonString);
+            var result = await _repo.ProfileUpdate(profile);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/deleteaccessprofile")]
+        public async Task<IActionResult> Profile03(string profileid)
+        {
+            var result = await _repo.ProfileDelete(profileid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/deletesystemuser")]
+        public async Task<IActionResult> SystemUser04(string userid)
+        {
+            var result = await _repo.SystemUserDelete(userid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/addsystemuser")]
+        public async Task<IActionResult> SystemUser06([FromBody] SystemUser user)
+        {
+            var result = await _repo.SystemUserAdd(user);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
     }
 }

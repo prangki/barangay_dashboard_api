@@ -41,6 +41,17 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object skl)> Load_Skills(string search);
         Task<(Results result, String message)> AssigendSkin(string skin);
         Task<(Results result, String message)> ResidenceDODAsyn(DOD req, bool isUpdate = false);
+
+        Task<(Results result, object household)> ProfileGet();
+        Task<(Results result, object household)> SystemUserGetSingle(string plid, string pgrpid, string userid);
+        Task<(Results result, object household)> GetResidents();
+        Task<(Results result, object household)> GetSystemUsers();
+        Task<(Results result, string message)> ProfileAdd(AccessProfile profile);
+        Task<(Results result, string message)> ProfileUpdate(AccessProfile profile);
+        Task<(Results result, object message)> ProfileDelete(string profileid);
+        Task<(Results result, string message)> SystemUserAdd(SystemUser user);
+        Task<(Results result, string message)> SystemUserUpdate(SystemUser user);
+        Task<(Results result, object message)> SystemUserDelete(string userid);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -508,6 +519,226 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "This Account was In-Active!");
             }
             return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> ProfileGet()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_PROFILE_GET", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> SystemUserGetSingle(string plid, string pgrpid, string userid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_GETSINGLE", new Dictionary<string, object>()
+            {
+
+                {"parmplid", plid },
+                {"parmpgrpid", pgrpid },
+                {"parmuserid", userid },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> GetResidents()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_CREATE_GETRESIDENTS", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> GetSystemUsers()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_GETUSERS", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID },
+                {"parmacttype", account.ACT_TYP }
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ProfileAdd(AccessProfile profile)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_PROFILE_ADD", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+
+                {"parmprofilename", profile.profilename },
+
+                {"parmaccessstring_superadmin", profile.accessstring_superadmin },
+                {"parmaccessstring_admin", profile.accessstring_admin },
+                {"parmaccessstring_operation", profile.accessstring_operation },
+                {"parmaccessstring_reporting", profile.accessstring_reporting },
+                {"parmaccessstring_appearance", profile.accessstring_appearance },
+                {"parmaccessstring_configuration", profile.accessstring_configuration },
+
+                {"parmusercreation", profile.usercreation },
+                {"parmusermodification",profile.usermodification },
+                {"parmuserremoval", profile.userremoval },
+
+                {"parmcreatorid",account.USR_ID },
+                {"parmprofileaccess", profile.profileaccess },
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Profile Added!");
+                return (Results.Failed, "A profile with the same access level already exists");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> ProfileUpdate(AccessProfile profile)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_PROFILE_UPDATE", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+
+                {"parmprofileid", profile.profileid },
+                {"parmprofilename", profile.profilename },
+
+                {"parmaccessstring_superadmin", profile.accessstring_superadmin },
+                {"parmaccessstring_admin", profile.accessstring_admin },
+                {"parmaccessstring_operation", profile.accessstring_operation },
+                {"parmaccessstring_reporting", profile.accessstring_reporting },
+                {"parmaccessstring_appearance", profile.accessstring_appearance },
+                {"parmaccessstring_configuration", profile.accessstring_configuration },
+
+                {"parmusercreation", profile.usercreation },
+                {"parmusermodification",profile.usermodification },
+                {"parmuserremoval", profile.userremoval },
+
+                {"parmcreatorid",account.USR_ID },
+                {"parmprofileaccess", profile.profileaccess },
+            });
+
+            if (result != null)
+                return (Results.Success, "Successfully updated");
+            return (Results.Failed, null);
+            //if (result != null)
+            //{
+            //    var row = ((IDictionary<string, object>)result);
+            //    string ResultCode = row["RESULT"].Str();
+            //    if (ResultCode == "1")
+            //        return (Results.Success, "Successfully updated");
+            //    else if (ResultCode == "2")
+            //        return (Results.Failed, "Already Exists");
+
+            //}
+            //return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object message)> ProfileDelete(string profileid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_PROFILEDELETE", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmprofileid", profileid},
+
+            });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Failed, null);
+        }
+
+        public async Task<(Results result, string message)> SystemUserAdd(SystemUser user)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_ADD", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+
+                {"parmuserid", user.userid },
+                {"parmusername", user.username },
+
+                {"parmsubscriberid", user.subscribertype },
+                {"parmaccounttype", user.accounttype },
+                {"parmprofileid", user.profileid },
+                {"parmusermobileno", user.mobno },
+
+                {"parmcreatorid", account.USR_ID },
+
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "System User Added!");
+                return (Results.Failed, "Failed");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> SystemUserUpdate(SystemUser user)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_UPDATE", new Dictionary<string, object>()
+            {
+                {"parmplid", user.plid},
+                {"parmpgrpid", user.pgrpid},
+
+                {"parmuserid", user.userid },
+                {"parmprofileid", user.profileid},
+
+            });
+
+            if (result != null)
+                return (Results.Success, "Successfully updated");
+            return (Results.Failed, null);
+            //if (result != null)
+            //{
+            //    var row = ((IDictionary<string, object>)result);
+            //    string ResultCode = row["RESULT"].Str();
+            //    if (ResultCode == "1")
+            //        return (Results.Success, "Successfully updated");
+            //    else if (ResultCode == "2")
+            //        return (Results.Failed, "Already Exists");
+
+            //}
+            //return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object message)> SystemUserDelete(string userid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_DELETE", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
+                {"parmuserid", userid},
+
+            });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Failed, null);
         }
     }
 }

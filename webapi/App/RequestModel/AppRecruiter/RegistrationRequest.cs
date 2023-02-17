@@ -525,4 +525,44 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Item_Description;
     }
 
+    public class SystemUser
+    {
+        public string plid { get; set; }
+        public string pgrpid { get; set; }
+        public string userid { get; set; }
+
+        public string username { get; set; }
+        public int subscribertype { get; set; }
+        public int accounttype { get; set; }
+
+        public string profileid { get; set; }
+        public string profilename { get; set; }
+
+        public string mobno { get; set; }
+
+        public string usercreator { get; set; }
+    }
+
+    public class AccessProfile
+    {
+        public string plid { get; set; }
+        public string pgrpid { get; set; }
+        public string profileid { get; set; }
+
+        public string profilename { get; set; }
+        public string creatorid { get; set; }
+
+        public string accessstring_superadmin { get; set; }
+        public string accessstring_admin { get; set; }
+        public string accessstring_operation { get; set; }
+        public string accessstring_reporting { get; set; }
+        public string accessstring_appearance { get; set; }
+        public string accessstring_configuration { get; set; }
+
+        public int usercreation { get; set; }
+        public int usermodification { get; set; }
+        public int userremoval { get; set; }
+        public int profileaccess { get; set; }
+}
+
 }
