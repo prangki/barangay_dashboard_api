@@ -586,5 +586,15 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("account/addsystemuser01")]
+        public async Task<IActionResult> SystemUser06(string usrid)
+        {
+            var result = await _repo.SystemUserAdd01(usrid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
     }
 }
