@@ -28,6 +28,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object household)> GetComplaints(string from, string to, string plid = "0002", string pgrpid = "002");
         Task<(Results result, object household)> GetOrgs(string xml);
 
+        Task<(Results result, object household)> GetPreferences(ReportSettings settings);
+
+        Task<(Results result, string message)> AddReportPreference(ReportSettings settings);
 
     }
     public class BarangayReportRepository : IBarangayReportRepository
@@ -151,6 +154,59 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             if (results != null)
                 return (Results.Success, results);
             return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> GetPreferences(ReportSettings settings)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTPREFERENCE_GET", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", settings.plid},
+                {"parmpgrpid", settings.pgrpid},
+                {"parmuserid", settings.userid },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> AddReportPreference(ReportSettings settings)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTPREFERENCE_INSERT", new Dictionary<string, object>()
+            {
+
+                {"parmplid", settings.plid},
+                {"parmpgrpid", settings.pgrpid },
+                {"parmuserid", settings.userid},
+                {"parmpreferencedescription", settings.description},
+                {"parmlayoutindex", settings.layoutIndex },
+                {"parmtitle", settings.title},
+                {"parmsubtitle", settings.subtitle},
+                {"parmdateformatindex", settings.dateFormat },
+                {"parmselectbits", settings.selectBits.ToString()},
+                {"parmdistinctionbits", settings.distinctionBits.ToString()},
+                {"parmagefrom", settings.from },
+                {"parmageto", settings.to},
+                {"parmchartindex", settings.chartIndex.ToString()},
+                {"parmsignatureindex", settings.signIndex.ToString() },
+                {"parmisactive", settings.isactive },
+
+
+            });
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully saved");
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Already Exists");
+
+            }
+            return (Results.Null, null);
+
         }
 
     }

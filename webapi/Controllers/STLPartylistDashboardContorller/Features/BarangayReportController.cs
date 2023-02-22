@@ -85,5 +85,26 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.household);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("reporting/getreportsettings")]
+        public async Task<IActionResult> ShowPreferences([FromBody] ReportSettings settings)
+        {
+            var result = await _repo.GetPreferences(settings);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("reporting/addreportsettings")]
+        public async Task<IActionResult> ReportPreferenceAdd([FromBody] ReportSettings settings)
+        {
+            //var result = await _repo.AddPosition(position.JsonString);
+            var result = await _repo.AddReportPreference(settings);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
     }
 }

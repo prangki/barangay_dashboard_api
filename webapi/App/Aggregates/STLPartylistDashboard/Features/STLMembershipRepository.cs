@@ -50,6 +50,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> ProfileUpdate(AccessProfile profile);
         Task<(Results result, object message)> ProfileDelete(string profileid);
         Task<(Results result, string message)> SystemUserAdd(SystemUser user);
+        Task<(Results result, string message)> SystemUserAdd01(string usrid);
         Task<(Results result, string message)> SystemUserUpdate(SystemUser user);
         Task<(Results result, object message)> SystemUserDelete(string userid);
     }
@@ -554,9 +555,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_CREATE_GETRESIDENTS", new Dictionary<string, object>()
             {
-                //{"parmplid",account.PL_ID },
+                
                 {"parmplid", account.PL_ID},
                 {"parmpgrpid", account.PGRP_ID },
+                {"parmaccttype ", account.ACT_TYP },
 
             });
             if (results != null)
@@ -685,6 +687,28 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmusermobileno", user.mobno },
 
                 {"parmcreatorid", account.USR_ID },
+
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "System User Added!");
+                return (Results.Failed, "Failed");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> SystemUserAdd01(string usrid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_ADD01", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+
+                {"parmuserid", usrid },
+                {"creatorid", account.USR_ID },
 
             }).FirstOrDefault();
             if (results != null)
