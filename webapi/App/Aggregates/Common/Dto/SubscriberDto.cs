@@ -303,7 +303,12 @@ namespace webapi.App.Aggregates.Common
             o.License_type = data["LICENSE_TYP"].Str();
             o.Expiry_Days = (data["LIC_NUM"].Str() == "") ? 0 : Convert.ToInt32(data["LIC_NUM"].Str());
             o.LicenseKey = data["LICENSEKEY"].Str();
+            o.Registered_Date = data["DT_REGISTERED"].Str();
+            o.License_Expiry = data["LICENSE_EXPIRY"];
+            o.Registered_Device = data["REGISTERED_DEVICE"].Str();
+            o.Registered_MCAddress = data["REGISTERED_MCADDRESS"].Str();
             o.BarangayCode = (data["BARANGAY_CODE"].Str() == "") ? "" : data["BARANGAY_CODE"].Str();
+            o.isExpired = Convert.ToInt32(data["isExpired"]);
             o.LocalNo = data["EXTN_LOC_NO"].Str();
             return o;
         }

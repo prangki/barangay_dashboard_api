@@ -45,6 +45,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmproductid", lic.ProductID},
                 {"parmextension", lic.Extension},
                 {"parmprevextension", lic.prevExtension},
+                {"@parmrenew", lic.licenserenew},
                 {"parmoptrid", lic.UserAccount},
             }).FirstOrDefault();
             if (result != null)
@@ -56,6 +57,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     if (!isUpdate)
                     {
                         lic.ID = row["ID"].Str();
+                        lic.Extension = row["EXTN_LOC_NO"].Str();
                         lic.Date_Generated = DateTime.Now.ToString("MMMM dd, yyyy");
                     }
                         
@@ -103,7 +105,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    lic.localno = row["LOC_NO"].Str();
+                    //lic.localno = row["LOC_NO"].Str();
                     return (Results.Success, "Successfully save");
                 }
                     

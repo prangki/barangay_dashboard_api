@@ -404,6 +404,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Date_Generated;
         public string Extension;
         public string prevExtension;
+        public string licenserenew;
     }
     public class OfficialHeader
     {
