@@ -43,8 +43,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> ResidenceDODAsyn(DOD req, bool isUpdate = false);
 
         Task<(Results result, object household)> ProfileGet();
+        Task<(Results result, object household)> ProfileGetSubscriberProfile();
         Task<(Results result, object household)> SystemUserGetSingle(string plid, string pgrpid, string userid);
-        Task<(Results result, object household)> GetResidents();
+        Task<(Results result, object household)> SelectUser(SelectUser user);
         Task<(Results result, object household)> GetSystemUsers();
         Task<(Results result, string message)> ProfileAdd(AccessProfile profile);
         Task<(Results result, string message)> ProfileUpdate(AccessProfile profile);
@@ -536,6 +537,20 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, object household)> ProfileGetSubscriberProfile()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_PROFILE_GETSUBSCRIBERPROFILE", new Dictionary<string, object>()
+            {
+                //{"parmplid",account.PL_ID },
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID },
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
         public async Task<(Results result, object household)> SystemUserGetSingle(string plid, string pgrpid, string userid)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_GETSINGLE", new Dictionary<string, object>()
@@ -551,14 +566,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object household)> GetResidents()
+        public async Task<(Results result, object household)> SelectUser(SelectUser user)
         {
-            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_CREATE_GETRESIDENTS", new Dictionary<string, object>()
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_CREATE_SELECTUSER", new Dictionary<string, object>()
             {
                 
-                {"parmplid", account.PL_ID},
-                {"parmpgrpid", account.PGRP_ID },
-                {"parmaccttype ", account.ACT_TYP },
+                {"parmplid", user.plid},
+                {"parmpgrpid", user.pgrpid },
+                {"parmsubtype ", user.subtype },
+
+                {"parmlocmun ", user.locmun },
+                {"parmlocprov ", user.locprov },
+                {"parmlocreg ", user.locreg },
 
             });
             if (results != null)

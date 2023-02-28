@@ -345,12 +345,16 @@ namespace webapi.App.STLDashboardModel
         public string title;
         public string subtitle;
         public int dateFormat;
-        public int[] selectBits = new int[50];
-        public List<int[]> distinctionBits = new List<int[]>();
-        public int from;
-        public int to;
-        public bool[] chartIndex = new bool[] { true, true, true, true };
-        public bool[] signIndex = new bool[] { true, true };
+        //public int[] selectBits = new int[50];
+        //public List<int[]> distinctionBits = new List<int[]>();
+        public string selectBits = "";
+        public string distinctionBits = "";
+        public int? from;
+        public int? to;
+        //public bool[] chartIndex = new bool[] { true, true, true, true };
+        //public bool[] signIndex = new bool[] { true, true };
+        public string chartIndex = "";
+        public string signIndex = "";
         public int isactive = 1;
     }
 

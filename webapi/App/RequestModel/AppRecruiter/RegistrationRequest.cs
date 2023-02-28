@@ -550,6 +550,18 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string usercreator { get; set; }
     }
 
+    public class SelectUser
+    {
+        public string plid { get; set; }
+        public string pgrpid { get; set; }
+
+        public int subtype { get; set; }
+
+        public string locmun { get; set; }
+        public int? locprov { get; set; }
+        public string locreg { get; set; }
+    }
+
     public class AccessProfile
     {
         public string plid { get; set; }
