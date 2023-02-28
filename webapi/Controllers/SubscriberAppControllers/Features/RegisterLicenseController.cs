@@ -85,5 +85,18 @@ namespace webapi.Controllers.SubscriberAppControllers.Features
                 return Ok(result.lic);
             return NotFound();
         }
+
+
+        [HttpPost]
+        [Route("license/formtemplate")]
+        public async Task<IActionResult> licenseformstemplate([FromBody] LicenseKeyCertificate cert)
+        {
+            var result = await _repo.LicensekeyCertificateAsync(cert);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message, Content = cert });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
     }
 }

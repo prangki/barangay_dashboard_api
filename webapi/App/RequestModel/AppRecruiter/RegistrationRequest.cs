@@ -388,6 +388,12 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string mcaddress;
 
     }
+    public class LicenseKeyCertificate
+    {
+        public string certificatecontent;
+        public string UserAccount;
+
+    }
     public class Generate_License_Key
     {
         public string ID;

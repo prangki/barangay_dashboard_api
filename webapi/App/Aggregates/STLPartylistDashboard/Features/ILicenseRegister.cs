@@ -20,6 +20,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         //Task<(Results result, object lic)> LoadGeneatedLicense(string search, int row);
         Task<(Results result, object lic)> LoadGeneatedLicense(LicenseFilterRequest filter);
         Task<(Results result, object lic)> LicenseKeyAvilability(LicenseKeyAvailable lic);
+        Task<(Results result, String message)> LicensekeyCertificateAsync(LicenseKeyCertificate cert);
 
     }
     public class LicenseRegisterRepository: ILicenseRegisterRepository
@@ -30,6 +31,27 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             _repo = repo;
         }
 
+        public async Task<(Results result, string message)> LicensekeyCertificateAsync(LicenseKeyCertificate cert)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BIMSDAC0A", new Dictionary<string, object>()
+            {
+                {"parmscertificatecontent", cert.certificatecontent },
+                {"parmoptrid", cert.UserAccount},
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, "Successfully save");
+                }
+
+                else if (ResultCode == "2")
+                    return (Results.Failed, "License was not valid");
+            }
+            return (Results.Null, null);
+        }
         public async Task<(Results result, string message)> GenerateLicenseKey(Generate_License_Key lic, bool isUpdate=false)
         {
             var result = _repo.DSpQuery<dynamic>($"spfn_DAB0C", new Dictionary<string, object>()
@@ -82,6 +104,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 return (Results.Success, SubscriberDto.GetAvailableLicenseKeyList(result));
             return (Results.Null, null);
         }
+
 
         public async Task<(Results result, string message)> LicenseKeyRegister(LicenseKey lic)
         {
