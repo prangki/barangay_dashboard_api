@@ -496,10 +496,20 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
 
         [HttpPost]
-        [Route("account/getresidents")]
-        public async Task<IActionResult> SystemUser04()
+        [Route("account/getsubscriberprofile")]
+        public async Task<IActionResult> Profile07()
         {
-            var result = await _repo.GetResidents();
+            var result = await _repo.ProfileGetSubscriberProfile();
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/getresidents")]
+        public async Task<IActionResult> SystemUser04([FromBody]SelectUser user)
+        {
+            var result = await _repo.SelectUser(user);
             if (result.result == Results.Success)
                 return Ok(result.household);
             return NotFound();
