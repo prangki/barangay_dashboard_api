@@ -23,6 +23,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object household)> DataAnalytics(Report report);
 
         Task<(Results result, object household)> GetStatisticalData(StatisticalData data);
+        Task<(Results result, object household)> GetStatisticalData02(StatisticalData data);
         Task<(Results result, object household)> DynamicReportData(Report report);
 
         Task<(Results result, object household)> GetComplaints(string from, string to, string plid = "0002", string pgrpid = "002");
@@ -90,6 +91,23 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmaccttype",account.ACT_TYP },
+                {"parmcode", data.code },
+                {"parmloctype", data.loctype },
+                {"parmxml", data.xml },
+
+
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object household)> GetStatisticalData02(StatisticalData data)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_STATISTICS01", new Dictionary<string, object>()
+            {
+
+                {"parmsubtype",account.SUB_TYP },
                 {"parmcode", data.code },
                 {"parmloctype", data.loctype },
                 {"parmxml", data.xml },

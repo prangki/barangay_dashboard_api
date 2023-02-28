@@ -57,6 +57,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
+        [Route("reporting/statisticalData02")]
+        public async Task<IActionResult> GetStatistics02([FromBody] StatisticalData data)
+        {
+            var result = await _repo.GetStatisticalData02(data);
+            if (result.result == Results.Success)
+                return Ok(result.household);
+            return NotFound();
+        }
+
+        [HttpPost]
         [Route("reporting/dynamicReporting")]
         public async Task<IActionResult> DynamicReportData([FromBody] Report report)
         {
