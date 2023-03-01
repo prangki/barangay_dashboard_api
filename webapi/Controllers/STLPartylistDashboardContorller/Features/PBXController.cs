@@ -29,7 +29,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("pbx/credential")]
-        public async Task<IActionResult> LoadForm()
+        public async Task<IActionResult> LoadPBXAPICredential()
         {
             dynamic credential = new
             {
@@ -40,5 +40,19 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             
             return Ok(credential);
         }
+
+        [HttpPost]
+        [Route("pbx/database/credential")]
+        public async Task<IActionResult> LoadPBXDBCredential()
+        {
+            dynamic credential = new
+            {
+                ConnectionString = _config["PBXDatabase:ConnectionString"].Str()
+            };
+
+            return Ok(credential);
+        }
+
+
     }
 }
