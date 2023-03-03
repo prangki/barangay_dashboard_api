@@ -31,6 +31,21 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
             _config = config;
             _repo = repo;
         }
+
+        [HttpPost]
+        [Route("account/changepassword")]
+        public async Task<IActionResult> ForgotPasswordConfirm([FromBody] RequiredChangePassword request)
+        {
+            var repoResult = await _repo.RequiredChangePassword(request);
+            if (repoResult.result == Results.Success)
+            {
+                return Ok(new { Status = "ok", Message = repoResult.message });
+            }
+            else if (repoResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = repoResult.message });
+            return NotFound();
+        }
+
         [HttpPost]
         [Route("dashboardsignin")]
         public async Task<IActionResult> Task0a([FromBody] STLSignInRequest request)
