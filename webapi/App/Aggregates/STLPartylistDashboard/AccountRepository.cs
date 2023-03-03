@@ -17,6 +17,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
     public interface IAccountRepository
     {
         Task<(Results result, String message, STLAccount account)>DashboardSignInAsync(STLSignInRequest request);
+        Task<(Results result, String message)> RequiredChangePassword(RequiredChangePassword request);
         Task<(object PartyList, object Group)> MemberGroup(STLAccount account);
         Task<(String Message, object menu)> LoadPGS(string userid, string accttype);
 
@@ -208,6 +209,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
                         CAN_DELETE = row["CAN_DELETE"].Str(),
                         PROFILE_ACCESS = row["PROFILE_ACCESS"].Str(),
                         PROFILE_ID = row["PROFILE_ID"].Str(),
+                        RQRD_CHNG_PSSWRD = row["RQRD_CHNG_PSSWRD"].Str(),
+                        TRGR_CHNG_PSSWRD = row["TRGR_CHNG_PSSWRD"].Str(),
                         sActive = true,
                         IsLogin = true
                     });
@@ -221,6 +224,36 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
                 return (Results.Failed, "Invalid username and password! Please try again", null);
             }
             return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message)> RequiredChangePassword(RequiredChangePassword request)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER0A", new Dictionary<string, object>()
+            {
+                {"parmplid", request.PLID },
+                {"parmpgrpid", request.PGRPID },
+                {"parmusrename", request.Username },
+                {"parmpassword", request.OldPassword },
+                {"parmnewpassword", request.Password },
+                {"parmconfirmpassword", request.ConfirmPassword }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Change Successfull! you can now use your new password");
+                else if (ResultCode == "61")
+                    return (Results.Null, "Password did not match");
+                else if (ResultCode == "62")
+                    return (Results.Null, "You are trying to user your old password, please try again.");
+                else if (ResultCode == "0")
+                    return (Results.Null, "Your username or mobile number was not exist, please try again.");
+                else if (ResultCode == "21")
+                    return (Results.Null, "You are try to access block account, please try again.");
+                return (Results.Null, "Failed to Change! your request is already done");
+            }
+            return (Results.Null, null);
         }
     }
 }

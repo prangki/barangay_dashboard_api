@@ -27,6 +27,15 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string groupid;
         public string psncd;
     }
+    public class RequiredChangePassword
+    {
+        public string PLID;
+        public string PGRPID;
+        public string Username;
+        public string OldPassword;
+        public string Password;
+        public string ConfirmPassword;
+    }
     public class BIMSSMSIN 
     {
         public string Id;
