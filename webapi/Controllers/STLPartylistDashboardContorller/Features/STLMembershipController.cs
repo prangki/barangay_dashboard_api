@@ -547,10 +547,31 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
 
         [HttpPost]
+        [Route("account/updatesystemuserpassword")]
+        public async Task<IActionResult> SystemUser09(string plid, string pgrpid, string usrid, string password)
+        {
+            //var result = await _repo.AddPosition(position.JsonString);
+            var result = await _repo.SystemUserUpdatePassword(plid, pgrpid, usrid, password);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
         [Route("account/addaccessprofile")]
         public async Task<IActionResult> Profile02([FromBody] AccessProfile profile)
         {
             var result = await _repo.ProfileAdd(profile);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/systemuserissubscriber")]
+        public async Task<IActionResult> SystemUser10()
+        {
+            var result = await _repo.SystemUserIsSubscriber();
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();

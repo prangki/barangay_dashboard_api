@@ -48,11 +48,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object household)> SelectUser(SelectUser user);
         Task<(Results result, object household)> GetSystemUsers();
         Task<(Results result, string message)> ProfileAdd(AccessProfile profile);
+        Task<(Results result, string message)> SystemUserIsSubscriber();
         Task<(Results result, string message)> ProfileUpdate(AccessProfile profile);
         Task<(Results result, object message)> ProfileDelete(string profileid);
         Task<(Results result, string message)> SystemUserAdd(SystemUser user);
         Task<(Results result, string message)> SystemUserAdd01(string usrid);
         Task<(Results result, string message)> SystemUserUpdate(SystemUser user);
+        Task<(Results result, string message)> SystemUserUpdatePassword(string plid, string pgrpid, string usrid, string password);
         Task<(Results result, object message)> SystemUserDelete(string userid);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
@@ -634,6 +636,33 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, string message)> SystemUserIsSubscriber()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_ISSUBSCRIBER", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+
+                {"parmuserid", account.USR_ID },
+
+
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "You are not allowed to change subscriber password. Please contact ESAT.");
+                else
+                {
+                    if(account.ACT_TYP == "4" || account.ACT_TYP == "5")
+                        return (Results.Failed, "You are not allowed to change password. Please contact your administrator.");
+                }
+                
+            }
+            return (Results.Null, null);
+        }
+
         public async Task<(Results result, string message)> ProfileUpdate(AccessProfile profile)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_PROFILE_UPDATE", new Dictionary<string, object>()
@@ -751,6 +780,33 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmuserid", user.userid },
                 {"parmprofileid", user.profileid},
 
+            });
+
+            if (result != null)
+                return (Results.Success, "Successfully updated");
+            return (Results.Failed, null);
+            //if (result != null)
+            //{
+            //    var row = ((IDictionary<string, object>)result);
+            //    string ResultCode = row["RESULT"].Str();
+            //    if (ResultCode == "1")
+            //        return (Results.Success, "Successfully updated");
+            //    else if (ResultCode == "2")
+            //        return (Results.Failed, "Already Exists");
+
+            //}
+            //return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> SystemUserUpdatePassword(string plid, string pgrpid, string usrid, string password)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_CHANGEPASSWORD", new Dictionary<string, object>()
+            {
+                {"parmplid", plid},
+                {"parmpgrpid", pgrpid},
+
+                {"parmuserid", usrid },
+                {"parmpassword", password},
             });
 
             if (result != null)
