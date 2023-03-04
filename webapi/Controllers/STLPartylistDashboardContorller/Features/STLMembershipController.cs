@@ -78,18 +78,18 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         {
             var valresult = await validity(request);
             if (valresult.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valresult.message });
+                return Ok(new { result = "error", Message = valresult.message });
             if (valresult.result != Results.Success)
                 return NotFound();
             var valresult1 = await validitysignatue(request);
             if (valresult1.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valresult.message });
+                return Ok(new { result = "error", Message = valresult.message });
             if (valresult1.result != Results.Success)
                 return NotFound();
 
             var valresult2 = await validitygov(request);
             if (valresult2.result == Results.Failed)
-                return Ok(new { Status = "error", Message = valresult.message });
+                return Ok(new { result = "error", Message = valresult.message });
             if (valresult2.result != Results.Success)
                 return NotFound();
 
@@ -354,10 +354,18 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             if (!request.ImageUrl.IsEmpty())
                 return (Results.Success, null);
             if (request.Img.IsEmpty())
-                return (Results.Failed, "Please select an image.");
+            {
+                request.ImageUrl = "";
+                return (Results.Success, null);
+            }
+                
             byte[] bytes = Convert.FromBase64String(request.Img.Str());
             if (bytes.Length == 0)
-                return (Results.Failed, "Make sure selected image is invalid.");
+            {
+                request.ImageUrl = "";
+                return (Results.Success, null);
+            }
+                
             var res = await ImgService.SendAsync(bytes);
             bytes.Clear();
             if (res == null)
