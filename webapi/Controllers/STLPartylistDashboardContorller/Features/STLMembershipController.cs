@@ -617,6 +617,16 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
 
         [HttpPost]
+        [Route("account/deletesystemuser02")]
+        public async Task<IActionResult> SystemUser11(string plid, string pgrpid, string userid)
+        {
+            var result = await _repo.SystemUserDelete02(plid, pgrpid, userid);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
         [Route("account/addsystemuser")]
         public async Task<IActionResult> SystemUser06([FromBody] SystemUser user)
         {

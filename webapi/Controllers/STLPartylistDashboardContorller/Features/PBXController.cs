@@ -26,12 +26,14 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
     public class PBXController : ControllerBase
     {
         private readonly IConfiguration _config;
+        private readonly IPBXRepository _repo;
         private static string token = null;
         private static string APIUrl = null;
 
-        public PBXController(IConfiguration config)
+        public PBXController(IConfiguration config, IPBXRepository repo)
         {
             _config = config;
+            _repo = repo;
         }
 
         [HttpPost]
@@ -86,6 +88,20 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             };
 
             return Ok(credential);
+        }
+
+        [HttpPost]
+        [Route("pbx/sip/credential")]
+        public async Task<IActionResult> GetSIPCredential()
+        {
+            dynamic credential = new
+            {
+                password = _config["PBX:SIP:Password"].Str(),
+                domain = _config["PBX:SIP:Domain"].Str(),
+                port = int.Parse(_config["PBX:SIP:Port"].Str())
+            };
+
+            return Ok(new { errCode = 0, errMessage = "SUCCESS", credential = credential });
         }
 
         [HttpPost]
@@ -210,6 +226,36 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 errCode = 0,
                 respMessage = "SUCCESS"
             });
+        }
+
+        [HttpPost]
+        [Route("pbx/calllogs/save")]
+        public async Task<IActionResult> SaveCallLogs(string id, string name, string callType)
+        {
+            var result = await _repo.SaveCallLogs(id, name, callType);
+            if (result.result != Results.Success)
+                return Ok(new { errCode = 2005, errMessage = "SQL ERROR" });
+            return Ok(new { errCode = 0, errMessage = "SUCCESS" });
+        }
+
+        [HttpPost]
+        [Route("pbx/calllogs/list")]
+        public async Task<IActionResult> GetListCallLogs(string id)
+        {
+            var result = await _repo.GetListCallLogs(id);
+            if (result.result != Results.Success)
+                return Ok(new { errCode = 2005, errMessage = "SQL ERROR", list = "" });
+            return Ok(new { errCode = 0, errMessage = "SUCCESS", list = result.list });
+        }
+
+        [HttpPost]
+        [Route("pbx/extension/get")]
+        public async Task<IActionResult> GetExtensionId(string mcAddress, string fullname)
+        {
+            var result = await _repo.GetExtensionId(mcAddress, fullname);
+            if (result.result != Results.Success)
+                return Ok(new { errCode = 2005, errMessage = "SQL ERROR" });
+            return Ok(new { errCode = 0, errMessage = "SUCCESS", extension = result.extension });
         }
 
         private string SendAPIPostRequest(string URL, string body)

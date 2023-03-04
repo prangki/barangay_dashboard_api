@@ -56,6 +56,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> SystemUserUpdate(SystemUser user);
         Task<(Results result, string message)> SystemUserUpdatePassword(string plid, string pgrpid, string usrid, string password);
         Task<(Results result, object message)> SystemUserDelete(string userid);
+        Task<(Results result, object message)> SystemUserDelete02(string plid, string pgrpid, string userid);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -831,6 +832,21 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid", account.PL_ID},
                 {"parmpgrpid", account.PGRP_ID},
+                {"parmuserid", userid},
+
+            });
+
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Failed, null);
+        }
+
+        public async Task<(Results result, object message)> SystemUserDelete02(string plid, string pgrpid, string userid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_DASHBOARDUSER_DELETE", new Dictionary<string, object>()
+            {
+                {"parmplid", plid},
+                {"parmpgrpid", pgrpid},
                 {"parmuserid", userid},
 
             });
