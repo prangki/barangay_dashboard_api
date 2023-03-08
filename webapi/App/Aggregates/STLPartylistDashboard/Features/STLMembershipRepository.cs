@@ -21,6 +21,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, String message, String UserID, String AcctID)> MembershipAsync(STLMembership membership, bool isUpdate = false);
         Task<(Results result, object account)> LoadAccount(string search);
+        Task<(Results result, object account)> DashboardUserAccount(string plid, string pgrpid);
         Task<(Results result, object account)> LoadAccountSearch(string search);
         Task<(Results result, object account)> LoadAccountAccess();
         Task<(Results result, object access)> LoadUserAccess(string userid);
@@ -855,5 +856,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 return (Results.Success, result);
             return (Results.Failed, null);
         }
+
+        public async Task<(Results result, object account)> DashboardUserAccount(string plid, string pgrpid)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_UDBDBAP0A", new Dictionary<string, object>()
+            {
+                {"parmplid", plid},
+                {"parmpgrpid", pgrpid }
+            });
+            if (results != null)
+                return (Results.Success, results);
+            return (Results.Null, null);
+        }
     }
+    
 }

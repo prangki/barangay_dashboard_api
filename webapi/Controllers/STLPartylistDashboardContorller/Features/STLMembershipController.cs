@@ -181,6 +181,16 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         }
 
         [HttpPost]
+        [Route("dashboarduser")]
+        public async Task<IActionResult> Task0f1(string plid, string pgrpid)
+        {
+            var result = await _repo.DashboardUserAccount(plid, pgrpid);
+            if (result.result == Results.Success)
+                return Ok(result.account);
+            return NotFound();
+        }
+
+        [HttpPost]
         [Route("householdaccount")]
         public async Task<IActionResult> Task01(string search)
         {
