@@ -81,7 +81,8 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
                     CAN_CREATE = user.CAN_CREATE,
                     CAN_UPDATE = user.CAN_UPDATE,
                     CAN_DELETE = user.CAN_DELETE,
-                    PROFILE_ACCESS = user.PROFILE_ACCESS
+                    PROFILE_ACCESS = user.PROFILE_ACCESS,
+                    SUBSCRIBER_ID = user.SUBSCRIBER_ID
 
                 }), guid)),
                 new Claim(ClaimTypes.Name, user.FLL_NM),
