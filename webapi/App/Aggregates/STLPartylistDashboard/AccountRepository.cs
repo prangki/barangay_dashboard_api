@@ -208,6 +208,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
                         CAN_UPDATE = row["CAN_UPDATE"].Str(),
                         CAN_DELETE = row["CAN_DELETE"].Str(),
                         PROFILE_ACCESS = row["PROFILE_ACCESS"].Str(),
+                        SUBSCRIBER_ID = row["SUBSCRIBER_ID"].Str(),
                         PROFILE_ID = row["PROFILE_ID"].Str(),
                         RQRD_CHNG_PSSWRD = row["RQRD_CHNG_PSSWRD"].Str(),
                         TRGR_CHNG_PSSWRD = row["TRGR_CHNG_PSSWRD"].Str(),
