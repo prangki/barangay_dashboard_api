@@ -26,7 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object household)> GetStatisticalData02(StatisticalData data);
         Task<(Results result, object household)> DynamicReportData(Report report);
 
-        Task<(Results result, object household)> GetComplaints(string from, string to, string plid = "0002", string pgrpid = "002");
+        Task<(Results result, object household)> GetComplaints(string from, string to);
         Task<(Results result, object household)> GetOrgs(string xml);
 
         Task<(Results result, object household)> GetPreferences(ReportSettings settings);
@@ -142,13 +142,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object household)> GetComplaints(string from, string to , string plid = "0002", string pgrpid = "002")
+        public async Task<(Results result, object household)> GetComplaints(string from, string to)
         {
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_COMPLAINTSSHOW", new Dictionary<string, object>()
             {
                 //{"parmplid",account.PL_ID },
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmplid",  account.PL_ID },
+                {"parmpgrpid", account.PGRP_ID},
                 {"parmfrom", from },
                 {"parmto", to},
 
@@ -163,8 +163,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var results = _repo.DSpQuery<dynamic>($"dbo.spfn_REPORTINGorgz", new Dictionary<string, object>()
             {
                 //{"parmplid",account.PL_ID },
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmplid", account.PL_ID },
+                {"parmpgrpid", account.PGRP_ID},
                 {"parmxml", xml },
 
 

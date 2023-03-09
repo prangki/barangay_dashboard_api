@@ -49,8 +49,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 
                 //{ "json", jsonString },
                 {"paramcode", code},
-                {"paramplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parampgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"paramplid", account.PL_ID },
+                {"parampgrpid", account.PGRP_ID },
                 {"paramdescription", religion.Description},
                 {"paramuserid", account.USR_ID},
 
@@ -75,8 +75,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONDELETE", new Dictionary<string, object>()
             {
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
                 {"paramdescription", description},
                 
             });
@@ -92,8 +92,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"paramcode", religion.Code },
                 {"paramdescription", religion.Description},
-                {"paramplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parampgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"paramplid", account.PL_ID},
+                {"parampgrpid", account.PGRP_ID },
                 {"paramuserid", account.USR_ID},
             });
 
@@ -115,8 +115,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_RELIGIONSHOW", new Dictionary<string, object>()
             {
 
-                {"parmplid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PL_ID : "0002"},
-                {"parmpgrpid", (account.ACT_TYP != "1" || account.ACT_TYP != "2") ? account.PGRP_ID : "002"},
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid", account.PGRP_ID},
 
             });
             if (result != null)
