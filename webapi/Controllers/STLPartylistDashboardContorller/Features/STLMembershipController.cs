@@ -179,6 +179,15 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(result.account);
             return NotFound();
         }
+        [HttpPost]
+        [Route("memberaccountnotelected")]
+        public async Task<IActionResult> Task0f01(string search)
+        {
+            var result = await _repo.LoadAccount_NotElected(search);
+            if (result.result == Results.Success)
+                return Ok(result.account);
+            return NotFound();
+        }
 
         [HttpPost]
         [Route("dashboarduser")]

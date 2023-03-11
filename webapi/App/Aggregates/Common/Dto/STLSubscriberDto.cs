@@ -580,6 +580,8 @@ namespace webapi.App.Aggregates.Common.Dto
             o.Sitio = data["SIT_NM"].Str();
             o.BarangayPositionID = data["BRGY_PSTN_ID"].Str();
             o.BarangayPosition = data["POSITION"].Str();
+            o.Category = data["CATEGORY"].Str();
+            o.Sub_Category = data["SUB_CAT"].Str();
             o.ElectedOfficial = data["OFCL_NM"].Str();
             o.ResidentName = data["FLL_NM"].Str();
             o.Userid = data["USR_ID"].Str();
@@ -587,6 +589,7 @@ namespace webapi.App.Aggregates.Common.Dto
             o.Committee = data["CMTE"].Str();
             o.TermStart = Convert.ToDateTime(data["EF_DATE"].Str()).ToString("MMM dd, yyyy");
             o.TermEnd = Convert.ToDateTime(data["EOT_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.SignatureURL = data["SIGNATUREID"].Str();
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;
         }
