@@ -791,7 +791,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid", user.plid},
                 {"parmpgrpid", user.pgrpid},
-
+                {"parmusername", user.username },
                 {"parmuserid", user.userid },
                 {"parmprofileid", user.profileid},
 

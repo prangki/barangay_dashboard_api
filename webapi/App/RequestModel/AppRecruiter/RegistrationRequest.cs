@@ -330,6 +330,22 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Brgy_Chief_Tanod_sig_URL;
         public string Tanod_Events;
     }
+
+    public class BarangaySignatures
+    {
+        public List<Signatory> signatories = new List<Signatory>();
+        public string isignatories;
+        public class Signatory
+        {
+            public string BRGY_POSITION;
+            public string ELECTED_OFFICIAL;
+            public string ELECTED_OFFICIAL_ID;
+            public string COMMITTEE;
+            public string SIGNATURE_URL;
+            public string base64stringattachment;
+            public string NEW_UPLOAD;
+        }
+    }
     public class BarangaySignatory
     {
         public string ColName;

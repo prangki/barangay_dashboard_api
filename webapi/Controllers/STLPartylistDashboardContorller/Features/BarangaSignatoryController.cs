@@ -11,6 +11,8 @@ using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using webapi.App.Features.UserFeature;
 using webapi.App.RequestModel.AppRecruiter;
 using Newtonsoft.Json;
+using System.Text;
+using System.Security.Policy;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -61,6 +63,71 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             else if(result.result==Results.Failed)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
+        }
+
+        [HttpPost]
+        [Route("signatory/update02")]
+        public async Task<IActionResult> execute0b02([FromBody] BarangaySignatures signatory)
+        {
+            var valsig = await validitysignatory(signatory);
+            if (valsig.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valsig.message });
+            if (valsig.result != Results.Success)
+                return NotFound();
+
+            var result = await _repo.SignatoryAsync02(signatory);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            else if (result.result == Results.Failed)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+
+        
+
+        private async Task<(Results result, string message)> validitysignatory(BarangaySignatures request)
+        {
+            //List<STLMembership.GovAttachment> _tempList = new List<STLMembership.GovAttachment>();
+            //Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            if (request == null)
+                return (Results.Null, null);
+            if (request.signatories.Count < 1)
+                return (Results.Success, null);
+            byte[] bytes = null;
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in request.signatories)
+
+            {
+                if (item.base64stringattachment != null && item.NEW_UPLOAD == "1")
+                {
+                    bytes = Convert.FromBase64String(item.base64stringattachment);
+                    if (bytes.Length == 0)
+                        return (Results.Failed, "Make sure selected document path is invalid.");
+                    var res = await ImgService.SendAsync(bytes);
+                    bytes.Clear();
+                    if (res == null)
+                        return (Results.Failed, "Please contact to admin.");
+                    var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                    if (json["status"].Str() != "error")
+                    {
+                        //dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
+                        string url = json["url"].Str();
+                        sb.Append($"<item OFFICIAL_ID=\"{item.ELECTED_OFFICIAL_ID}\" BRGY_POSITION=\"{item.BRGY_POSITION}\" ELECTED_OFFICIAL=\"{item.ELECTED_OFFICIAL}\" COMMITTEE=\"{item.COMMITTEE}\" SIGNATURE_URL=\"{url}\"/>");
+                        //request.GovIDList[i] = url;
+                    }
+                    else
+                        sb.Append($"<item OFFICIAL_ID=\"{item.ELECTED_OFFICIAL_ID}\" BRGY_POSITION=\"{item.BRGY_POSITION}\" ELECTED_OFFICIAL=\"{item.ELECTED_OFFICIAL}\" COMMITTEE=\"{item.COMMITTEE}\" SIGNATURE_URL=\"\"/>");
+                }
+                else
+                    sb.Append($"<item OFFICIAL_ID=\"{item.ELECTED_OFFICIAL_ID}\" BRGY_POSITION=\"{item.BRGY_POSITION}\" ELECTED_OFFICIAL=\"{item.ELECTED_OFFICIAL}\" COMMITTEE=\"{item.COMMITTEE}\" SIGNATURE_URL=\"{item.SIGNATURE_URL}\"/>");
+
+            }
+            if (sb.Length > 0)
+            {
+                request.isignatories = sb.ToString();
+                return (Results.Success, null);
+            }
+            return (Results.Failed, "Make sure selected image is valid.");
         }
 
         [HttpPost]
