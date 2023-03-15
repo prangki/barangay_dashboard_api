@@ -143,7 +143,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
-                    {"parmhhld", details.Household},
+                    {"parmhhld", details.Householder},
                     {"parmcsftn", details.HouseholdClassification},
                     {"parmrgsby", details.CreatedBy},
                     {"parmrgsdt", details.DateCreated}
@@ -197,7 +197,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmusrid", details.FamilyId},
+                    {"parmhhldr", details.Householder},
+                    {"parmusrid", details.FamilyMember},
+                    {"parmrltnsp", details.Relationship},
                     {"parmoptr", details.CreatedBy},
                     {"parmdt", details.DateCreated}
                 }).FirstOrDefault();
@@ -336,6 +338,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmhseclsfctn", details.HouseClassification},
                     {"parmsitloc", details.SitioId},
                     {"parmhmaddr", details.HomeAddress},
+                    {"parmmodby", details.ModifiedBy},
+                    {"parmmoddt", details.ModifiedDate},
                 }).FirstOrDefault();
 
             if (result != null)
@@ -360,7 +364,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmhhld", details.Household},
+                    {"parmhhld", details.Householder},
                     {"parmcsftn", details.HouseholdClassification},
                     {"parmmodby", details.ModifiedBy},
                     {"parmmoddt", details.ModifiedDate}
@@ -389,7 +393,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmhhlder", details.Household},
+                    {"parmhhlder", details.Householder},
                     {"parmfamid", details.FamilyId},
                     {"parmnewfamid", details.NewFamilyHead},
                     {"parmmodby", details.ModifiedBy},

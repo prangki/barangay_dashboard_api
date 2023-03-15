@@ -284,7 +284,7 @@ namespace webapi.App.STLDashboardModel
         public string HouseholdId;
         public string FamilyId;
         public string HouseOwner;
-        public string HouseholdUser;
+        public string Householder;
         public string Household;
         public string NewFamilyHead;
         public string FamilyMember;
@@ -292,8 +292,7 @@ namespace webapi.App.STLDashboardModel
         public string HouseholdClassification;
         public string HouseClassification;
         public string SitioId;
-        public string HouseholderRelationship;
-        public string FamilyHeadRelationship;
+        public string Relationship;
         public string HomeAddress;
         public string CreatedBy;
         public string DateCreated;
