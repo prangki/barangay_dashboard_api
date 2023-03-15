@@ -18,6 +18,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, object signatory)> LoadSignatory();
         Task<(Results result, String message)> SignatoryAsync(BrgySignatory request);
+
+        Task<(Results result, String message)> SignatoryAsync02(BarangaySignatures signatory);
         Task<(Results result, Object sig)> Load_Signature(BarangaySignatory req);
         Task<(Results result, Object col)> Load_Col_Signature();
     }
@@ -112,6 +114,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             }
             return (Results.Null, null);
         }
+
+        public async Task<(Results result, string message)> SignatoryAsync02(BarangaySignatures signatory)
+        {
+            var results = _repo.DSpQueryMultiple("dbo.spfn_BRGY_SIGNATORY02", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID },
+                {"parmpgrpid", account.PGRP_ID },
+
+                {"paramxml",signatory.isignatories},
+                {"parmusrid",account.USR_ID},
+
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Succesfull saved");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Something wrong in your data, Please try again");
+            }
+            return (Results.Null, null);
+        }
+
 
         public async Task<(Results result, object sig)> Load_Signature(BarangaySignatory req)
         {
