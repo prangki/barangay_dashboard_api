@@ -53,9 +53,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["SIT_ID"].Str());
+                    return (Results.Success, "Successfully saved!", row["SIT_ID"].Str());
                 else if(ResultCode=="0")
-                    return (Results.Failed, "Already Exist", null);
+                    return (Results.Failed, "Already Exist!", null);
                 else if(ResultCode=="2")
                     return (Results.Null, null, null);
             }
@@ -122,9 +122,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["BRGY_CODE"].Str());
+                    return (Results.Success, "Successfully saved!", row["BRGY_CODE"].Str());
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Already Exist",null);
+                    return (Results.Failed, "Already Exist!",null);
                 else if (ResultCode == "2")
                     return (Results.Null, null,null);
             }

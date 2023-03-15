@@ -266,15 +266,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull save", row["USR_ID"].Str(), row["ACT_ID"].Str());
+                    return (Results.Success, "Successfully saved!", row["USR_ID"].Str(), row["ACT_ID"].Str());
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Invalid Mobile Number", null, null);
+                    return (Results.Failed, "Invalid Mobile Number!", null, null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Mobile Number already exist", null, null);
+                    return (Results.Failed, "Mobile Number already exist!", null, null);
                 else if (ResultCode == "4")
-                    return (Results.Failed, "You are already Register", null, null);
+                    return (Results.Failed, "This account already Register!", null, null);
                 else if (ResultCode == "5")
-                    return (Results.Failed, "Username already exist", null, null);
+                    return (Results.Failed, "Username already exist!", null, null);
             }
             return (Results.Null, null, null, null);
         }
@@ -322,9 +322,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Successfully save!");
+                    return (Results.Success, "Successfully saved!");
                 }
-                return (Results.Failed, "Somethings wrong in your data. Please try again");
+                return (Results.Failed, "Somethings wrong in your data. Please try again!");
             }
             return (Results.Null, null);
         }
@@ -346,11 +346,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Successfully save!");
+                    return (Results.Success, "Successfully saved!");
                 }
                 else if(ResultCode=="2")
-                        return (Results.Failed, "Username already exist. Please try again");
-                return (Results.Failed, "Somethings wrong in your data. Please try again");
+                        return (Results.Failed, "Username already exist. Please try again!");
+                return (Results.Failed, "Somethings wrong in your data. Please try again!");
             }
             return (Results.Null, null);
         }
@@ -530,7 +530,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                         req.VerifiedBy = row["VERIFIEDBY"].Str();
                         req.CertifiedBy = row["CERTIFIEDBY"].Str();
                     }
-                    return (Results.Success, "Clearance succesfully save!");
+                    return (Results.Success, "Clearance succesfully saved!");
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");

@@ -218,9 +218,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully saved");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Already Exists");
+                    return (Results.Failed, "Already Exists!");
 
             }
             return (Results.Null, null);

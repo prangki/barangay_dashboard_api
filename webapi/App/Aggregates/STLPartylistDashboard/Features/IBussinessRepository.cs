@@ -75,12 +75,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", result);
+                    return (Results.Success, "Successfully saved!", result);
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Business Name already Exist, Please try again", null);
+                    return (Results.Failed, "Business Name already Exist, Please try again!", null);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Business Details, Please try again", null);
-                return (Results.Failed, "Something wrong in your data, Please try again", null);
+                    return (Results.Failed, "Check Business Details, Please try again!", null);
+                return (Results.Failed, "Something wrong in your data, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -112,12 +112,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Business Name already Exist, Please try again");
+                    return (Results.Failed, "Business Name already Exist, Please try again!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Business Details, Please try again");
-                return (Results.Failed, "Something wrong in your data, Please try again");
+                    return (Results.Failed, "Check Business Details, Please try again!");
+                return (Results.Failed, "Something wrong in your data, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -183,13 +183,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (!isEdit)
                         request.BusinessOwnershiptypeID = row["BIZTYPOWNRSHP_ID"].Str();
-                    return (Results.Success, "Successfully save", request.BusinessOwnershiptypeID);
+                    return (Results.Success, "Successfully saved!", request.BusinessOwnershiptypeID);
                 }
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Business Ownership Type already exist, Please try again", null);
+                    return (Results.Failed, "Business Ownership Type already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -220,10 +220,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Remove Selected Item");
+                    return (Results.Success, "Successfully Remove Selected Item!");
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -264,7 +264,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                         req.VerifiedBy = row["VERIFIEDBY"].Str();
                         req.CertifiedBy = row["CERTIFIEDBY"].Str();
                     }
-                    return (Results.Success, "Clearance succesfully save!");
+                    return (Results.Success, "Clearance succesfully saved!");
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
@@ -302,7 +302,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Clearance succesfully released !", results);
+                    return (Results.Success, "Clearance succesfully released!", results);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
@@ -326,7 +326,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Selected Item succesfully cancelled", results);
+                    return (Results.Success, "Selected Item successfully cancelled!", results);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
@@ -353,11 +353,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     req.VerifiedBy = row["VERIFIEDBY"].Str();
                     req.CertifiedBy = row["CERTIFIEDBY"].Str();
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 }
                     
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -391,7 +391,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Process Clearance succesfully save!");
+                    return (Results.Success, "Process Clearance successfully saved!");
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");

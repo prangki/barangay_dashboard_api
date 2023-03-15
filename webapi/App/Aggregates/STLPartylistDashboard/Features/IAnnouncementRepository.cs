@@ -85,12 +85,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     //await Pusher.PushAsync($"/{account.PL_ID}/{(isUpdate ? request.PGRP_ID : request.PGRP_ID)}/notify", new { type = "post-notication", content = SubscriberDto.EventNofitication(result) });
                     await PostAnnouncement(result);
-                    return (Results.Success, "Successfully save",result);
+                    return (Results.Success, "Successfully saved!",result);
                 }
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Something wrong in your data. Please try again",null);
+                    return (Results.Failed, "Something wrong in your data. Please try again!",null);
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Events already exist",null);
+                    return (Results.Failed, "Events already exist!",null);
             }
             return (Results.Null, null,null);
         }

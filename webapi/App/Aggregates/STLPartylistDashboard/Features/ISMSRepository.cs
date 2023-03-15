@@ -45,7 +45,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     req.Id = row["Id"].Str();
                     await Pusher.PushAsync($"/smsin", new { type = "smsin", content = req });
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully send!");
                 }
                 else if (ResultCode == "2")
                     return (Results.Failed, "License was not valid");

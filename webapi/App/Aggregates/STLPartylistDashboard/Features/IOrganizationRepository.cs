@@ -62,9 +62,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull save", row["ORG_ID"].Str());
+                    return (Results.Success, "Successfully saved!", row["ORG_ID"].Str());
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Organization already Registered.", null);
+                    return (Results.Failed, "Organization already Registered!", null);
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
             }

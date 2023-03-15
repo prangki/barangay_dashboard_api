@@ -44,11 +44,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 }
 
                 else if (ResultCode == "2")
-                    return (Results.Failed, "License was not valid");
+                    return (Results.Failed, "License was not valid!");
             }
             return (Results.Null, null);
         }
@@ -83,11 +83,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                         lic.Date_Generated = DateTime.Now.ToString("MMMM dd, yyyy");
                     }
                         
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 }
                     
                 else if (ResultCode == "2")
-                    return (Results.Failed, "License was not valid");
+                    return (Results.Failed, "License was not valid!");
             }
             return (Results.Null, null);
         }
@@ -129,11 +129,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                 {
                     //lic.localno = row["LOC_NO"].Str();
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 }
                     
                 else if (ResultCode == "2")
-                    return (Results.Failed, "License was not valid");
+                    return (Results.Failed, "License was not valid!");
             }
             return (Results.Null, null);
         }

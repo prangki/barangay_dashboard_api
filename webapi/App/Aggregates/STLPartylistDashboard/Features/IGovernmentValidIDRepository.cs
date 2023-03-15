@@ -74,12 +74,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["ID"].Str());
+                    return (Results.Success, "Successfully saved!", row["ID"].Str());
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Government ID already Exist, Please try again", null);
+                    return (Results.Failed, "Government ID already Exist, Please try again!", null);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Government ID Details, Please try again", null);
-                return (Results.Failed, "Something wrong in your data, Please try again", null);
+                    return (Results.Failed, "Check Government ID Details, Please try again!", null);
+                return (Results.Failed, "Something wrong in your data, Please try again!", null);
             }
             return (Results.Null, null, null);
         }

@@ -89,14 +89,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (req.TemplateTypeID.IsEmpty())
                         req.TemplateTypeID = row["TPLTYP_ID"].Str();
-                    return (Results.Success, "Successfully save", req.TemplateTypeID);
+                    return (Results.Success, "Successfully saved!", req.TemplateTypeID);
                 }
                     
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Description already Exist, Please try again", null);
+                    return (Results.Failed, "Description already Exist, Please try again!", null);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Description, Please try again", null);
-                return (Results.Failed, "Something wrong in your data, Please try again", null);
+                    return (Results.Failed, "Check Description, Please try again!", null);
+                return (Results.Failed, "Something wrong in your data, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -148,14 +148,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (req.TemplateDocID.IsEmpty())
                         req.TemplateDocID = row["TPL_ID"].Str();
-                    return (Results.Success, "Successfully save", req.TemplateDocID);
+                    return (Results.Success, "Successfully saved!", req.TemplateDocID);
                 }
 
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Description already Exist, Please try again", null);
+                    return (Results.Failed, "Description already Exist, Please try again!", null);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Description, Please try again", null);
-                return (Results.Failed, "Something wrong in your data, Please try again", null);
+                    return (Results.Failed, "Check Description, Please try again!", null);
+                return (Results.Failed, "Something wrong in your data, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -180,14 +180,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (req.DescriptionID.IsEmpty())
                         req.DescriptionID = row["TPL_ID"].Str();
-                    return (Results.Success, "Successfully save", req.DescriptionID);
+                    return (Results.Success, "Successfully saved!", req.DescriptionID);
                 }
 
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Description already Exist, Please try again", null);
+                    return (Results.Failed, "Description already Exist, Please try again!", null);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Description, Please try again", null);
-                return (Results.Failed, "Something wrong in your data, Please try again", null);
+                    return (Results.Failed, "Check Description, Please try again!", null);
+                return (Results.Failed, "Something wrong in your data, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -249,14 +249,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (req.RestTypId.IsEmpty())
                         req.RestTypId = row["RESTYP_ID"].Str();
-                    return (Results.Success, "Successfully save", req.RestTypId);
+                    return (Results.Success, "Successfully saved!", req.RestTypId);
                 }
 
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Description already Exist, Please try again", null);
+                    return (Results.Failed, "Description already Exist, Please try again!", null);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Description, Please try again", null);
-                return (Results.Failed, "Something wrong in your data, Please try again", null);
+                    return (Results.Failed, "Check Description, Please try again!", null);
+                return (Results.Failed, "Something wrong in your data, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -274,10 +274,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Remove Selected Item");
+                    return (Results.Success, "Successfully Remove Selected Item!");
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -295,10 +295,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Remove Selected Item");
+                    return (Results.Success, "Successfully Remove Selected Item!");
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -316,10 +316,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Remove Selected Item");
+                    return (Results.Success, "Successfully Remove Selected Item!");
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -344,14 +344,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (req.FormID.IsEmpty())
                         req.FormID = row["FORMS_ID"].Str();
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 }
 
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Form already Exist, Please try again");
+                    return (Results.Failed, "Form already Exist, Please try again!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check this Form Template, Please try again");
-                return (Results.Failed, "Something wrong in your data, Please try again");
+                    return (Results.Failed, "Check this Form Template, Please try again!");
+                return (Results.Failed, "Something wrong in your data, Please try again!");
             }
             return (Results.Null, null);
         }

@@ -57,9 +57,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Something wrong in your data, Please try again");
+                    return (Results.Failed, "Something wrong in your data, Please try again!");
             }
             return (Results.Null, null);
         }

@@ -110,9 +110,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                 {
                     await SASettings(row, new { LiveStreamUrl = request.LiveStreamUrl, LiveStreamName = request.LiveStreamDescription }, request.PL_ID, request.PGRP_ID);
-                    return (Results.Success, "Successfully save!");
+                    return (Results.Success, "Successfully saved!");
                 }
-                return (Results.Failed, "Something wrong in your data. Please try again");
+                return (Results.Failed, "Something wrong in your data. Please try again!");
             }
             return (Results.Null, null);
         }
@@ -133,7 +133,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                 {
                     await CompanySettings(row, new { LiveStreamUrl = url, LiveStreamName = description });
-                    return (Results.Success, "Successfully save!");
+                    return (Results.Success, "Successfully saved!");
                 }
                 return (Results.Failed, "Something wrong in your data. Please try again");
             }

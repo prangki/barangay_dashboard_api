@@ -49,11 +49,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Donation already exist");
+                    return (Results.Failed, "Donation already exist!");
                 else if (ResultCode == "4")
-                    return (Results.Failed, "Donation already exist");
+                    return (Results.Failed, "Donation already exist!");
             }
             return (Results.Null, null);
         }
@@ -76,11 +76,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Donation already exist");
+                    return (Results.Failed, "Donation already exist!");
                 else if (ResultCode == "4")
-                    return (Results.Failed, "Donation already exist");
+                    return (Results.Failed, "Donation already exist!");
             }
             return (Results.Null, null);
         }
@@ -100,9 +100,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Resend Code");
+                    return (Results.Success, "Successfully Resend Code!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Something wrong in your data, Please try again");
+                    return (Results.Failed, "Something wrong in your data, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -123,11 +123,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Code already Expired");
+                    return (Results.Failed, "Code already Expired!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Something wrong in your data, Please try again");
+                    return (Results.Failed, "Something wrong in your data, Please try again!");
             }
             return (Results.Null, null);
         }

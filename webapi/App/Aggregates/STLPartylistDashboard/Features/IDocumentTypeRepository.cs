@@ -52,11 +52,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["DOC_TYP_ID"].Str());
+                    return (Results.Success, "Successfully save!", row["DOC_TYP_ID"].Str());
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Document already exist, Please try again", null);
+                    return (Results.Failed, "Document already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -80,11 +80,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Document already exist, Please try again");
+                    return (Results.Failed, "Document already exist, Please try again!");
             }
             return (Results.Null, null);
         }

@@ -74,7 +74,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                         req.ClearanceNo = row["BRGYCLR_ID"].Str();
                         req.ControlNo = row["CNTRL_NO"].Str();
                     }
-                    return (Results.Success, "Clearance succesfully save!", req.ClearanceNo, req.ControlNo);
+                    return (Results.Success, "Clearance successfully saved!", req.ClearanceNo, req.ControlNo);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null, null);
@@ -113,7 +113,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Clearance succesfully released !", results);
+                    return (Results.Success, "Clearance succesfully released!", results);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
@@ -137,7 +137,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Selected Item succesfully cancelled", results);
+                    return (Results.Success, "Selected item successfully cancelled!", results);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
@@ -160,9 +160,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }

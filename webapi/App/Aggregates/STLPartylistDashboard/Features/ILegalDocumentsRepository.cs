@@ -56,9 +56,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull save", results);
+                    return (Results.Success, "Successfully saved!", results);
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Description already Save.", null);
+                    return (Results.Failed, "Description already Saved!", null);
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
             }
@@ -91,7 +91,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull Delete");
+                    return (Results.Success, "Successfully Deleted!");
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
             }
@@ -119,9 +119,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull save", results);
+                    return (Results.Success, "Successfully saved!", results);
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Legal Document O.R Number already Save.", null);
+                    return (Results.Failed, "Legal Document O.R Number already Saved!", null);
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
             }
@@ -176,7 +176,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Clearance succesfully released !", results);
+                    return (Results.Success, "Clearance successfully released!", results);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
@@ -200,7 +200,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    return (Results.Success, "Selected Item succesfully cancelled", results);
+                    return (Results.Success, "Selected Item successfully cancelled!", results);
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!", null);
@@ -227,11 +227,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     req.VerifiedBy = row["VERIFIEDBY"].Str();
                     req.CertifiedBy = row["CERTIFIEDBY"].Str();
-                    return (Results.Success, "Succesfull save");
+                    return (Results.Success, "Succesfully saved!");
                 }
                     
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Request Document was not exist.");
+                    return (Results.Failed, "Request Document was not exist!");
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
             }
@@ -259,9 +259,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Succesfull save");
+                    return (Results.Success, "Succesfully saved!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Legal Document not exist.");
+                    return (Results.Failed, "Legal Document not exist!");
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
             }

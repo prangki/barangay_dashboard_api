@@ -76,11 +76,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["REQ_DOC_ID"].Str());
+                    return (Results.Success, "Successfully saved!", row["REQ_DOC_ID"].Str());
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Elected Barngay Official already exist, Please try again", null);
+                    return (Results.Failed, "Elected Barngay Official already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -136,14 +136,14 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                 {
                     request.ReqDocID = row["REQ_DOC_ID"].Str();
-                    return (Results.Success, "Successfully save", request.ReqDocID);
+                    return (Results.Success, "Successfully saved!", request.ReqDocID);
                 }
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Check Payment Detials, Please try again", null);
+                    return (Results.Failed, "Check Payment Detials, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Requested Document already exist, Please try again", null);
+                    return (Results.Failed, "Requested Document already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -163,11 +163,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Already Generated, Please try again");
+                    return (Results.Failed, "Already Generated, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -198,13 +198,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                 {
                     request.ReqDocID = row["REQ_DOC_ID"].Str();
-                    return (Results.Success, "Successfully save", request.ReqDocID);
+                    return (Results.Success, "Successfully saved!", request.ReqDocID);
                 }
                     
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Requested Document already exist, Please try again", null);
+                    return (Results.Failed, "Requested Document already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -238,11 +238,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", request.ReqDocID);
+                    return (Results.Success, "Successfully saved!", request.ReqDocID);
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Requested Document already exist, Please try again", null);
+                    return (Results.Failed, "Requested Document already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -278,9 +278,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -389,11 +389,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["REQ_DOC_ID"].Str(), row["CNTRL_NO"].Str());
+                    return (Results.Success, "Successfully saved!", row["REQ_DOC_ID"].Str(), row["CNTRL_NO"].Str());
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null, null);
+                    return (Results.Failed, "Check Details, Please try again!", null, null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Elected Barngay Official already exist, Please try again", null, null);
+                    return (Results.Failed, "Elected Barngay Official already exist, Please try again!", null, null);
             }
             return (Results.Null, null, null, null);
         }
@@ -416,13 +416,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (!isEdit)
                         request.PurposeID = row["PURP_ID"].Str();
-                    return (Results.Success, "Successfully save", request.PurposeID);
+                    return (Results.Success, "Successfully saved!", request.PurposeID);
                 }
                     
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Description already exist, Please try again", null);
+                    return (Results.Failed, "Description already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -445,13 +445,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     if (!isUpdate)
                         request.CertTypID = row["CERTTYP_ID"].Str();
-                    return (Results.Success, "Successfully save", request.CertTypID);
+                    return (Results.Success, "Successfully save!", request.CertTypID);
                 }
                     
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again", null);
+                    return (Results.Failed, "Check Details, Please try again!", null);
                 else if (ResultCode == "3")
-                    return (Results.Failed, "Description already exist, Please try again", null);
+                    return (Results.Failed, "Description already exist, Please try again!", null);
             }
             return (Results.Null, null, null);
         }
@@ -482,10 +482,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Remove Selected Item");
+                    return (Results.Success, "Successfully Remove Selected Item!");
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }
@@ -503,10 +503,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Remove Selected Item");
+                    return (Results.Success, "Successfully Remove Selected Item!");
 
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Check Details, Please try again");
+                    return (Results.Failed, "Check Details, Please try again!");
             }
             return (Results.Null, null);
         }

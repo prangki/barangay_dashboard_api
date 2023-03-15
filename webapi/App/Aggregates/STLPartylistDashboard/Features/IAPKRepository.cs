@@ -49,11 +49,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully save", row["APK_TRN"].Str());
+                    return (Results.Success, "Successfully saved!", row["APK_TRN"].Str());
                 else if (ResultCode == "0")
-                    return (Results.Failed, "APK Version Already Exist, Please try again",null);
+                    return (Results.Failed, "APK Version Already Exist, Please try again!",null);
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Invalid Apk Version, Please try again",null);
+                    return (Results.Failed, "Invalid Apk Version, Please try again!",null);
             }
             return (Results.Null, null,null);
         }
@@ -87,12 +87,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {
                     var description = row["NOTIF_DESC"].Str();
                     await ComapantySettings(null, new { Update = description }, request.PL_ID, request.PGRP_ID);
-                    return (Results.Success, "Successfully set this for Update");
+                    return (Results.Success, "Successfully set this for Update!");
                 }
                 else if (ResultCode == "0")
-                    return (Results.Failed, "Invalid APK Version, Please try again");
+                    return (Results.Failed, "Invalid APK Version, Please try again!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Invalid APK Version, Please try again");
+                    return (Results.Failed, "Invalid APK Version, Please try again!");
             }
             return (Results.Null, null);
         }

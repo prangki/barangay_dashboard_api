@@ -93,11 +93,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Send Message");
+                    return (Results.Success, "Successfully Send Message!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Send Message");
+                    return (Results.Failed, "Failed Send Message!");
                 else
-                    return (Results.Failed, "Error Send Message");
+                    return (Results.Failed, "Error Send Message!");
             }
             return (Results.Null, null);
         }
@@ -117,11 +117,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Send Message");
+                    return (Results.Success, "Successfully Send Message!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Send Message");
+                    return (Results.Failed, "Failed Send Message!");
                 else
-                    return (Results.Failed, "Error Send Message");
+                    return (Results.Failed, "Error Send Message!");
             }
             return (Results.Null, null);
         }
@@ -142,11 +142,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Send Message");
+                    return (Results.Success, "Successfully Send Message!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Send Message");
+                    return (Results.Failed, "Failed Send Message!");
                 else
-                    return (Results.Failed, "Error Send Message");
+                    return (Results.Failed, "Error Send Message!");
             }
             return (Results.Null, null);
         }
@@ -166,11 +166,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Send Message");
+                    return (Results.Success, "Successfully Send Message!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Send Message");
+                    return (Results.Failed, "Failed Send Message!");
                 else 
-                    return (Results.Failed, "Error Send Message");
+                    return (Results.Failed, "Error Send Message!");
             }
             return (Results.Null, null);
         }
@@ -222,11 +222,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Save");
+                    return (Results.Success, "Successfully saved!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Save");
+                    return (Results.Failed, "Failed!");
                 else
-                    return (Results.Failed, "Error Save");
+                    return (Results.Failed, "Error Save!");
             }
             return (Results.Null, null);
         }
@@ -266,13 +266,13 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                 {
                     req.SMS_ID = row["SMS_ID"].Str();
-                    return (Results.Success, "Successfully Sent", req.SMS_ID);
+                    return (Results.Success, "Successfully Sent!", req.SMS_ID);
                 }
                     
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Sent", null);
+                    return (Results.Failed, "Failed Sent!", null);
                 else
-                    return (Results.Failed, "Error Sent", null);
+                    return (Results.Failed, "Error Sent!", null);
             }
             return (Results.Null, null, null);
         }
@@ -294,11 +294,11 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var row = ((IDictionary<string, object>)results);
                 string ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Successfully Sent");
+                    return (Results.Success, "Successfully Sent!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "Failed Sent");
+                    return (Results.Failed, "Failed Sent!");
                 else
-                    return (Results.Failed, "Error Sent");
+                    return (Results.Failed, "Error Sent!");
             }
             return (Results.Null, null);
         }
