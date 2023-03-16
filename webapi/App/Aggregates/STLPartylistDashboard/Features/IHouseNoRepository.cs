@@ -146,6 +146,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmhseid", details.HouseId},
                     {"parmhhld", details.Householder},
                     {"parmcsftn", details.HouseholdClassification},
+                    {"parmwfam", details.LivingWithFamily},
                     {"parmrgsby", details.CreatedBy},
                     {"parmrgsdt", details.DateCreated}
                 }).FirstOrDefault();
