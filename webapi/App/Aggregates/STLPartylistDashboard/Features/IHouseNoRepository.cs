@@ -26,7 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object households)> LoadHouseholds(int currentRow);
         Task<(Results result, object households)> LoadSpecificHouseholds(string houseid);
         Task<(Results result, string message)> SaveFamilyMember(HouseDetails details);
-        Task<(Results result, object family)> LoadFamilyMembers(int currentRow);
+        Task<(Results result, object family)> LoadFamilies(int currentRow);
         Task<(Results result, object family)> LoadSpecificFamilyMembers(string householdid);
         Task<(Results result, object houseinfo)> LoadHouseInfo();
         Task<(Results result, string message)> RemoveHouseNo(string houseno);
@@ -43,6 +43,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> RemoveHouseClassifications(string classification);
         Task<(Results result, object report)> LoadHouseReport(string brgyloc, string from, string to);
         Task<(Results result, object numbers)> LoadHouseNumbers();
+        Task<(Results result, object family)> LoadFamilyMembers(string householdId);
 
 
     }
@@ -143,8 +144,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid", account.PL_ID},
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
-                    {"parmhhld", details.Household},
+                    {"parmhhld", details.Householder},
                     {"parmcsftn", details.HouseholdClassification},
+                    {"parmwfam", details.LivingWithFamily},
                     {"parmrgsby", details.CreatedBy},
                     {"parmrgsdt", details.DateCreated}
                 }).FirstOrDefault();
@@ -197,7 +199,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmusrid", details.FamilyId},
+                    {"parmhhldr", details.Householder},
+                    {"parmusrid", details.FamilyMember},
+                    {"parmrltnsp", details.Relationship},
                     {"parmoptr", details.CreatedBy},
                     {"parmdt", details.DateCreated}
                 }).FirstOrDefault();
@@ -216,7 +220,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object family)> LoadFamilyMembers(int currentRow)
+        public async Task<(Results result, object family)> LoadFamilies(int currentRow)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYFMLYMMBR", new Dictionary<string, object>()
                 {
@@ -336,6 +340,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmhseclsfctn", details.HouseClassification},
                     {"parmsitloc", details.SitioId},
                     {"parmhmaddr", details.HomeAddress},
+                    {"parmmodby", details.ModifiedBy},
+                    {"parmmoddt", details.ModifiedDate},
                 }).FirstOrDefault();
 
             if (result != null)
@@ -360,7 +366,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmhhld", details.Household},
+                    {"parmhhld", details.Householder},
                     {"parmcsftn", details.HouseholdClassification},
                     {"parmmodby", details.ModifiedBy},
                     {"parmmoddt", details.ModifiedDate}
@@ -389,7 +395,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmhhlder", details.Household},
+                    {"parmhhlder", details.Householder},
                     {"parmfamid", details.FamilyId},
                     {"parmnewfamid", details.NewFamilyHead},
                     {"parmmodby", details.ModifiedBy},
@@ -544,6 +550,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpgrpid", account.PGRP_ID},
                 {"parmbrgyid", account.LOC_BRGY}
             });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object family)> LoadFamilyMembers(string householdId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYVWFMLYMBR", new Dictionary<string, object>()
+                {
+                    {"parmplid", account.PL_ID},
+                    {"parmpgrpid", account.PGRP_ID},
+                    {"parmhhldid", householdId}
+                });
             if (result != null)
                 return (Results.Success, result);
             return (Results.Null, null);
