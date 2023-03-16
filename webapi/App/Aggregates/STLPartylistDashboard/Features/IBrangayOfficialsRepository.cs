@@ -20,6 +20,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message, String oflid)> BarangayOfficialAsync(BarangayOfficial request);
         Task<(Results result, String message)> UpdateBarangayOfficialAsync(BarangayOfficial request);
         Task<(Results result, object brgyofl)> LoadMBarangayOfficial(FilterRequest request);
+        Task<(Results result, object brgyofl)> LoadMBarangayOfficial02(FilterRequest request);
         Task<(Results result, String message)> ElectedOfficialEndTerm(BarangayOfficial request);
     }
     public class BarangayOfficialsRepository:IBrangayOfficialsRepository
@@ -66,6 +67,21 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         public async Task<(Results result, object brgyofl)> LoadMBarangayOfficial(FilterRequest request)
         {
             var result = _repo.DSpQueryMultiple($"dbo.spfn_BRGYOFLBDB0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmstatus", request.Status},
+                {"parmrownum", request.num_row},
+                {"parmsearch", request.Search}
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetAllBrgyOfficialList(result.Read<dynamic>(), request.Userid, 100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object brgyofl)> LoadMBarangayOfficial02(FilterRequest request)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_BRGYOFLBDB0A02", new Dictionary<string, object>()
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },

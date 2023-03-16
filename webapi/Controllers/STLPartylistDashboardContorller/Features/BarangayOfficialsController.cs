@@ -37,6 +37,17 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.brgyofl);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("brgyofl02")]
+        public async Task<IActionResult> Task0102([FromBody] FilterRequest request)
+        {
+            var result = await _repo.LoadMBarangayOfficial02(request);
+            if (result.result == Results.Success)
+                return Ok(result.brgyofl);
+            return NotFound();
+        }
+
         [HttpPost]
         [Route("brgyofl/new")]
         public async Task<IActionResult> Task02([FromBody] BarangayOfficial request)
