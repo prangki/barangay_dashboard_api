@@ -294,6 +294,7 @@ namespace webapi.App.STLDashboardModel
         public string SitioId;
         public string Relationship;
         public string HomeAddress;
+        public int LivingWithFamily;
         public string CreatedBy;
         public string DateCreated;
         public string ModifiedBy;

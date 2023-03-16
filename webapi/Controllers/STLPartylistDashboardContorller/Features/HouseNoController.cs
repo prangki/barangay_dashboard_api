@@ -129,9 +129,19 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
         [HttpPost]
         [Route("house/family/load")]
-        public async Task<IActionResult> LoadFamilyMembers(int currentRow)
+        public async Task<IActionResult> LoadFamilies(int currentRow)
         {
-            var result = await _repo.LoadFamilyMembers(currentRow);
+            var result = await _repo.LoadFamilies(currentRow);
+            if (result.result == Results.Success)
+                return Ok(result.family);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("house/family/member/list")]
+        public async Task<IActionResult> LoadFamilyMembers(string householdId)
+        {
+            var result = await _repo.LoadFamilyMembers(householdId);
             if (result.result == Results.Success)
                 return Ok(result.family);
             return NotFound();
