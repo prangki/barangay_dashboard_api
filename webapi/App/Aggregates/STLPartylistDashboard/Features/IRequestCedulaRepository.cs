@@ -124,6 +124,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid", account.PL_ID},
                 {"parmpgrpid", account.PGRP_ID},
+                {"parmacttyp", account.ACT_TYP},
                 {"parmfltr", int.Parse(filterId)},
                 {"parmfrom", from},
                 {"parmto", to},
