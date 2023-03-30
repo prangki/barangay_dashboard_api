@@ -95,7 +95,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
 
             var reporesult = await _repo.MembershipAsync(request, true);
             if (reporesult.result == Results.Success)
-                return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID ,AcctID = reporesult.AcctID });
+                return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID ,AcctID = reporesult.AcctID, profilepicture=request.ImageUrl });
             else if (reporesult.result == Results.Failed)
                 return Ok(new { result = reporesult.result, Message = reporesult.message });
             return NotFound();
@@ -135,7 +135,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
 
             var reporesult = await _repo.MembershipAsync(request,true);
             if (reporesult.result == Results.Success)
-                return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID, AcctID = reporesult.AcctID });
+                return Ok(new { result = reporesult.result, Message = reporesult.message, User_ID = reporesult.UserID, AcctID = reporesult.AcctID, profilepicture = request.ImageUrl });
             else if (reporesult.result == Results.Failed)
                 return Ok(new { result = reporesult.result, Message = reporesult.message });
             return NotFound();
@@ -175,6 +175,15 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         public async Task<IActionResult> Task0f(string search)
         {
             var result = await _repo.LoadAccount(search);
+            if (result.result == Results.Success)
+                return Ok(result.account);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("selectmemberaccount")]
+        public async Task<IActionResult> Task0f1(string search)
+        {
+            var result = await _repo.SelectAccount(search);
             if (result.result == Results.Success)
                 return Ok(result.account);
             return NotFound();

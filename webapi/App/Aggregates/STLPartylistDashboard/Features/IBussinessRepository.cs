@@ -213,7 +213,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
-                {"parmpurposeid", request.BusinessOwnershiptypeID }
+                {"parmbusinesstypeownershipid", request.BusinessOwnershiptypeID }
             }).FirstOrDefault();
             if (result != null)
             {
