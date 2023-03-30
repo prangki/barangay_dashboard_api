@@ -825,7 +825,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
 
             if (result != null)
-                return (Results.Success, "Successfully updated");
+                return (Results.Success, "Change Password imposed. The user must now reset password on login");
             return (Results.Failed, null);
             //if (result != null)
             //{
