@@ -243,16 +243,16 @@ namespace webapi.App.Aggregates.STLPartylistDashboard
                 var row = ((IDictionary<string, object>)result);
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
-                    return (Results.Success, "Change Successfull! you can now use your new password");
+                    return (Results.Success, "Password changed Successfully!");
                 else if (ResultCode == "61")
-                    return (Results.Null, "Password did not match");
+                    return (Results.Failed, "Password did not match");
                 else if (ResultCode == "62")
-                    return (Results.Null, "You are trying to user your old password, please try again.");
+                    return (Results.Failed, "Using an old password as a new password is not allowed. Please try again.");
                 else if (ResultCode == "0")
-                    return (Results.Null, "Your username or mobile number was not exist, please try again.");
+                    return (Results.Failed, "You entered an incorrect old password. Please try again.");
                 else if (ResultCode == "21")
-                    return (Results.Null, "You are try to access block account, please try again.");
-                return (Results.Null, "Failed to Change! your request is already done");
+                    return (Results.Failed, "You are try to access a blocked account. Please try again.");
+                return (Results.Failed, "Failed to Change! your request is already done");
             }
             return (Results.Null, null);
         }
