@@ -368,6 +368,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmhhldid", details.HouseholdId},
                     {"parmhhld", details.Householder},
                     {"parmcsftn", details.HouseholdClassification},
+                    {"parmlwfam", details.LivingWithFamily},
                     {"parmmodby", details.ModifiedBy},
                     {"parmmoddt", details.ModifiedDate}
                 }).FirstOrDefault();
@@ -379,7 +380,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 if (ResultCode == "1")
                     return (Results.Success, "Successfully save");
                 else if (ResultCode == "0")
-                    return (Results.Failed, $"Household doesn't exist");
+                    return (Results.Failed, $"Doesn't exist in family");
                 else if (ResultCode == "2")
                     return (Results.Null, null);
             }
@@ -395,9 +396,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmpgrpid", account.PGRP_ID},
                     {"parmhseid", details.HouseId},
                     {"parmhhldid", details.HouseholdId},
-                    {"parmhhlder", details.Householder},
                     {"parmfamid", details.FamilyId},
-                    {"parmnewfamid", details.NewFamilyHead},
+                    {"parmfammem", details.FamilyMember},
+                    {"parmrltnsp", details.Relationship},
                     {"parmmodby", details.ModifiedBy},
                     {"parmmoddt", details.ModifiedDate}
                 }).FirstOrDefault();
