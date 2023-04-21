@@ -419,6 +419,8 @@ namespace webapi.App.STLDashboardModel
         public decimal InterestRate;
         public decimal Interest;
         public decimal AmountPaid;
+        public string RequestDate;
+        public string ClaimDate;
         public string ProcessBy;
         public string ProcessDate;
 	    public string ReleaseDate;

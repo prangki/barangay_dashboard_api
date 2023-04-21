@@ -61,6 +61,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmirt", param.InterestRate},
                     {"parmintrst", param.Interest},
                     {"parmttlamtpd", param.AmountPaid},
+                    {"parmreqdt", param.RequestDate},
+                    {"parmclmdt", param.ClaimDate},
                     {"parmprcsby", param.ProcessBy},
                     {"parmprcsdt", param.ProcessDate},
                     {"parmrlsdt", param.ReleaseDate}
@@ -100,8 +102,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmirt", param.InterestRate},
                     {"parmintrst", param.Interest},
                     {"parmttlamtpd", param.AmountPaid},
-                    {"parmprcsby", param.ProcessBy},
-                    {"parmprcsdt", param.ProcessDate}
+                    //{"parmprcsby", param.ProcessBy},
+                    //{"parmprcsdt", param.ProcessDate}
                 }).FirstOrDefault();
 
             if (result != null)
