@@ -35,6 +35,8 @@ namespace webapi.App.RequestModel.Common
         public string DocTypeID;
         public string BusinessId;
         public string Gender;
+        public string EmgyTypID;
+        public string EmgyContactID;
 
         public DateTime? TransactionDt;
         public DateTime? FromDt;

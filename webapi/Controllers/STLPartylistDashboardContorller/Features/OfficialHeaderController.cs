@@ -63,33 +63,43 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             if (request.iMunicipalLogo.IsEmpty() && request.MunLogoChange == 1)
                 return (Results.Failed, "Please select Municipality/ Cities Logo");
 
-            if (!request.iBrgyOfficialLogo.IsEmpty() && request.BrgyLogoChange == 1 && !request.iMunicipalLogo.IsEmpty() && request.MunLogoChange == 1)
+            if ((!request.iBrgyOfficialLogo.IsEmpty() && request.BrgyLogoChange == 1) || (!request.iMunicipalLogo.IsEmpty() && request.MunLogoChange == 1))
             {
-                byte[] brgybytes = Convert.FromBase64String(request.iBrgyOfficialLogo.Str());
-                if (brgybytes.Length == 0)
-                    return (Results.Failed, "Make sure selected image is not invalid.");
-                var resbrgy = await ImgService.SendAsync(brgybytes);
-                brgybytes.Clear();
-                if (resbrgy == null)
-                    return (Results.Failed, "Please contact to admin");
-                var jsonbrgy = JsonConvert.DeserializeObject<Dictionary<string, object>>(resbrgy);
-                //if(jsonbrgy["status"].Str() != "error")
-                //    request.BrgyOfficialLogo = jsonbrgy["url"].Str();
-
-                byte[] munbytes = Convert.FromBase64String(request.iMunicipalLogo.Str());
-                if (munbytes.Length == 0)
-                    return (Results.Failed, "Make sure selected image is not invalid.");
-                var resmun = await ImgService.SendAsync(munbytes);
-                munbytes.Clear();
-                if (resmun == null)
-                    return (Results.Failed, "Please contact to admin");
-                var jsonmun = JsonConvert.DeserializeObject<Dictionary<string, object>>(resmun);
-                if (jsonbrgy["status"].Str() != "error" && jsonmun["status"].Str() != "error")
+                
+                if(!request.iBrgyOfficialLogo.IsEmpty() && request.BrgyLogoChange == 1)
                 {
-                    request.BrgyOfficialLogo = jsonbrgy["url"].Str();
-                    request.MunicipalLogo = jsonmun["url"].Str();
-                    return (Results.Success, null);
+                    byte[] brgybytes = Convert.FromBase64String(request.iBrgyOfficialLogo.Str());
+                    if (brgybytes.Length == 0)
+                        return (Results.Failed, "Make sure selected image is not invalid.");
+                    var resbrgy = await ImgService.SendAsync(brgybytes);
+                    brgybytes.Clear();
+                    if (resbrgy == null)
+                        return (Results.Failed, "Please contact to admin");
+                    var jsonbrgy = JsonConvert.DeserializeObject<Dictionary<string, object>>(resbrgy);
+                    //if(jsonbrgy["status"].Str() != "error")
+                    //    request.BrgyOfficialLogo = jsonbrgy["url"].Str();
+                    if(jsonbrgy["status"].Str() != "error")
+                    {
+                        request.BrgyOfficialLogo = jsonbrgy["url"].Str();
+                    }
                 }
+                if (!request.iMunicipalLogo.IsEmpty() && request.MunLogoChange == 1)
+                {
+                    byte[] munbytes = Convert.FromBase64String(request.iMunicipalLogo.Str());
+                    if (munbytes.Length == 0)
+                        return (Results.Failed, "Make sure selected image is not invalid.");
+                    var resmun = await ImgService.SendAsync(munbytes);
+                    munbytes.Clear();
+                    if (resmun == null)
+                        return (Results.Failed, "Please contact to admin");
+                    var jsonmun = JsonConvert.DeserializeObject<Dictionary<string, object>>(resmun);
+                    if (jsonmun["status"].Str() != "error")
+                    {
+                        request.MunicipalLogo = jsonmun["url"].Str();
+                    }
+                }
+                return (Results.Success, null);
+
 
             }
             return (Results.Null, "Make sure Your selected Barangay and Municipality/ Cities Logo is not invalid");

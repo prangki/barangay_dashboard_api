@@ -376,6 +376,25 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string BizStatus;
 
     }
+
+    public class Emergency_Type 
+    {
+        public string PL_ID;
+        public string PGRP_ID;
+        public string EmgyTypID;
+        public string EmgyType;
+        public string Message;
+    }
+    public class Emergency_Contact_Person
+    {
+        public string PL_ID;
+        public string PGRP_ID;
+        public string EmgyTypID;
+        public string EmgyContactID;
+        public string ContactPerson;
+        public string MobileNumber;
+    }
+
     public class LicenseKey
     {
         public string plid;
@@ -452,6 +471,23 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string OrganizationNM;
         public string OrganizatioAbbr;
         public string Estabalished;
+    }
+    public class Establishment
+    {
+        public string PL_ID;
+        public string PGRP_ID;
+        public string Est_ID;
+        public string Est_Name;
+        public string Est_Type;
+        public string ContactDetails;
+        public string Address;
+        public string EmailAddress;
+    }
+    public class Establishment_Request
+    {
+        public string num_row;
+        public string search;
+        public string type;
     }
 
     public class LegalDocument
