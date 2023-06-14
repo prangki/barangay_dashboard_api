@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System;
 using webapi.App.Features.UserFeature;
 using System.Collections.Generic;
+using webapi.App.RequestModel.Common;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -83,6 +84,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> LoadBlotter(int status)
         {
             var result = await _repo.LoadBlotterV2(status);
+            if (result.result == Results.Success)
+                return Ok(result.blotter);
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("blotter/notification")]
+        public async Task<IActionResult> LoadBlotterNotification([FromBody] FilterRequest req)
+        {
+            var result = await _repo.LoadBlotterNotification(req);
             if (result.result == Results.Success)
                 return Ok(result.blotter);
             return NotFound();

@@ -21,6 +21,8 @@ using webapi.App.RequestModel.Feature;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using webapi.Services.Firebase;
 using webapi.App.Features.UserFeature;
+using webapi.App.RequestModel.Common;
+using webapi.App.Aggregates.Common.Dto;
 
 namespace webapi.App.Aggregates.FeatureAggregate
 {
@@ -33,6 +35,7 @@ namespace webapi.App.Aggregates.FeatureAggregate
         Task<(Results result, object item)> SendMessageAsync(String ChatKey, MessengerAppRequest request);
         Task<(Results result, object items)> GetPreviousChatsAsync(String LastChatTimestamp);
         Task<(Results result, object items)> GetRecentChatsAsync();
+        Task<(Results result, object sender)> Load_ChatSender(FilterRequest req);
     }
 
     public class MessengerAppRepository : IMessengerAppRepository
@@ -223,7 +226,7 @@ namespace webapi.App.Aggregates.FeatureAggregate
                 DECLARE @IsFirstMessage bit = '0';
                 --
                 DECLARE @Fullname varchar(150), @DisplayName varchar(150), @ProfileImageUrl varchar(500), @IsPersonal bit=0;
-                (SELECT TOP(1) @DisplayName=NCK_NM, @ProfileImageUrl=IMG_URL, @Fullname=FLL_NM
+                (SELECT TOP(1) /*@DisplayName=NCK_NM*/ @DisplayName=FLL_NM, @ProfileImageUrl=IMG_URL, @Fullname=FLL_NM
                 FROM dbo.STLBDB a with(nolock) 
                 WHERE CONCAT(a.PL_ID, a.ACT_ID)=@SenderID) ORDER BY a.PL_ID, a.USR_ID;
                 IF(ISNULL(@DisplayName,'')='') SET @DisplayName=@Fullname;
@@ -460,5 +463,19 @@ namespace webapi.App.Aggregates.FeatureAggregate
             return false;
         }
 
+        public async Task<(Results result, object sender)> Load_ChatSender(FilterRequest req)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_0BA0BBBDB01", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID},
+                {"parmoptrid",account.USR_ID},
+                {"parmrownum",req.num_row},
+                {"parmsearch", req.Search }
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetAllChatSenderList(result.Read<dynamic>()));
+            return (Results.Null, null);
+        }
     }
 }

@@ -12,6 +12,7 @@ using Comm.Commons.Extensions;
 using webapi.App.RequestModel.Feature;
 using webapi.App.Features.UserFeature;
 using Newtonsoft.Json;
+using webapi.App.RequestModel.Common;
 
 namespace webapi.Controllers.SubscriberAppControllers.Features
 {
@@ -138,6 +139,19 @@ namespace webapi.Controllers.SubscriberAppControllers.Features
                 return (Results.Success, null);
             }
             return (Results.Failed, "Make sure selected image is valid.");
+        }
+
+
+        [HttpPost]
+        [Route("sender/notification")]
+        public async Task<IActionResult> Task0b([FromBody] FilterRequest req)
+        {
+            var result = await _appRepo.Load_ChatSender(req);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", sender = result.sender });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", sender = result.sender });
+            return NotFound();
         }
     }
 }

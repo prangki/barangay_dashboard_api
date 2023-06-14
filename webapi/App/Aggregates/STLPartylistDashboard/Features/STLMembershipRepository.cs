@@ -30,6 +30,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object account)> LoadMasterList();
         Task<(Results result, object account)> TotalREgister();
         Task<(Results result, object account)> LoadMasterList1(MasterListRequest request);
+        Task<(Results result, object account)> LoadMasterList2(MasterListRequest request);
         Task<(Results result, string message)> AssignedAccess(string userid, string access);
         Task<(Results result, String message)> UpdateValidityAccount(ValidityAccount request);
         Task<(Results result, string message)> ChangeAccounttype(ChangeAccountType request);
@@ -60,6 +61,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> SystemUserUpdatePassword(string plid, string pgrpid, string usrid, string password);
         Task<(Results result, object message)> SystemUserDelete(string userid);
         Task<(Results result, object message)> SystemUserDelete02(string plid, string pgrpid, string userid);
+        Task<(Results result, string message)> LogOutAsyn();
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -104,6 +106,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmsubtype", account.SUB_TYP },
                 {"parmrownum",request.num_row },
+                {"parmverifiedaccount", request.verified },
                 {"parmsrch",request.search },
                 {"parmreg",request.reg },
                 {"parmprov",request.prov },
@@ -114,6 +117,21 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             if (results != null)
                 return (Results.Success, SubscriberDto.GetMasterList1(results, 100));
                 //return (Results.Success, results);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, object account)> LoadMasterList2(MasterListRequest request)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDABDB06B", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmsubtype", account.SUB_TYP },
+                {"parmrownum",request.num_row },
+                {"parmuserid", request.userid },
+            });
+            if (results != null)
+                return (Results.Success, SubscriberDto.GetMasterList1(results, 100));
+            //return (Results.Success, results);
             return (Results.Null, null);
         }
         public async Task<(Results result, object account)> LoadAccountAccess()
@@ -260,6 +278,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 
                 {"parmusername",membership.Username },
                 {"parmusrid",(isUpdate?membership.Userid:"") },
+                {"parmverified",membership.Verified },
                 {"parmoptrid",account.USR_ID },
             }).ReadSingleOrDefault();
             if (results != null)
@@ -893,6 +912,31 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (results != null)
                 return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> LogOutAsyn()
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BDAOL02", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmuserid", account.USR_ID },
+
+
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, "Log-out!");
+                }
+                else if (ResultCode == "2")
+                    return (Results.Failed, "Please try again!");
+                return (Results.Failed, "Somethings wrong in your data. Please try again!");
+            }
             return (Results.Null, null);
         }
     }

@@ -409,6 +409,65 @@ namespace webapi.App.Aggregates.Common.Dto
             o.PL_ID = data["PL_ID"].Str();
             o.PGRP_ID = data["PGRP_ID"].Str();
             o.Userid = data["USR_ID"].Str();
+
+            o.Firstname = textInfo.ToTitleCase(data["FRST_NM"].Str());
+            o.Lastname = textInfo.ToTitleCase(data["LST_NM"].Str());
+            o.Middlename = textInfo.ToTitleCase(data["MDL_NM"].Str());
+            o.AccountName = textInfo.ToTitleCase(data["FLL_NM"].Str());
+            o.MobileNumber = data["MOB_NO"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.Sitio = data["LOC_SIT"].Str();
+            o.SitioName = textInfo.ToTitleCase(data["SIT_NM"].Str());
+            o.GeoLocationLat = data["GEO_LOC_LAT"].Str();
+            o.GeoLocationLong = data["GEO_LOC_LONG"].Str();
+
+            o.TransactionNo = data["TRN_NO"].Str();
+            o.TicketNo = data["TCKT_NO"].Str();
+            o.Subject = data["SBJCT"].Str();
+            o.Body = data["BODY"].Str();
+            o.Status = data["STAT"].Str();
+            o.StatusName = data["STAT_NM"].Str();
+            o.CorrectiveAction = data["COR_ACTION"].Str();
+            o.DateReceived = (data["RGS_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["RGS_TRN_TS"].Str()).ToString("MMM, dd, yyyy");
+            o.ProcessDate = (data["PRCS_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["PRCS_TRN_TS"].Str()).ToString("MMM dd, yyyy");
+            o.ActionDate = (data["FXD_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["FXD_TRN_TS"].Str()).ToString("MMM, dd, yyyy");
+            o.TotalAttachment = (data["TTL_ATTCHMNT"].Str()=="0") ? "" : data["TTL_ATTCHMNT"].Str();
+
+            o.Attachment = (data["ATTCHMNT"].Str() == "0") ? "" : data["ATTCHMNT"].Str();
+            //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAllIssuesConcernList1(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllIssuesConcern_List1(data);
+            var count = items.Count();
+            if (count >= limit)
+            {
+                var o = items.Last();
+                var filter = (o.NextFilter = Dynamic.Object);
+                items = items.Take(count - 1).Concat(new[] { o });
+                filter.NextFilter = o.num_row;
+                filter.Userid = userid;
+            }
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllIssuesConcern_List1(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllIssuesConcern_List1(e));
+        }
+        public static IDictionary<string, object> Get_AllIssuesConcern_List1(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.num_row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.Userid = data["USR_ID"].Str();
+
             o.Firstname = textInfo.ToTitleCase(data["FRST_NM"].Str());
             o.Lastname = textInfo.ToTitleCase(data["LST_NM"].Str());
             o.Middlename = textInfo.ToTitleCase(data["MDL_NM"].Str());
@@ -416,7 +475,10 @@ namespace webapi.App.Aggregates.Common.Dto
             o.MobileNumber = data["MOB_NO"].Str();
             o.Sitio = data["LOC_SIT"].Str();
             o.SitioName = textInfo.ToTitleCase(data["SIT_NM"].Str());
+            o.GeoLocLat = data["GEO_LOC_LAT"].Str();
+            o.GeoLocLong = data["GEO_LOC_LONG"].Str();
             o.ImageUrl = data["IMG_URL"].Str();
+
             o.TransactionNo = data["TRN_NO"].Str();
             o.TicketNo = data["TCKT_NO"].Str();
             o.Subject = data["SBJCT"].Str();
@@ -426,7 +488,9 @@ namespace webapi.App.Aggregates.Common.Dto
             o.IssuedDate = (data["RGS_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["RGS_TRN_TS"].Str()).ToString("MMM, dd, yyyy");
             o.ProcessDate = (data["PRCS_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["PRCS_TRN_TS"].Str()).ToString("MMM dd, yyyy");
             o.ActionDate = (data["FXD_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["FXD_TRN_TS"].Str()).ToString("MMM, dd, yyyy");
-            o.TotalAttachment = (data["TTL_ATTCHMNT"].Str()=="0") ? "" : data["TTL_ATTCHMNT"].Str();
+            o.TotalAttachment = (data["TTL_ATTCHMNT"].Str() == "0") ? "" : data["TTL_ATTCHMNT"].Str();
+
+            o.Attachment = (data["ATTCHMNT"].Str() == "0") ? "" : data["ATTCHMNT"].Str();
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;
         }
@@ -736,13 +800,102 @@ namespace webapi.App.Aggregates.Common.Dto
             o.num_row = data["Num_Row"].Str();
             o.PL_ID = data["PL_ID"].Str();
             o.PGRP_ID = data["PGRP_ID"].Str();
+            o.EmgyContactID = data["EMGY_CNTCT_ID"].Str();
             o.EmgyTypID = data["EMGY_TYP_ID"].Str();
             o.EmgyType = data["EMERGENCY_TYPE"].Str();
             o.Message = data["TEXT_MESSAGE"].Str();
-            o.ContactPerson = data["EMGY_CNTCT_ID"].Str();
+            o.ContactPerson = data["CONTACT_PERSON"].Str();
             o.MobileNumber = data["MOB_NUMBER"].Str();
             o.Status = Convert.ToBoolean(data["STATUS"]);
             o.StatusName = data["STATUS_NM"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAllEmergencyAlertRequestList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllEmergencyAlertRequest_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllEmergencyAlertRequest_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllEmergencyAlertRequest_List(e));
+        }
+        public static IDictionary<string, object> Get_AllEmergencyAlertRequest_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Num_Row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.AccountName = data["FLL_NM"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
+            o.EmergencyID = data["EMGY_ID"].Str();
+            o.EmergencyTypeID = data["EMGY_TYP_ID"].Str();
+            o.EmergencyTypeNM = data["EMERGENCY_TYPE"].Str();
+            o.GeoLocationLat = data["GEO_LOC_LAT"].Str();
+            o.GeoLocationLong = data["GEO_LOC_LONG"].Str();
+            o.DateReceived = Convert.ToDateTime(data["RGS_TRN_TS"].Str()).ToString("MMM dd, yyyy");
+            o.Count = data["CNT_REQUEST"].Str();
+            return o;
+        }
+
+
+        public static IEnumerable<dynamic> GetAllEmergencyAlertList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllEmergencyAlert_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllEmergencyAlert_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllEmergencyAlert_List(e));
+        }
+        public static IDictionary<string, object> Get_AllEmergencyAlert_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.num_row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.EmgyID = data["EMGY_ID"].Str();
+            o.EmgyTypID = data["EMGY_TYP_ID"].Str();
+            o.EmgyType = data["EMERGENCY_TYPE"].Str();
+            o.Message = data["TEXT_MESSAGE"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.FUllName = data["FLL_NM"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
+            o.AlertDate = data["ALRT_DATE"].Str();
+            o.GeolocationLat = data["GEO_LOC_LAT"].Str();
+            o.GeolocationLong = data["GEO_LOC_LONG"].Str();
+            o.Closed_Details = data["CLOSED_DETAILS"].Str();
+            o.ClosedDate = data["CLOSED_DATE"].Str();
+            o.Closed_Type = Convert.ToInt32(data["CLOSED_TYP"]);
+            o.Closed_TypeName = data["CLOSED_TYP_NM"].Str();
             return o;
         }
 
@@ -839,6 +992,50 @@ namespace webapi.App.Aggregates.Common.Dto
             o.OrganizationNM = data["ORG_NM"].Str();
             o.OrganizatioAbbr = data["ORG_ABBR"].Str();
             o.Estabalished = data["ORG_EST"].Str();
+
+            //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
+            return o;
+        }
+
+        public static IEnumerable<dynamic> GetAllChatSenderList(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllChatSender_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllChatSender_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllChatSender_List(e));
+        }
+        public static IDictionary<string, object> Get_AllChatSender_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.num_row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.ChatID = data["ID"].Str();
+            o.ChatKey = data["CHT_CD"].Str();
+            o.IsPersonal = data["S_PRSNL"].Str();
+            o.IsGroup = data["S_GRP"].Str();
+            o.IsPublic = data["S_PBLC"].Str();
+            o.IsAllowInvatiation = data["S_ALLW_INVT"].Str();
+            o.SenderID = data["MMBR_ID"].Str();
+            o.DisplayName = data["FLL_NM"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            //o.MobileNo = data["MOB_NO"].Str();
+            o.DateSend = data["RGS_TRN_TS"].Str();
+            o.Count = (data["Unread"].Str() == "0") ? "" :  data["Unread"].Str();
 
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;

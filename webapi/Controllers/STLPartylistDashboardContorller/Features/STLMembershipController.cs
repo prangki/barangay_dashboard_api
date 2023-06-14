@@ -72,6 +72,19 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             return NotFound();
         }
 
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Log_out()
+        {
+            var reporesult = await _repo.LogOutAsyn();
+            if (reporesult.result == Results.Success)
+                return Ok(new { Status = "ok", Message = reporesult.message });
+            else if (reporesult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = reporesult.message });
+            return NotFound();
+        }
+
         [HttpPost]
         [Route("registration/new")]
         public async Task<IActionResult> Task0c([FromBody] STLMembership request)
@@ -231,6 +244,16 @@ namespace webapi.Controllers.STLPartylistMembership.Features
         public async Task<IActionResult> Task0g1([FromBody] MasterListRequest request) 
         {
             var result = await _repo.LoadMasterList1(request);
+            if (result.result == Results.Success)
+                return Ok(result.account);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("account/id")]
+        public async Task<IActionResult> Task0g1A([FromBody] MasterListRequest request)
+        {
+            var result = await _repo.LoadMasterList2(request);
             if (result.result == Results.Success)
                 return Ok(result.account);
             return NotFound();

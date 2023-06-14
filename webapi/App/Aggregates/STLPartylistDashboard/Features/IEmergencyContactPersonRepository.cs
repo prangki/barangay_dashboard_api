@@ -40,7 +40,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
-                {"parmemergencycontactid", (isEdit) ? req.EmgyTypID: "" },
+                {"parmemergencycontactid", (isEdit) ? req.EmgyContactID: "" },
                 {"parmemergencytypeid",req.EmgyTypID },
                 {"parmemergencyconctacperson",req.ContactPerson },
                 {"parmmobilenumber",req.MobileNumber },
@@ -52,7 +52,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    if (isEdit)
+                    if (!isEdit)
                         req.EmgyContactID = row["EMGY_CNTCT_ID"].Str();
                     return (Results.Success, "Successfully saved!");
                 }

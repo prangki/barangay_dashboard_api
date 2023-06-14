@@ -131,6 +131,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
 
         [HttpPost]
+        [Route("businessclearance/id")]
+        public async Task<IActionResult> Task0j1([FromBody] BrgyBusinessClearance request)
+        {
+            var result = await _repo.Load_BrgyBizClearancebyID(request);
+            if (result.result == Results.Success)
+                return Ok(result.brgybizclearance);
+            return NotFound();
+        }
+
+        [HttpPost]
         [Route("businessclearance/new")]
         public async Task<IActionResult> Task0k([FromBody] BrgyBusinessClearance request)
         {

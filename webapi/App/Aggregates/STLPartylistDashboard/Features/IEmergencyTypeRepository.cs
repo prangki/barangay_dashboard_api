@@ -51,7 +51,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 var ResultCode = row["RESULT"].Str();
                 if (ResultCode == "1")
                 {
-                    if (isEdit)
+                    if (!isEdit)
                         req.EmgyTypID = row["EMGY_TYP_ID"].Str();
                     return(Results.Success, "Successfully saved!");
                 }

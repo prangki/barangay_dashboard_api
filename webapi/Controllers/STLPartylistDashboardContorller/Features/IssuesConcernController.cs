@@ -36,6 +36,8 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+
+
         [HttpPost]
         [Route("report/problem/attachment")]
         public async Task<IActionResult> Task06([FromBody] ReportAProblemRequest request)
@@ -73,6 +75,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { Status = "ok", Message = repoResult.message, Content = request });
             else if (repoResult.result == Results.Failed)
                 return Ok(new { Status = "error", Message = repoResult.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("report/notification")]
+        public async Task<IActionResult> Task07([FromBody] FilterRequest request)
+        {
+            var result = await _supRepo.LoadIssuesConcern1(request);
+            if (result.result == Results.Success)
+                return Ok(result.concern);
             return NotFound();
         }
 

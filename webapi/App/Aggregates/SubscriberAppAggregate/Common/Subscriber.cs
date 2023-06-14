@@ -169,7 +169,8 @@ namespace  webapi.App.Aggregates.SubscriberAppAggregate.Common
                             //            identity.IsLogin = true;
                             //            identity.sActive = (row["S_ACTV"].Str().Equals("1"));
                             //            //identity.IsCurrentDevice = (row["CUR_DVC"].Str().Equals("1"));
-                            //            identity.IsSessionExpired = !(row["SSSN_ID"].Str().ToLower().Equals(identity.SessionID.Str().ToLower()));
+                            //            identity.IsSessionExpired = !(row["
+                            //            "].Str().ToLower().Equals(identity.SessionID.Str().ToLower()));
                             //            this.accountIdentity = identity;
                             //            return true;
                             //        }

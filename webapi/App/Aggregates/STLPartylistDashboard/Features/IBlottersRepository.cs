@@ -12,6 +12,7 @@ using System.Data;
 using System.Collections.Generic;
 using System;
 using Comm.Commons.Extensions;
+using webapi.App.RequestModel.Common;
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
@@ -24,6 +25,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> UpdateBlotterV2(Blotter info);
         Task<(Results result, object blotter)> LoadBlotter(int id, int currentRow, string from, string to);
         Task<(Results result, object blotter)> LoadBlotterV2(int status);
+        Task<(Results result, object blotter)> LoadBlotterNotification(FilterRequest req);
+
         Task<(Results result, string message)> SaveSummon(Blotter info);
         Task<(Results result, string message)> UpdateSummon(Blotter info);
         Task<(Results result, string message)> ResolveSummon(Blotter info);
@@ -252,6 +255,31 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     {"parmplid",account.PL_ID },
                     {"parmpgrpid",account.PGRP_ID },
                     {"parmsts", status}
+                    //{"paramvwtyp", id },
+                    //{"paramfrom", from },
+                    //{"paramto", to },
+                    //{"paramcurrow", currentRow }
+                });
+                if (result != null)
+                    return (Results.Success, result);
+                return (Results.Null, null);
+            }
+            catch (System.Exception)
+            {
+                return (Results.Null, null);
+            }
+        }
+        public async Task<(Results result, object blotter)> LoadBlotterNotification(FilterRequest req)
+        {
+            try
+            {
+                var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR01A", new Dictionary<string, object>()
+                {
+                    {"parmplid",req.PL_ID },
+                    {"parmpgrpid",req.PGRP_ID },
+                    {"parmrownum", req.num_row},
+                    {"parmsts", req.Status},
+                    {"@parmsrch", req.Search}
                     //{"paramvwtyp", id },
                     //{"paramfrom", from },
                     //{"paramto", to },

@@ -146,6 +146,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string iEducationalAttainment;
         public string iEmployement;
         public string Json;
+        public int Verified;
         public List<FingerImage> ImageList;
         public List<GovAttachment> GovIDList;
         public class FingerImage
@@ -250,6 +251,8 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string mun;
         public string brgy;
         public string sitio;
+        public string verified;
+        public string userid;
     }
     public class LicenseFilterRequest
     {
@@ -330,6 +333,23 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string Brgy_Chief_Tanod_sig_URL;
         public string Tanod_Events;
     }
+    public class FilterRequestDoc
+    {
+        public string plid;
+        public string pgrpid;
+        public string userid;
+        public string reqdoc;
+        public string docid;
+        public string id;
+        public string controlno;
+        public string num_row;
+        public string search;
+        public string status;
+        public string from;
+        public string to;
+        public Nullable<int> cancelled;
+        public Nullable<int> release;
+    }
 
     public class BarangaySignatures
     {
@@ -393,6 +413,21 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string EmgyContactID;
         public string ContactPerson;
         public string MobileNumber;
+    }
+    public class EmergencyAlert
+    {
+        public string PL_ID;
+        public string PGRP_ID;
+        public string EmgyID;
+        public string EmgyTypID;
+        public string UserID;
+        public string FUllName;
+        public string GeolocationLat;
+        public string GeolocatonLong;
+        public string Closed_Details;
+        public string ClosedDate;
+        public int Closed_Type;
+        public string Closed_TypeName;
     }
 
     public class LicenseKey

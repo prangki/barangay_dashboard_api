@@ -20,6 +20,7 @@ namespace webapi.App.RequestModel.Feature
         public bool IsFile;
         public bool IsMessage;
         public string MemberID;
+        public string ChatID;
 
         /*public static bool validity(Account account, String ChatKey, MessengerAppRequest request){
             if(request == null || ChatKey.IsEmpty()) return false;

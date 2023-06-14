@@ -640,6 +640,7 @@ namespace webapi.App.Aggregates.Common
             o.PLTCL_NM = data["PLTCL_NM"].Str();
             //o.PSN_NM = data["PSN_NM"].Str();
             o.USR_ID = data["USR_ID"].Str();
+            o.ResidentIDNo = data["RESIDENT_ID_NO"].Str();
             o.ACT_ID = data["ACT_ID"].Str();
             o.ACT_TYP = data["ACT_TYP"].Str();
             o.HouseNo = data["HSENO_ID"].Str();
@@ -742,6 +743,7 @@ namespace webapi.App.Aggregates.Common
             o.MonthlyIncome = data["MON_INC"].Str();
             o.ResidentType = data["TYP_RES"].Str();
             o.DateReside = data["DT_RES"].Str();
+            o.isConfirm = data["S_MOB_RGS_CFRM"].Str();
             o.CompleteAddress = data["CMPLT_ADDRESS"].Str();
             o.SeniorCitizenMember = (data["SR_CIT"].Str() == "") ? 0 : Convert.ToInt32(data["SR_CIT"]);
             o.SingleParent = (data["SGL_PAR"].Str() == "") ? 0 : Convert.ToInt32(data["SGL_PAR"]);
@@ -792,6 +794,47 @@ namespace webapi.App.Aggregates.Common
             return o;
         }
 
+        public static IEnumerable<dynamic> GetRequestDocumentList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetRequestDocument_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetRequestDocument_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_RequestDocument_List(e));
+        }
+        public static IDictionary<string, object> Get_RequestDocument_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Num_Row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.TitleName = data["NM_TTL"].Str();
+            o.RequestDocument = data["RequestDocument"].Str();
+            o.Doc_ID = data["DOC_ID"].Str();
+            o.ClearanceNo = data["ID"].Str();
+            o.ControlNo = data["CNTRL_NO"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.ResidentIDNo = data["RESIDENT_ID_NO"].Str();
+            o.Requestor = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
+            o.Requested_Date = (data["Requested_Date"].Str() == "") ? "" : Convert.ToDateTime(data["Requested_Date"].Str()).ToString("MMM dd, yyyy");
+            o.Appointment_Date = (data["Appointment_Date"].Str() == "") ? "" : Convert.ToDateTime(data["Appointment_Date"].Str()).ToString("MMM dd, yyyy");
+            o.ClearanceType = data["CERTTYP_ID"].Str();
+            return o;
+        }
 
         public static IEnumerable<dynamic> GetBrygClearanceList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
         {
@@ -822,7 +865,10 @@ namespace webapi.App.Aggregates.Common
             o.ControlNo = data["CNTRL_NO"].Str();
             o.UserID = data["USR_ID"].Str();
             o.ResidentIDNo = data["RESIDENT_ID_NO"].Str();
+            o.TitleName = data["NM_TTL"].Str();
             o.Requestor = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.MobileNo = data["MOB_NO"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
             o.TypeofClearance = data["CERTTYP_ID"].Str();
             o.ClearanceType = textInfo.ToUpper(textInfo.ToLower(data["CERTTYP_NM"].Str()));
             o.Purpose = data["PURP_ID"].Str();
@@ -855,6 +901,41 @@ namespace webapi.App.Aggregates.Common
             return o;
         }
 
+
+        public static IEnumerable<dynamic> GetSMSSenderList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetSMSSender_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetSMSSender_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_SMSSender_List(e));
+        }
+        public static IDictionary<string, object> Get_SMSSender_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Num_Row = data["Num_Row"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.SenderName = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
+            o.isRead = Convert.ToBoolean(data["IsRead"]);
+            return o;
+        }
+
         public static IEnumerable<dynamic> GetLegalDocumentList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
         {
             if (data == null) return null;
@@ -884,6 +965,8 @@ namespace webapi.App.Aggregates.Common
             o.ControlNo = data["CONTROLNO"].Str();
             o.RequestorID = data["REQUESTORID"].Str();
             o.RequestorName = data["REQUESTORNM"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
             o.TypeofTemplateID = data["TPLTYP_ID"].Str();
             o.TypeofTemplateNM = data["TPLTTYP_NM"].Str();
             o.FormsCertificateID = data["TPL_ID"].Str();
@@ -973,10 +1056,15 @@ namespace webapi.App.Aggregates.Common
             o.ControlNo = data["CTNRL_NO"].Str();
             o.BusinessID = data["BIZ_ID"].Str();
             o.BusinessNM = textInfo.ToUpper(textInfo.ToLower(data["BIZ_NM"].Str()));
+            o.RegisterNo = data["REG_NO"].Str();
+            o.NatureofBusiness = data["NTREBIZ"].Str();
+            o.OwnershipTypeName = data["OWNRSHP_TYP_NM"].Str();
             o.BusinessAddress = textInfo.ToUpper(textInfo.ToLower(data["BIZ_ADDR"].Str()));
             o.DateOperate = data["DATE_OPRT"].Str();
             o.OwnerID = data["OWNER_ID"].Str();
             o.OwnerNM = textInfo.ToUpper(textInfo.ToLower(data["OWNER_NM"].Str()));
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
             o.OwnerAddress = textInfo.ToUpper(textInfo.ToLower(data["OWNR_ADDRESS"].Str()));
             o.DateIssued = data["DATEISSUED"].Str();
             o.ExpiryDate = data["EXPIREDDATE"].Str();
@@ -1040,6 +1128,21 @@ namespace webapi.App.Aggregates.Common
             return o;
         }
 
+        public static IDictionary<string, object> EmergencyAlertNotification(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.UserID = data["USR_ID"].Str();
+            o.AccountName = data["FLL_NM"].Str();
+            o.EmergencyID = data["EMGY_ID"].Str();
+            o.EmergencyTypeID = data["EMGY_TYP_ID"].Str();
+            o.EmergencyTypeNM = data["EMERGENCY_TYPE"].Str();
+            o.GeoLocationLat = data["GEO_LOC_LAT"].Str();
+            o.GeoLocationLong = data["GEO_LOC_LONG"].Str();
+            o.DateReceived = data["RGS_TRN_TS"].Str();
+            return o;
+        }
 
         public static IDictionary<string, object> EventNofitication(IDictionary<string, object> data)
         {

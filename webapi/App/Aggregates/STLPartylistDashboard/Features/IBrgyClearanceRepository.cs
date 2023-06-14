@@ -21,10 +21,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, String message, String brgyclrid, String cntrlno)> BrgyClearanceAsync(BrgyClearance req, bool isUpdate = false);
         Task<(Results result, object bryclrid)> Load_BrgyClearance(BrgyClearance req);
+        Task<(Results result, object bryclrid)> Load_BrgyClearanceID(BrgyClearance req);
         Task<(Results result, String message, object release)> ReleaseAsync(BrgyClearance req);
         Task<(Results result, String message, object cancel)> CancellAsync(BrgyClearance req);
         Task<(Results result, String message)> ReceivedBrgyClearanceRequestAsync(BrgyClearance req);
         Task<(Results result, String message)> ProcessRecivedBrgyClearanceRequestAsync(BrgyClearance req);
+        Task<(Results result, object reqdoc)> Load_RequestDocument(FilterRequestDoc req);
     }
     public class BrgyClearanceRepository:IBrgyClearanceRepository
     {
@@ -90,6 +92,20 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmpgrpid",req.PGRPID },
                 {"parmuserid",req.UserID },
                 {"parmrequeststatus", req.StatusRequest },
+            });
+            if (results != null)
+                return (Results.Success, SubscriberDto.GetBrygClearanceList(results, 100));
+            //return (Results.Success, results);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, object bryclrid)> Load_BrgyClearanceID(BrgyClearance req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYCLR0C1", new Dictionary<string, object>()
+            {
+                {"parmplid", req.PLID},
+                {"parmpgrpid",req.PGRPID },
+                {"parmbrgyclrid", req.ClearanceNo },
+                {"parmuserid",req.UserID },
             });
             if (results != null)
                 return (Results.Success, SubscriberDto.GetBrygClearanceList(results, 100));
@@ -206,6 +222,27 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
             }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object reqdoc)> Load_RequestDocument(FilterRequestDoc req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_CRLBIZLDLDOC", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmdoc",req.reqdoc },
+                {"parmrownum",req.num_row },
+                {"parmstatus",req.status },
+                {"parmdatefrom",req.from },
+                {"parmdateto",req.to },
+                {"parmsrch",req.search },
+                {"parmcancelled",(req.cancelled == null) ? 0 : req.cancelled },
+                {"parmrelease", (req.release == null) ? 0 : req.release }
+            });
+            if (results != null)
+                return (Results.Success, SubscriberDto.GetRequestDocumentList(results, 100));
+            //return (Results.Success, results);
             return (Results.Null, null);
         }
     }

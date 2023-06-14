@@ -23,6 +23,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> Delete_FormTab(LegalDocument req);
         Task<(Results result, String message, object legaldoc)> LegalDocAsync(LegalDocument_Transaction req);
         Task<(Results result, object legaldoc)> Load_LegalDoc(LegalDocument_Transaction req);
+        Task<(Results result, object legaldoc)> Load_LegalDocID(LegalDocument_Transaction req);
         Task<(Results result, object legaldocdetails)> Load_LegalDocDetails(LegalDocument_Transaction req);
         Task<(Results result, String message, object release)> ReleaseAsync(LegalDocument_Transaction req);
         Task<(Results result, String message, object cancel)> CancellAsync(LegalDocument_Transaction req);
@@ -140,6 +141,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmdatefrom", req.DateFrom },
                 {"parmdateto", req.DateTo },
                 {"parmsearch", req.Search }
+            });
+            if (result != null)
+                return (Results.Success, SubscriberDto.GetLegalDocumentList(result, 100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object legaldoc)> Load_LegalDocID(LegalDocument_Transaction req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_LGLDOC0C2", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmlgldocid", req.LegalFormsID },
             });
             if (result != null)
                 return (Results.Success, SubscriberDto.GetLegalDocumentList(result, 100));

@@ -35,6 +35,7 @@ namespace webapi.App.RequestModel.Common
         public string DocTypeID;
         public string BusinessId;
         public string Gender;
+        public string EmgyID;
         public string EmgyTypID;
         public string EmgyContactID;
 

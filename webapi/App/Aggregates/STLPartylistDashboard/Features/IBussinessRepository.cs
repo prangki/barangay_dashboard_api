@@ -31,6 +31,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> ReceivedBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req);
         Task<(Results result, String message)> ProcessBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req);
         Task<(Results result, object brgybizclearance)> Load_BrgyBizClearance(BrgyBusinessClearance req);
+        Task<(Results result, object brgybizclearance)> Load_BrgyBizClearancebyID(BrgyBusinessClearance req);
         Task<(Results result, String message, object release)> ReleaseAsync(BrgyBusinessClearance req);
         Task<(Results result, String message, object cancel)> CancellAsync(BrgyBusinessClearance req);
     }
@@ -279,6 +280,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmplid", req.PLID},
                 {"parmpgrpid",req.PGRPID },
                 {"parmownerid",req.OwnerID }
+            });
+            if (results != null)
+                return (Results.Success, SubscriberDto.GetBrygBusinessClearanceList(results, 100));
+            //return (Results.Success, results);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, object brgybizclearance)> Load_BrgyBizClearancebyID(BrgyBusinessClearance req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBIZCLR0C2", new Dictionary<string, object>()
+            {
+                {"parmplid", req.PLID},
+                {"parmpgrpid",req.PGRPID },
+                {"parmbrgybizclrid",req.BusinessClearanceID }
             });
             if (results != null)
                 return (Results.Success, SubscriberDto.GetBrygBusinessClearanceList(results, 100));

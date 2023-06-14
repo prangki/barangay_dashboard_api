@@ -76,6 +76,10 @@ namespace webapi.App.Aggregates.SubscriberAppAggregate.Features
         private void Subscribes(){
             stack.subscribe("/test", this.msgTest);
             stack.subscribe("/smsin", this.msgSMSIN);
+            stack.subscribe($"{account.PL_ID}/{account.PGRP_ID}/emergencyalert", this.receivedBranchEmergencyAlertNotification);
+            stack.subscribe($"{account.PL_ID}/{account.PGRP_ID}/issuesandconern", this.receivedBranchIssuesandConcernNotification);
+            stack.subscribe($"{account.PL_ID}/{account.PGRP_ID}/requestdocument", this.receivedBranchRequestDocumentNotification);
+            stack.subscribe($"{account.PL_ID}/{account.PGRP_ID}/complaint", this.receivedBranchComplaintNotification);
             stack.subscribe($"/{account.PL_ID}/notify", this.receivedCompanyNotication);
             stack.subscribe($"/{account.PL_ID}/{account.PGRP_ID}/chat", this.receivedBranchPublicChat);
             stack.subscribe($"/{account.PL_ID}/{account.PGRP_ID}/notify", this.receivedBranchNotication);
@@ -106,6 +110,23 @@ namespace webapi.App.Aggregates.SubscriberAppAggregate.Features
         private void msgSMSIN(Ultralight.StompMessage message)
         {
             stomp("/smsin", message.Body);
+        }
+        private void receivedBranchEmergencyAlertNotification(Ultralight.StompMessage message)
+        {
+            stomp("/emergencyalert", message.Body);
+        }
+        private void receivedBranchIssuesandConcernNotification(Ultralight.StompMessage message)
+        {
+            stomp("/issuesandconern", message.Body);
+        }
+        private void receivedBranchRequestDocumentNotification(Ultralight.StompMessage message)
+        {
+            stomp("/requestdocument", message.Body);
+        }
+
+        private void receivedBranchComplaintNotification(Ultralight.StompMessage message)
+        {
+            stomp("/complaint", message.Body);
         }
         private void receivedCompanyNotication(Ultralight.StompMessage message){
             stomp("/company", message.Body);

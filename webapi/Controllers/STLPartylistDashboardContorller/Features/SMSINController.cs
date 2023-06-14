@@ -18,6 +18,8 @@ using webapi.App.Aggregates.STLPartylistDashboard;
 using webapi.App.Model.User;
 using webapi.App.RequestModel.AppRecruiter;
 using webapi.App.Aggregates.STLPartylistDashboard.Features;
+using webapi.App.RequestModel.Common;
+using webapi.App.RequestModel.Feature;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -39,6 +41,28 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             var result = await _repo.SMSINAsync(req);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("smsin/notification")]
+        public async Task<IActionResult> Task0b([FromBody] FilterRequest req)
+        {
+            var result = await _repo.SMSINNotification(req);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", sender = result.resident });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", sender = result.resident });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("chat/isread")]
+        public async Task<IActionResult> Task0c([FromBody] MessengerAppRequest req)
+        {
+            var result = await _repo.ChatMessageReadAsync(req);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
             return NotFound();
         }
     }

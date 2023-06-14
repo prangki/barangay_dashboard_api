@@ -25,6 +25,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> UpdateIssuesConcernAsync(ReportAProblemRequest request);
         Task<(Results result, String message)> ProcessIssuesConcernAsync(ReportAProblemRequest request);
         Task<(Results result, object concern)> LoadIssuesConcern(FilterRequest request);
+        Task<(Results result, object concern)> LoadIssuesConcern1(FilterRequest request);
         Task<(Results result, object concern)> LoadIssuesConcernAttachment(ReportAProblemRequest request);
         Task<(Results result, String message)> ClosedIssuesConcernAsync(ReportAProblemRequest request);
     }
@@ -207,6 +208,21 @@ h1,h2,h3,h4{{ margin: 2px; vertical-align: bottom; }}
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, object concern)> LoadIssuesConcern1(FilterRequest request)
+        {
+            var result = _repo.DSpQueryMultiple($"dbo.spfn_AEABDB0C1", new Dictionary<string, object>()
+            {
+                {"parmplid",request.PL_ID },
+                {"parmpgrpid",request.PGRP_ID },
+                {"parmrownum", request.num_row},
+                {"parmstatus", request.Status},
+                {"parmsrch", request.Search}
+            });
+            if (result != null)
+                return (Results.Success, STLSubscriberDto.GetAllIssuesConcernList(result.Read<dynamic>(), request.Userid, 100));
+            return (Results.Null, null);
+        }
+
         public async Task<(Results result, string message)> UpdateIssuesConcernAsync(ReportAProblemRequest request)
         {
             string supportAccount = _fd.String("Company:Support");
@@ -273,7 +289,8 @@ h1,h2,h3,h4{{ margin: 2px; vertical-align: bottom; }}
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmuserid", account.USR_ID},
                 {"parmtran_no", request.TransactionNo},
-                {"parmtckt", request.TicketNo}
+                {"parmtckt", request.TicketNo},
+                {"parmcorrectiveaction", request.CorrectiveAction}
             }).ReadSingleOrDefault();
             if (results != null)
             {

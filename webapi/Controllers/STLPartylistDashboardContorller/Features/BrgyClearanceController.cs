@@ -72,6 +72,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
         [HttpPost]
+        [Route("brgyclearance/id")]
+        public async Task<IActionResult> Task0d1([FromBody] BrgyClearance request)
+        {
+            var result = await _repo.Load_BrgyClearanceID(request);
+            if (result.result == Results.Success)
+                return Ok(result.bryclrid);
+            return NotFound();
+        }
+        [HttpPost]
         [Route("brgyclearance/received")]
         public async Task<IActionResult> Task0e([FromBody] BrgyClearance request)
         {
@@ -91,6 +100,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { Status = "ok", Message = result.message });
             if (result.result == Results.Failed)
                 return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("requestdocument/list")]
+        public async Task<IActionResult> Task0g([FromBody] FilterRequestDoc request)
+        {
+            var result = await _repo.Load_RequestDocument(request);
+            if (result.result == Results.Success)
+                return Ok(result.reqdoc);
             return NotFound();
         }
     }

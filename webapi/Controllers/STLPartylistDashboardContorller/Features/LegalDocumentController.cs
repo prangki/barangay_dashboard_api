@@ -92,6 +92,16 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.legaldoc);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("legaldocument/id")]
+        public async Task<IActionResult> Task0e1(LegalDocument_Transaction req)
+        {
+            var result = await _repo.Load_LegalDocID(req);
+            if (result.result == Results.Success)
+                return Ok(result.legaldoc);
+            return NotFound();
+        }
         [HttpPost]
         [Route("legaldocument/details")]
         public async Task<IActionResult> Task0f(LegalDocument_Transaction req)
