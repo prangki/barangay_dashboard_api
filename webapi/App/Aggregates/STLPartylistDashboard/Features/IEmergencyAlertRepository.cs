@@ -24,6 +24,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object emgyalert)> Load_EmergencyAlertRequest(FilterRequest req);
         Task<(Results result, String message)> ClosedEmergencyAlertAsync(EmergencyAlert req);
         Task<(Results result, String total_alert)> TotaldEmergencyAlertAsync(FilterRequest req);
+        Task<(Results result, object profile)> LoadEmergencyPofile(string userId);
     }
     public class EmergencyAlertRepository : IEmergencyAlertRepository
     {
@@ -126,6 +127,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Success, row["TTL_ALERT"].Str());
                 }
             }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object profile)> LoadEmergencyPofile(string userId)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSEMGYPRF", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmusrid",userId}
+            });
+            if (result != null)
+                return (Results.Success, result);
             return (Results.Null, null);
         }
     }
