@@ -26,6 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object blotter)> LoadBlotter(int id, int currentRow, string from, string to);
         Task<(Results result, object blotter)> LoadBlotterV2(int status);
         Task<(Results result, object blotter)> LoadBlotterNotification(FilterRequest req);
+        Task<(Results result, string total_blotter)> TotalBlotterNotificationAsync(FilterRequest req);
 
         Task<(Results result, string message)> SaveSummon(Blotter info);
         Task<(Results result, string message)> UpdateSummon(Blotter info);
@@ -293,6 +294,25 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             {
                 return (Results.Null, null);
             }
+        }
+        
+        public async Task<(Results result, string total_blotter)> TotalBlotterNotificationAsync(FilterRequest req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR01B", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PL_ID },
+                {"parmpgrpid",req.PGRP_ID }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, row["TTL_BLOTTER"].Str());
+                }
+            }
+            return (Results.Null, null);
         }
 
         public async Task<(Results result, object summon)> LoadSummon(int currentRow, string from, string to)

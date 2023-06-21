@@ -93,8 +93,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> LoadBlotterNotification([FromBody] FilterRequest req)
         {
             var result = await _repo.LoadBlotterNotification(req);
+            var res = await _repo.TotalBlotterNotificationAsync(req);
             if (result.result == Results.Success)
-                return Ok(result.blotter);
+                return Ok(new { Status = "ok", blotter = result.blotter, totalblotter = res.total_blotter });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", blotter = result.blotter, totalblotter = res.total_blotter });
             return NotFound();
         }
 

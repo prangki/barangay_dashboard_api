@@ -26,6 +26,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> ProcessIssuesConcernAsync(ReportAProblemRequest request);
         Task<(Results result, object concern)> LoadIssuesConcern(FilterRequest request);
         Task<(Results result, object concern)> LoadIssuesConcern1(FilterRequest request);
+        Task<(Results result, string total_concern)> TotalIssuesConcernAsync(FilterRequest request);
         Task<(Results result, object concern)> LoadIssuesConcernAttachment(ReportAProblemRequest request);
         Task<(Results result, String message)> ClosedIssuesConcernAsync(ReportAProblemRequest request);
     }
@@ -220,6 +221,25 @@ h1,h2,h3,h4{{ margin: 2px; vertical-align: bottom; }}
             });
             if (result != null)
                 return (Results.Success, STLSubscriberDto.GetAllIssuesConcernList(result.Read<dynamic>(), request.Userid, 100));
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string total_concern)> TotalIssuesConcernAsync(FilterRequest req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_AEABDB0C2", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PL_ID },
+                {"parmpgrpid",req.PGRP_ID }
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, row["TTL_IC"].Str());
+                }
+            }
             return (Results.Null, null);
         }
 

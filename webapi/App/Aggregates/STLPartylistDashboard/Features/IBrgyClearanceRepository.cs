@@ -27,6 +27,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> ReceivedBrgyClearanceRequestAsync(BrgyClearance req);
         Task<(Results result, String message)> ProcessRecivedBrgyClearanceRequestAsync(BrgyClearance req);
         Task<(Results result, object reqdoc)> Load_RequestDocument(FilterRequestDoc req);
+        Task<(Results result, string total_reqdoc)> TotalRequestDocumentAsyn(FilterRequestDoc req);
     }
     public class BrgyClearanceRepository:IBrgyClearanceRepository
     {
@@ -242,6 +243,25 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (results != null)
                 return (Results.Success, SubscriberDto.GetRequestDocumentList(results, 100));
+            //return (Results.Success, results);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, string total_reqdoc)> TotalRequestDocumentAsyn(FilterRequestDoc req)
+        {
+            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_CRLBIZLDLDOC01", new Dictionary<string, object>()
+            {
+                {"parmplid", account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID },
+            }).FirstOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, row["TTL_REQDOC"].Str());
+                }
+            }
             //return (Results.Success, results);
             return (Results.Null, null);
         }

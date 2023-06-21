@@ -108,8 +108,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> Task0g([FromBody] FilterRequestDoc request)
         {
             var result = await _repo.Load_RequestDocument(request);
+            var res = await _repo.TotalRequestDocumentAsyn(request);
             if (result.result == Results.Success)
-                return Ok(result.reqdoc);
+                return Ok(new { Status = "ok", requestdocument = result.reqdoc, totalrequestdocument = res.total_reqdoc });
+            if(result.result == Results.Failed)
+                return Ok(new { Status = "error", requestdocument = result.reqdoc, totalrequestdocument = res.total_reqdoc });
             return NotFound();
         }
     }

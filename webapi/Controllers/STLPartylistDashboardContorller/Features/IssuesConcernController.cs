@@ -83,8 +83,12 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         public async Task<IActionResult> Task07([FromBody] FilterRequest request)
         {
             var result = await _supRepo.LoadIssuesConcern1(request);
+            var res = await _supRepo.TotalIssuesConcernAsync(request);
+
             if (result.result == Results.Success)
-                return Ok(result.concern);
+                return Ok(new { Status = "ok", loadissuesconcern = result.concern, totalissuesconcern = res.total_concern });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", loadissuesconcern = result.concern, totalissuesconcern = res.total_concern });
             return NotFound();
         }
 
@@ -103,23 +107,31 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             for (int i = 0; i < request.Attachments.Count; i++)
             {
                 var attachment = request.Attachments[i];
-                byte[] bytes = Convert.FromBase64String(attachment.Str());
-                if (bytes.Length == 0)
-                    return (Results.Failed, "Make sure selected image is valid.");
-
-                var res = await ImgService.SendAsync(bytes);
-                bytes.Clear();
-                if (res == null)
-                    return (Results.Failed, "Please contact to admin.");
-
-                var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
-                if (json["status"].Str() != "error")
+                if (attachment.IsEmpty()) continue;
+                if (attachment.StartsWith("http"))
                 {
-                    string url = json["url"].Str();
-                    sb.Append($"<item LNK_URL=\"{ url }\" />");
-                    request.Attachments[i] = url;
+                    sb.Append($"<item LNK_URL=\"{ attachment }\" />");
                 }
-                else return (Results.Failed, "Make sure selected image is valid.");
+                else
+                {
+                    byte[] bytes = Convert.FromBase64String(attachment.Str());
+                    if (bytes.Length == 0)
+                        return (Results.Failed, "Make sure selected image is valid.");
+
+                    var res = await ImgService.SendAsync(bytes);
+                    bytes.Clear();
+                    if (res == null)
+                        return (Results.Failed, "Please contact to admin.");
+
+                    var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                    if (json["status"].Str() != "error")
+                    {
+                        string url = json["url"].Str();
+                        sb.Append($"<item LNK_URL=\"{ url }\" />");
+                        request.Attachments[i] = url;
+                    }
+                    else return (Results.Failed, "Make sure selected image is valid.");
+                }
             }
             if (sb.Length > 0)
             {
