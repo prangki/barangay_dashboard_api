@@ -17,6 +17,7 @@ using webapi.App.Aggregates.Common;
 using webapi.App.Aggregates.STLPartylistDashboard;
 using webapi.App.Model.User;
 using webapi.App.RequestModel.AppRecruiter;
+using Org.BouncyCastle.Asn1.Pkcs;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller
 {
@@ -116,7 +117,8 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
                 var token = CreateToken(result.account);
                 var menu = await _repo.LoadPGS02(result.account.PROFILE_ID.Str(), result.account.ACT_TYP);
                 var data = await _repo.MemberGroup(result.account);
-                return Ok(new { result = result.result, account = result.account, auth = token, Company = data.PartyList, group = data.Group, menupage = menu.menu });
+                var pbx = new { uri = _config["PBX:WebSocketUri"].Str(), localhost = _config["PBX:Localhost"].Str() };
+                return Ok(new { result = result.result, account = result.account, auth = token, Company = data.PartyList, group = data.Group, menupage = menu.menu, pbx = pbx });
             }
             else if (result.result == Results.Failed)
                 return Ok(new { result = result.result, Message = result.message });

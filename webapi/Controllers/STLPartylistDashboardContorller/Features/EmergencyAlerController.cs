@@ -75,5 +75,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.emgyalert);
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("profile")]
+        public async Task<IActionResult> LoadEmergencyPofile(string userId)
+        {
+            var result = await _repo.LoadEmergencyPofile(userId);
+            if (result.result == Results.Success)
+                return Ok(result.profile);
+            return NotFound();
+        }
     }
 }
