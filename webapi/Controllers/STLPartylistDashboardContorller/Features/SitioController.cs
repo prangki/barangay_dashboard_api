@@ -29,9 +29,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         }
         [HttpPost]
         [Route("sitio")]
-        public async Task<IActionResult> Sitio(string code)
+        public async Task<IActionResult> Sitio(string code, int row = 0, string search="")
         {
-            var result = await _repo.LoadSitio(code);
+            var result = await _repo.LoadSitio(code, row, search);
             if (result.result == Results.Success)
                 return Ok(result.sit);
             return NotFound();

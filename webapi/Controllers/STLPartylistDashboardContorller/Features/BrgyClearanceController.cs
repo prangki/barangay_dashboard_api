@@ -35,7 +35,27 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         {
             var result = await _repo.BrgyClearanceAsync(request);
             if (result.result == Results.Success)
-                return Ok(new { Status = "ok", Message = result.message, ClearanceNo = result.brgyclrid, ControlNo=result.cntrlno });
+            {
+                return Ok(new { Status = "ok", Message = result.message, ClearanceNo = result.brgyclrid, ControlNo = result.cntrlno });
+            }
+            else if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message, URLDocument = "" });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("brgyclearance/export")]
+        public async Task<IActionResult> Task0a1([FromBody] BrgyClearance request)
+        {
+            var valresult = await validityReport(request);
+            if (valresult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult.result != Results.Success)
+                return NotFound();
+
+            var result = await _repo.Generate_BrgyClearance(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message});
             if (result.result == Results.Failed)
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();
@@ -97,7 +117,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         {
             var result = await _repo.ProcessRecivedBrgyClearanceRequestAsync(request);
             if (result.result == Results.Success)
+            {
                 return Ok(new { Status = "ok", Message = result.message });
+            }
             if (result.result == Results.Failed)
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();
@@ -114,6 +136,29 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             if(result.result == Results.Failed)
                 return Ok(new { Status = "error", requestdocument = result.reqdoc, totalrequestdocument = res.total_reqdoc });
             return NotFound();
+        }
+
+        private async Task<(Results result, string message)> validityReport(BrgyClearance request)
+        {
+            if (request == null)
+                return (Results.Null, null);
+            if (request.ExportedDocument.IsEmpty())
+                return (Results.Success, null);
+            byte[] bytes = Convert.FromBase64String(request.ExportedDocument.Str());
+            if (bytes.Length == 0)
+                return (Results.Failed, "Make sure you have internet connection.");
+            var res = await ReportService.SendAsync(bytes, $"barangayclearance_{request.PLID}{request.PGRPID}{request.ClearanceID}");
+            bytes.Clear();
+            if (res == null)
+                return (Results.Failed, "Please contact to admin.");
+            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+            if(json["status"].Str() != "error")
+            {
+                //request.URLDocument = json["url"].Str();
+                request.URLDocument = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
+                return (Results.Success, null);
+            }
+            return (Results.Null, "Make sure you have internet connection.");
         }
     }
 }

@@ -18,7 +18,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     public interface ISMSRepository
     {
         Task<(Results result, String message)> SMSINAsync(BIMSSMSIN req);
-        Task<(Results result, object resident)> SMSINNotification(FilterRequest req);
+        Task<(Results result, object totalunreadinbox, object resident)> SMSINNotification(FilterRequest req);
         Task<(Results result, String message)> ChatMessageReadAsync(MessengerAppRequest req);
     }
     public class SMSRespository : ISMSRepository
@@ -78,9 +78,10 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
-        public async Task<(Results result, object resident)> SMSINNotification(FilterRequest req)
+        public async Task<(Results result, object totalunreadinbox, object resident)> SMSINNotification(FilterRequest req)
         {
-            var results = _repo.DSpQuery<dynamic>($"dbo.spfn_SMSIN0A1", new Dictionary<string, object>()
+            //var results = _repo.DSpQuery<dynamic>($"dbo.spfn_SMSIN0A1", new Dictionary<string, object>()
+            var results = _repo.DSpQueryMultiple($"dbo.spfn_SMSIN0A1", new Dictionary<string, object>()
             {
                 {"parmplid", req.PL_ID},
                 {"parmpgrpid",req.PGRP_ID },
@@ -88,9 +89,15 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmmobileno", (req.MOB_NO == "") ? null : req.MOB_NO },
             });
             if (results != null)
-                return (Results.Success, SubscriberDto.GetSMSSenderList(results, 100));
+            {
+                var totalunreadmessage = SubscriberDto.GetTotalUnreadInbox(results.ReadSingleOrDefault());
+                var smsinbox = SubscriberDto.GetSMSSenderList(results.Read<dynamic>(), 100);
+                //return (Results.Success, null, SubscriberDto.GetSMSSenderList(results, 100));
+                return (Results.Success, totalunreadmessage, smsinbox);
+            }
+                
             //return (Results.Success, results);
-            return (Results.Null, null);
+            return (Results.Null, null, null);
         }
     }
 }

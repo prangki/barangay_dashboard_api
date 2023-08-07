@@ -31,6 +31,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> ReceivedBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req);
         Task<(Results result, String message)> ProcessBrgyBusinessClearanceRequestAsync(BrgyBusinessClearance req);
         Task<(Results result, object brgybizclearance)> Load_BrgyBizClearance(BrgyBusinessClearance req);
+        Task<(Results result, string message)> Generate_BrgyBizClearance(BrgyBusinessClearance req);
         Task<(Results result, object brgybizclearance)> Load_BrgyBizClearancebyID(BrgyBusinessClearance req);
         Task<(Results result, String message, object release)> ReleaseAsync(BrgyBusinessClearance req);
         Task<(Results result, String message, object cancel)> CancellAsync(BrgyBusinessClearance req);
@@ -409,6 +410,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> Generate_BrgyBizClearance(BrgyBusinessClearance req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BRGYBIZCLR0G", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmbrgybizclrid", req.BusinessClearanceID },
+                {"parmreqdocurlpath", req.URLDocument },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully saved!");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again!");
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Already Generated, Please try again!");
             }
             return (Results.Null, null);
         }

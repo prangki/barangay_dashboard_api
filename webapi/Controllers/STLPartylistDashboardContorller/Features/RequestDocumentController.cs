@@ -383,7 +383,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return (Results.Success, null);
             byte[] bytes = Convert.FromBase64String(request.BizReport.Str());
             if (bytes.Length == 0)
-                return (Results.Failed, "Make sure selected image is invalid.");
+                return (Results.Failed, "Make sure you have internet connection.");
             var res = await ReportService.SendAsync(bytes, request.ControlNo);
             bytes.Clear();
             if (res == null)
@@ -395,7 +395,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 
                 return (Results.Success, null);
             }
-            return (Results.Null, "Make sure selected image is invalid");
+            return (Results.Null, "Make sure you have internet connection.");
         }
     }
 }

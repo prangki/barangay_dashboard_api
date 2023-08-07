@@ -243,5 +243,24 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(result.templateform);
             return NotFound();
         }
+        [HttpPost]
+        [Route("templateforms/tagline")]
+        public async Task<IActionResult> Task0r(string formsid)
+        {
+            var result = await _repo.TemplateForms_Tagline(formsid);
+            if (result.result == Results.Success)
+                return Ok(result.tagline);
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("deathcertificatedetails/tagline")]
+        public async Task<IActionResult> Task0s(string formsid)
+        {
+            var result = await _repo.DeathCertificateDetails_Tagline(formsid);
+            if (result.result == Results.Success)
+                return Ok(result.tagline);
+            return NotFound();
+        }
     }
 }

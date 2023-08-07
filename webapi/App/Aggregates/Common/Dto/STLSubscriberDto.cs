@@ -651,13 +651,49 @@ namespace webapi.App.Aggregates.Common.Dto
             o.Userid = data["USR_ID"].Str();
             o.RankNo = data["RNK_NO"].Str();
             o.Committee = data["CMTE"].Str();
-            o.TermStart = Convert.ToDateTime(data["EF_DATE"].Str()).ToString("MMM dd, yyyy");
-            o.TermEnd = Convert.ToDateTime(data["EOT_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.TermStart = (data["EF_DATE"].Str().IsEmpty()) ? "" : Convert.ToDateTime(data["EF_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.TermEnd = (data["EOT_DATE"].Str().IsEmpty()) ? "" : Convert.ToDateTime(data["EOT_DATE"].Str()).ToString("MMM dd, yyyy");
             o.SignatureURL = data["SIGNATUREID"].Str();
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;
         }
 
+        public static IEnumerable<dynamic> GetAllBarangaySignatoryList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetAllBarangaySignatory_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //    filter.Userid = userid;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetAllBarangaySignatory_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_AllBarangaySignatory_List(e));
+        }
+        public static IDictionary<string, object> Get_AllBarangaySignatory_List(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.Position_ID = data["ID"].Str();
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.Userid = data["USR_ID"].Str();
+            o.Brgy_Official = data["BRGY_OFFICIAL"].Str();
+            o.Committee = data["CMTE"].Str();
+            o.Position = data["POSITION"].Str();
+            o.Tagline = data["TAGLINE"].Str();
+            o.Tagline_Sig = data["TAGLINE_SIG"].Str();
+            o.Brgy_Official_Sig = data["SIGNATURE_URL"].Str();
+            return o;
+        }
 
         public static IEnumerable<dynamic> GetAllRequestDocumentList(IEnumerable<dynamic> data, string userid = "", int limit = 100, bool fullinfo = true)
         {
@@ -1074,6 +1110,8 @@ namespace webapi.App.Aggregates.Common.Dto
             o.ContactDetails = data["CON_DET"].Str();
             o.Address = data["EST_ADR"].Str();
             o.EmailAddress = data["EMAIL_ADR"].Str();
+            o.CompanyLogo = data["LOGO"].Str();
+            o.EstablishmentLocation = data["URL_LINKED"].Str();
 
             //o.isLeader = Convert.ToBoolean(data["isLeader"].Str());
             return o;

@@ -44,6 +44,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmcontactdetails",req.ContactDetails },
                 {"parmaddress",req.Address },
                 {"parmemailaddress",req.EmailAddress },
+                {"parmcompanylogo",req.Company_Logo },
+                {"parmestablishmentlocation",req.EstablishmentLocation },
                 {"parmoptrid",account.USR_ID }
             }).ReadSingleOrDefault();
             if (results != null)

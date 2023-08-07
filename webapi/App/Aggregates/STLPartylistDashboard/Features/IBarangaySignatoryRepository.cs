@@ -10,6 +10,7 @@ using Infrastructure.Repositories;
 using webapi.App.Model.User;
 using webapi.Commons.AutoRegister;
 using webapi.App.Features.UserFeature;
+using webapi.App.Aggregates.Common.Dto;
 
 namespace webapi.App.Aggregates.STLPartylistDashboard.Features
 {
@@ -17,6 +18,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     public interface IBarangaySignatoryRepository
     {
         Task<(Results result, object signatory)> LoadSignatory();
+        Task<(Results result, object signatory)> LoadSignatoryA();
         Task<(Results result, String message)> SignatoryAsync(BrgySignatory request);
 
         Task<(Results result, String message)> SignatoryAsync02(BarangaySignatures signatory);
@@ -43,6 +45,18 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             });
             if (result != null)
                 return (Results.Success, result);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, object signatory)> LoadSignatoryA()
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGY_SIGNATORY0B", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID }
+            });
+            if (result != null)
+                //return (Results.Success, result);
+                return (Results.Success, STLSubscriberDto.GetAllBarangaySignatoryList(result, "", 100));
             return (Results.Null, null);
         }
 

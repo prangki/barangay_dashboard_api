@@ -631,6 +631,7 @@ namespace webapi.App.Aggregates.Common
         {
             dynamic o = Dynamic.Object;
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            //11-20
             o.Num_Row = data["Num_Row"].Str();
             o.PL_ID = data["PL_ID"].Str();
             //o.PSN_CD = data["PSN_CD"].Str();
@@ -644,6 +645,8 @@ namespace webapi.App.Aggregates.Common
             o.ACT_ID = data["ACT_ID"].Str();
             o.ACT_TYP = data["ACT_TYP"].Str();
             o.HouseNo = data["HSENO_ID"].Str();
+
+            //11-20
             o.HouseClassification = data["HSE_CLSFCTN"].Str();
             o.HouseOwner = data["HSE_OWNR"].Str();
             o.HouseholdNo = data["HHLD_ID"].Str();
@@ -654,15 +657,20 @@ namespace webapi.App.Aggregates.Common
             o.FRST_NM = data["FRST_NM"].Str();
             o.MDL_NM = data["MDL_NM"].Str();
             o.LST_NM = data["LST_NM"].Str();
+
+            //21-30
             o.NCK_NM = data["NCK_NM"].Str();
             o.FLL_NM = data["FLL_NM"].Str();
-            o.Religion = data["REL"].Str();
+            o.ReligionCode = data["REL"].Str();
+            o.Religion = data["Religion"].Str();
             o.MOB_NO = data["MOB_NO"].Str();
             o.EML_ADD = data["EML_ADD"].Str();
             o.USR_NM = data["USR_NM"].Str();
             o.Height = data["HEIGHT"].Str();
             o.Weight = data["WEIGHT"].Str();
             o.PRCNT_NO = data["PRCNT_NO"].Str();
+
+            //31-40
             o.CLSTR_NO = data["CLSTR_NO"].Str();
             o.SEQUENCE_NO = data["SEQUENCE_NO"].Str();
             o.HM_ADDR = data["HM_ADDR"].Str();
@@ -673,6 +681,8 @@ namespace webapi.App.Aggregates.Common
             o.LOC_PROV = data["LOC_PROV"].Str();
             o.LOC_PROV_NM = data["LOC_PROV_NM"].Str();
             o.LOC_MUN = data["LOC_MUN"].Str();
+
+            //41-50
             o.LOC_MUN_NM = data["LOC_MUN_NM"].Str();
             o.LOC_BRGY = data["LOC_BRGY"].Str();
             o.LOC_BRGY_NM = data["LOC_BRGY_NM"].Str();
@@ -683,8 +693,8 @@ namespace webapi.App.Aggregates.Common
             o.MRTL_STAT = data["MRTL_STAT"].Str();
             o.MRTL_STAT_NM = data["MRTL_STAT_NM"].Str();
             o.CTZNSHP = data["CTZNSHP"].Str();
-            o.ReligionCode = data["REL"].Str();
-            o.Religion = data["Religion"].Str();
+
+            //51-60
             o.IMG_URL = data["IMG_URL"].Str();
             o.BRT_DT = data["BRT_DT"].Str();
             o.PlaceOfBirth = data["PLC_BRT"].Str();
@@ -695,6 +705,8 @@ namespace webapi.App.Aggregates.Common
             o.SKLLS = data["SKLLS"].Str();
             o.PRF_PIC = data["PRF_PIC"].Str();
             o.LeftThumb = data["LEFT_THUMB"].Str();
+
+            //61-70
             o.LeftIndex = data["LEFT_POINTERFINGER"].Str();
             o.LeftMiddle = data["LEFT_MIDDLEFINGER"].Str();
             o.LeftRing = data["LEFT_RINGFINGER"].Str();
@@ -705,6 +717,8 @@ namespace webapi.App.Aggregates.Common
             o.RightRing = data["RIGHT_RINGFINGER"].Str();
             o.RightPinky = data["RIGHT_PINKYFINGER"].Str();
             o.Taken_ProfPic = data["TAKEN_PIC"].Str();
+
+            //71-80
             o.FR_ID = data["FR_ID"].Str();
             o.MO_ID = data["MO_ID"].Str();
             o.FrFirstName = data["FR_FRST_NM"].Str();
@@ -715,6 +729,8 @@ namespace webapi.App.Aggregates.Common
             o.FrEmail = data["FR_EML_ADD"].Str();
             o.FrAddress = data["FR_PRSNT_ADDRESS"].Str();
             o.MoFirstname = data["MOM_FRST_NM"].Str();
+
+            //81-90
             o.MoMiddleInitial = data["MOM_MI_NM"].Str();
             o.MoLastname = data["MOM_LST_NM"].Str();
             o.MoFullName = data["MOM_FLL_NM"].Str();
@@ -726,6 +742,8 @@ namespace webapi.App.Aggregates.Common
             o.S_BLCK = Convert.ToBoolean((data["S_BLCK"].Str() == "0") ? 0 : 1);
             o.Age = data["AGE"].Str();
             o.WDisability = (data["WDISABILITY"].Str() == "") ? 0 : Convert.ToInt32(data["WDISABILITY"].Str());
+
+            //91-100
             o.TypeDisability = data["TYPE_DISABILITY"].Str();
             o.RegisterVoter = (data["REGISTERVOTER"].Str() == "") ? 0 : Convert.ToInt32(data["REGISTERVOTER"].Str());
             o.WChildren = (data["WDependent"].Str() == "") ? 0 : Convert.ToInt32(data["WDependent"].Str());
@@ -736,6 +754,8 @@ namespace webapi.App.Aggregates.Common
             o.TotalSummon = (data["TTL_SUMMON"].Str() == "") ? 0 : Convert.ToInt32(data["TTL_SUMMON"].Str());
             o.CauseofDeath = data["CAUSEOFDEATH"].Str();
             o.DiedDate = data["DCDATE"].Str();
+
+            //101-110
             o.DiedTime = data["DCTIME"].Str();
             //o.PermanentResidence = (data["PERM_RES"].Str() == "") ? 0 : Convert.ToInt32(data["PERM_RES"].Str());
 
@@ -821,17 +841,26 @@ namespace webapi.App.Aggregates.Common
             o.PL_ID = data["PL_ID"].Str();
             o.PGRP_ID = data["PGRP_ID"].Str();
             o.TitleName = data["NM_TTL"].Str();
+            o.Requestor = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
             o.RequestDocument = data["RequestDocument"].Str();
             o.Doc_ID = data["DOC_ID"].Str();
             o.ClearanceNo = data["ID"].Str();
             o.ControlNo = data["CNTRL_NO"].Str();
+            o.Template_ID = data["TPL_ID"].Str();
+            o.Template_NM = data["TPL_NM"].Str();
+            o.TemplateType_ID = data["TPLTYP_ID"].Str();
+            o.TemplateType_NM = data["TPLTTYP_NM"].Str();
+            o.CauseofDeath = data["CAUSEOFDEATH"].Str();
+            o.Died_Date = (data["DIED_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["DIED_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.Died_Time = data["DIED_TIME"].Str();
             o.UserID = data["USR_ID"].Str();
             o.ResidentIDNo = data["RESIDENT_ID_NO"].Str();
-            o.Requestor = textInfo.ToUpper(textInfo.ToLower(data["FLL_NM"].Str()));
             o.ProfileImageUrl = data["IMG_URL"].Str();
             o.MobileNo = data["MOB_NO"].Str();
             o.Requested_Date = (data["Requested_Date"].Str() == "") ? "" : Convert.ToDateTime(data["Requested_Date"].Str()).ToString("MMM dd, yyyy");
             o.Appointment_Date = (data["Appointment_Date"].Str() == "") ? "" : Convert.ToDateTime(data["Appointment_Date"].Str()).ToString("MMM dd, yyyy");
+            o.DateReleased = (data["ReleaseDate"].Str() == "") ? "" : Convert.ToDateTime(data["ReleaseDate"].Str()).ToString("MMM, dd, yyyy");
+            o.DateCancelled = (data["CancelledDate"].Str() == "") ? "" : Convert.ToDateTime(data["CancelledDate"].Str()).ToString("MMM, dd, yyyy");
             o.ClearanceType = data["CERTTYP_ID"].Str();
             return o;
         }
@@ -888,6 +917,7 @@ namespace webapi.App.Aggregates.Common
             o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
             o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
 
+            o.Requested_Date = (data["RGS_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["RGS_TRN_TS"].Str()).ToString("MMM dd, yyyy");
             o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
             o.MosValidity = (data["MOS_VAL"].Str() == "") ? 0 : Convert.ToInt32(data["MOS_VAL"].Str());
             o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
@@ -898,10 +928,18 @@ namespace webapi.App.Aggregates.Common
             o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
             o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
             o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.URLDocument = data["URL_DOCPATH"].Str();
             return o;
         }
 
-
+        public static IDictionary<string, object> GetTotalUnreadInbox(IDictionary<string, object> data, bool fullinfo = true)
+        {
+            dynamic o = Dynamic.Object;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.TotalUnRead = data["TTL_UNREAD_MESSAGE"].Str();
+            return o;
+        }
         public static IEnumerable<dynamic> GetSMSSenderList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
         {
             if (data == null) return null;
@@ -979,6 +1017,7 @@ namespace webapi.App.Aggregates.Common
             o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
             o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
 
+            o.Requested_Date = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
             o.ProcessDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
             o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
             o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
@@ -988,9 +1027,78 @@ namespace webapi.App.Aggregates.Common
             o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
             o.StatusRequest = (data["STAT_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["STAT_REQ"].Str());
             o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.URLDocument = data["URL_DOCPATH"].Str();
             return o;
         }
 
+        public static IEnumerable<dynamic> GetDeathCertificateList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            var items = GetDeathCertificate_List(data);
+            var count = items.Count();
+            //if (count >= limit)
+            //{
+            //    var o = items.Last();
+            //    var filter = (o.NextFilter = Dynamic.Object);
+            //    items = items.Take(count - 1).Concat(new[] { o });
+            //    filter.NextFilter = o.num_row;
+            //}
+            return items;
+        }
+        public static IEnumerable<dynamic> GetDeathCertificate_List(IEnumerable<dynamic> data, bool fullinfo = true)
+        {
+            if (data == null) return null;
+            return data.Select(e => Get_DeathCertificate_List(e));
+        }
+        public static IDictionary<string, object> Get_DeathCertificate_List(IDictionary<string, object> data)
+        {
+            dynamic o = Dynamic.Object;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            o.PL_ID = data["PL_ID"].Str();
+            o.PGRP_ID = data["PGRP_ID"].Str();
+            o.DeathCertificateID = data["DC_ID"].Str();
+            o.ControlNo = data["CNTRL_NO"].Str();
+            o.DeceasedID = data["USR_ID"].Str();
+            o.DeceasedName = data["FLL_NM"].Str();
+            o.ProfileImageUrl = data["IMG_URL"].Str();
+            o.MobileNo = data["MOB_NO"].Str();
+            o.Resident_ID = data["RESIDENT_ID_NO"].Str();
+            o.CauseofDeath = data["CAUSEOFDEATH"].Str();
+            o.DiedDate = (data["DCDATE"].Str() == "") ? "" : Convert.ToDateTime(data["DCDATE"].Str()).ToString("MMM dd, yyyy");
+            o.DiedTime = data["DCTIME"].Str();
+            o.DiedAge = data["AGE"].Str();
+
+            o.ORNumber = data["OR_NO"].Str();
+            o.OR_DOI = Convert.ToDateTime(data["OR_DOI"].Str()).ToString("MMM, dd, yyyy");
+            o.AmountPaid = (data["AMOUNT_PAID"].Str() == "") ? Convert.ToDouble("0").ToString("n2") : Convert.ToDouble(data["AMOUNT_PAID"].Str()).ToString("n2");
+            o.DocStamp = (data["AMOUNT_PAID"].Str() == "") ? Convert.ToDouble("0").ToString("n2") : Convert.ToDouble(data["DOC_STAMP"].Str()).ToString("n2");
+
+            o.EnableCTC = (data["ENABLECTC"].Str() == "") ? false : Convert.ToBoolean(data["ENABLECTC"].Str());
+            o.CTC = data["CTC"].Str();
+            o.CTCIssuedOn = data["CTCISSUEDON"].Str();
+            o.CTCIssuedAt = data["CTCISSUEDAT"].Str();
+
+            o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
+            o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
+
+
+            o.ProcessDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
+            o.DateRelease = (data["DATERELEASED"].Str() == "") ? "" : Convert.ToDateTime(data["DATERELEASED"].Str()).ToString("MMM dd, yyyy");
+            o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyy");
+            o.URLDocument = data["URL_DOCPATH"].Str();
+
+            /*
+            o.Requested_Date = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.ProcessDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
+            o.ReleasedBy = textInfo.ToUpper(textInfo.ToLower(data["RELEASEDBY"].Str()));
+            o.Cancelled = (data["CANCELLED"].Str() == "") ? false : Convert.ToBoolean(data["CANCELLED"].Str());
+            o.CancelledBy = textInfo.ToUpper(textInfo.ToLower(data["CANCELLEDBY"].Str()));
+            o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
+            o.StatusRequest = (data["STAT_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["STAT_REQ"].Str());
+            */
+            return o;
+        }
 
         public static IEnumerable<dynamic> GetLegalDocumentDetailsList(IEnumerable<dynamic> data, int limit = 100, bool fullinfo = true)
         {
@@ -1083,6 +1191,7 @@ namespace webapi.App.Aggregates.Common
             o.VerifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["VERIFIEDBY"].Str()));
             o.CertifiedBy = textInfo.ToTitleCase(textInfo.ToLower(data["CERTIFIEDBY"].Str()));
 
+            o.Requested_Date = (data["RGS_TRN_TS"].Str() == "") ? "" : Convert.ToDateTime(data["RGS_TRN_TS"].Str()).ToString("MMM dd yyyy");
             o.Release = (data["RELEASED"].Str() == "") ? false : Convert.ToBoolean(data["RELEASED"].Str());
             o.MosValidity = (data["MOS_VAL"].Str() == "") ? 0 : Convert.ToInt32(data["MOS_VAL"].Str());
             o.IssuedDate = (data["DATEPROCESS"].Str() == "") ? "" : Convert.ToDateTime(data["DATEPROCESS"].Str()).ToString("MMM dd, yyyy");
@@ -1094,6 +1203,7 @@ namespace webapi.App.Aggregates.Common
             o.CancelledDate = (data["DATECANCELLED"].Str() == "") ? "" : Convert.ToDateTime(data["DATECANCELLED"].Str()).ToString("MMM dd, yyyy");
             o.StatusRequest = (data["STAT_REQ"].Str() == "") ? 0 : Convert.ToInt32(data["STAT_REQ"].Str());
             o.AppointmentDate = (data["APP_DATE"].Str() == "") ? "" : Convert.ToDateTime(data["APP_DATE"].Str()).ToString("MMM dd, yyyyy");
+            o.URLDocument = data["URL_DOCPATH"].Str();
             return o;
         }
 

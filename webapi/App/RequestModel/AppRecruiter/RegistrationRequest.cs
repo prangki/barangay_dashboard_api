@@ -149,6 +149,8 @@ namespace webapi.App.RequestModel.AppRecruiter
         public int Verified;
         public List<FingerImage> ImageList;
         public List<GovAttachment> GovIDList;
+        public string ExportedDocument;
+        public string URLDocument;
         public class FingerImage
         {
             public int Id;
@@ -235,6 +237,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string APKName;
         public string APKPath;
         public string APKPathCBA;
+        public byte[] APK_File;
     }
     public class GroupLeader
     {
@@ -517,6 +520,9 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string ContactDetails;
         public string Address;
         public string EmailAddress;
+        public string CompanyLogo;
+        public string Company_Logo;
+        public string EstablishmentLocation;
     }
     public class Establishment_Request
     {
@@ -541,6 +547,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string TypeofTemplateNM;
         public string TemplateID;
         public string TemplateNM;
+        public string DeathCertificateID;
         public string ORNumber;
         public string AmountPaid;
 
@@ -574,6 +581,8 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string AppointmentDate;
         public string VerifiedBy;
         public string CertifiedBy;
+        public string ExportedDocument;
+        public string URLDocument;
     }
 
     public class GovernmentValidID
@@ -596,6 +605,7 @@ namespace webapi.App.RequestModel.AppRecruiter
         public string BarangayCode;
         public string FormContent;
         public string FormName;
+        public string iTagline;
     }
     public class ResidentType
     {

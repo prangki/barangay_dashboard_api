@@ -21,6 +21,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     {
         Task<(Results result, String message, String brgyclrid, String cntrlno)> BrgyClearanceAsync(BrgyClearance req, bool isUpdate = false);
         Task<(Results result, object bryclrid)> Load_BrgyClearance(BrgyClearance req);
+        Task<(Results result,string message)> Generate_BrgyClearance(BrgyClearance req);
         Task<(Results result, object bryclrid)> Load_BrgyClearanceID(BrgyClearance req);
         Task<(Results result, String message, object release)> ReleaseAsync(BrgyClearance req);
         Task<(Results result, String message, object cancel)> CancellAsync(BrgyClearance req);
@@ -263,6 +264,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 }
             }
             //return (Results.Success, results);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> Generate_BrgyClearance(BrgyClearance req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BRGYCLR0H", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmbrgyclrid", req.ClearanceID },
+                {"parmreqdocurlpath", req.URLDocument },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully saved!");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again!");
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Already Generated, Please try again!");
+            }
             return (Results.Null, null);
         }
     }
