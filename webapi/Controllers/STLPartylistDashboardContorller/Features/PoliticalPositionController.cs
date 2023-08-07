@@ -65,5 +65,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("barangayposition/search")]
+        public async Task<IActionResult> BarangayPosition(string userId)
+        {
+            var result = await _repo.SearchBarangayPosition(userId);
+            if (result.result == Results.Success)
+                return Ok(result.position);
+            return NotFound();
+        }
     }
 }
