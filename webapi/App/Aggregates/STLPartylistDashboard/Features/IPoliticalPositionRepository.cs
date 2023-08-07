@@ -17,6 +17,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object psn)> LoadPoliticalPosition();
         Task<(Results result, String message)> PoliticalPositionAsyn(string psn, string psncd="", bool isUpdate = false);
         Task<(Results result, object psn)> LoadBarangayPosition();
+        Task<(Results result, object position)> SearchBarangayPosition(string userid);
     }
     public class PoliticalPositionRepository : IPoliticalPositionRepository
     {
@@ -73,6 +74,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmplid",account.PL_ID },
                 {"parmpgrpid",account.PGRP_ID },
                 {"parmbrgy", account.LOC_BRGY }
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, object position)> SearchBarangayPosition(string userid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSSIDPOS", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmusrid", userid }
             });
             if (result != null)
                 return (Results.Success, result);
