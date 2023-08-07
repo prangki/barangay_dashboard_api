@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Bcpg;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -520,6 +521,13 @@ namespace webapi.App.STLDashboardModel
             public string Index;
             public string Image;
         }
+    }
+
+    public class VirtualID
+    {
+        public string UserId;
+        public string FrontIdImageUrl;
+        public string BackIdImageUrl;
     }
 }
 
