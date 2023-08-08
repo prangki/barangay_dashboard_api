@@ -367,6 +367,13 @@ namespace webapi.App.STLDashboardModel
         public string xml = null;
     }
 
+    public class Sitioreport
+    {
+        public string json = null;
+        public int type;
+    }
+
+
     public class DocumentStatistics
     {
         public int type;
