@@ -118,7 +118,7 @@ namespace webapi.Controllers.STLPartylistDashboardContorller
                 var menu = await _repo.LoadPGS02(result.account.PROFILE_ID.Str(), result.account.ACT_TYP);
                 var data = await _repo.MemberGroup(result.account);
                 var pbx = new { uri = _config["PBX:WebSocketUri"].Str(), localhost = _config["PBX:Localhost"].Str() };
-                return Ok(new { result = result.result, account = result.account, auth = token, Company = data.PartyList, group = data.Group, menupage = menu.menu, pbx = pbx });
+                return Ok(new { result = result.result, account = result.account, auth = token, Company = data.PartyList, group = data.Group, menupage = menu.menu, pbx = pbx, fileserver = _config["Portforwarding:URL"].Str() });
             }
             else if (result.result == Results.Failed)
                 return Ok(new { result = result.result, Message = result.message });

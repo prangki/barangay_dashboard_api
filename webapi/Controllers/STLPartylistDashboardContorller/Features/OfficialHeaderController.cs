@@ -80,7 +80,8 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                     //    request.BrgyOfficialLogo = jsonbrgy["url"].Str();
                     if(jsonbrgy["status"].Str() != "error")
                     {
-                        request.BrgyOfficialLogo = jsonbrgy["url"].Str();
+                        //request.BrgyOfficialLogo = jsonbrgy["url"].Str();
+                        request.BrgyOfficialLogo = (jsonbrgy["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
                     }
                 }
                 if (!request.iMunicipalLogo.IsEmpty() && request.MunLogoChange == 1)
@@ -95,7 +96,8 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                     var jsonmun = JsonConvert.DeserializeObject<Dictionary<string, object>>(resmun);
                     if (jsonmun["status"].Str() != "error")
                     {
-                        request.MunicipalLogo = jsonmun["url"].Str();
+                        //request.MunicipalLogo = jsonmun["url"].Str();
+                        request.MunicipalLogo = (jsonmun["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
                     }
                 }
                 return (Results.Success, null);

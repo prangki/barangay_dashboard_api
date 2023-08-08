@@ -23,6 +23,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, string message)> SaveBlotterV2(Blotter info);
         Task<(Results result, string message)> UpdateBlotter(Blotter info);
         Task<(Results result, string message)> UpdateBlotterV2(Blotter info);
+        Task<(Results result, string message)> BlotterReceivedAsync(Blotter info);
+
         Task<(Results result, object blotter)> LoadBlotter(int id, int currentRow, string from, string to);
         Task<(Results result, object blotter)> LoadBlotterV2(int status);
         Task<(Results result, object blotter)> LoadBlotterNotification(FilterRequest req);
@@ -120,7 +122,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmincdt",info.DateOfIncident},
                 {"parminctm",info.TimeOfIncident},
                 {"parmstmt",info.Statement},
-                {"parmjsonattchmt",info.JsonAttachment},
+                //{"parmjsonattchmt",info.JsonAttachment},
+                {"parmjsonattchmt",info.iAttachments},
                 {"parmcrtdby",info.BarangaySecretary}
                 //{"paraminctm",info.TimeOfIncident},
                 //{"paramcrtdby",info.BarangaySecretary},
@@ -197,6 +200,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parminctm",info.TimeOfIncident},
                 {"parmstmt",info.Statement},
                 //{"parmjsonattchmt",info.JsonAttachment},
+                {"parmjsonattchmt",info.iAttachments},
                 {"parmstlmt",info.TermsOfSettlement},
                 {"parmawrd",info.Award},
                 {"parmsumdt",info.SummonDate},
@@ -219,6 +223,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "Already Exist");
                 else if (ResultCode == "2")
                     return (Results.Null, null);
+            }
+            return (Results.Null, null);
+
+        }
+        public async Task<(Results result, string message)> BlotterReceivedAsync(Blotter info)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BRGYBLTR02A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID},
+                {"parmpgrpid",account.PGRP_ID},
+                {"parmbrgycsno",info.BarangayCaseNo},
+                {"parmoptrid",account.USR_ID}
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully update");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again!");
+                else if (ResultCode == "2")
+                    return (Results.Null, "Please check details, Try again!");
             }
             return (Results.Null, null);
 

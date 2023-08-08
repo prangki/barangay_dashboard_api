@@ -23,7 +23,9 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message)> Delete_FormTab(LegalDocument req);
         Task<(Results result, String message, object legaldoc)> LegalDocAsync(LegalDocument_Transaction req);
         Task<(Results result, object legaldoc)> Load_LegalDoc(LegalDocument_Transaction req);
+        Task<(Results result, string message)> Generate_LegalDoc(LegalDocument_Transaction req);
         Task<(Results result, object legaldoc)> Load_LegalDocID(LegalDocument_Transaction req);
+        Task<(Results result, object legaldoc)> Load_DeathCertificateID(LegalDocument_Transaction req);
         Task<(Results result, object legaldocdetails)> Load_LegalDocDetails(LegalDocument_Transaction req);
         Task<(Results result, String message, object release)> ReleaseAsync(LegalDocument_Transaction req);
         Task<(Results result, String message, object cancel)> CancellAsync(LegalDocument_Transaction req);
@@ -160,6 +162,19 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, object legaldoc)> Load_DeathCertificateID(LegalDocument_Transaction req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSDC0B", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmdcid", req.DeathCertificateID },
+            });
+            if (result != null)
+                return (Results.Success, SubscriberDto.GetDeathCertificateList(result, 100));
+            return (Results.Null, null);
+        }
+
         public async Task<(Results result, object legaldocdetails)> Load_LegalDocDetails(LegalDocument_Transaction req)
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_LGLDOC0D", new Dictionary<string, object>()
@@ -278,6 +293,30 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                     return (Results.Failed, "Legal Document not exist!");
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message)> Generate_LegalDoc(LegalDocument_Transaction req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_LGLDOC0H", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmlgldocid", req.LegalFormsID },
+                {"parmreqdocurlpath", req.URLDocument },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully saved!");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again!");
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Already Generated, Please try again!");
             }
             return (Results.Null, null);
         }

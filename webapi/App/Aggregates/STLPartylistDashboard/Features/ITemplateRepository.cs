@@ -29,6 +29,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, String message, String descid)> ItemTabAsyn(ItemDescription req);
         Task<(Results result, object item)> Load_ItemTab(ItemDescription req);
         Task<(Results result, object tagline)> Load_Tagline(string templateid);
+        Task<(Results result, object tagline)> TemplateForms_Tagline(string formsid);
+        Task<(Results result, object tagline)> DeathCertificateDetails_Tagline(string formsid);
         Task<(Results result, object restype)> Load_ResType();
         Task<(Results result, String message, String resid)> ResidentTypeAsync(ResidentType req);
         Task<(Results result, String message)> RemoveResidentType(ResidentType req);
@@ -219,6 +221,31 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null);
         }
 
+        public async Task<(Results result, object tagline)> TemplateForms_Tagline(string formsid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSFRMTAGLINE0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbarangayformsid",formsid }
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+        public async Task<(Results result, object tagline)> DeathCertificateDetails_Tagline(string formsid)
+        {
+            var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSDCDETAILS0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmbarangayformsid",formsid }
+            });
+            if (result != null)
+                return (Results.Success, result);
+            return (Results.Null, null);
+        }
+
         public async Task<(Results result, object restype)> Load_ResType()
         {
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_BIMSRESTYP0B", new Dictionary<string, object>()
@@ -334,6 +361,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmdoccontent",req.FormContent },
                 {"parmbarangayformsid",req.FormID },
                 {"parmbarangayformname",req.FormName },
+                {"parmtagline",req.iTagline },
                 {"parmoptrid",account.USR_ID }
             }).FirstOrDefault();
             if (result != null)

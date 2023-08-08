@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Bcpg;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -272,6 +273,7 @@ namespace webapi.App.STLDashboardModel
         public string PangkatFMember;
         public string PangkatSMember;
         public List<string> Attachments;
+        public String iAttachments;
         public int Status;
         public string TemplateId;
         public string TemplateName;
@@ -453,11 +455,15 @@ namespace webapi.App.STLDashboardModel
         public string UserID;
         public string Requestor;
 
+        public int exportDoc;
+
         public string IssuedDate;
         public string ExpiryDate;
         public int MosValidity;
         public int StatusRequest;
         public string AppointmentDate;
+        public string ExportedDocument;
+        public string URLDocument;
     }
 
     public class DOD
@@ -484,6 +490,9 @@ namespace webapi.App.STLDashboardModel
         public string CertifiedBy;
 
         public string IssuedDate;
+        public string iTagline;
+        public string ExportedDocument;
+        public string URLDocument;
     }
     public class BrgyBusinessClearance
     {
@@ -507,6 +516,8 @@ namespace webapi.App.STLDashboardModel
         public string CertifiedBy;
         public string AppointmentDate;
         public int StatusRequest;
+        public string ExportedDocument;
+        public string URLDocument;
     }
 
     public class Fingerprint
@@ -527,6 +538,13 @@ namespace webapi.App.STLDashboardModel
             public string Index;
             public string Image;
         }
+    }
+
+    public class VirtualID
+    {
+        public string UserId;
+        public string FrontIdImageUrl;
+        public string BackIdImageUrl;
     }
 }
 

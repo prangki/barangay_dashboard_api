@@ -17,7 +17,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
     public interface ISitioRepository
     {
         Task<(Results result, String message, String sitcode)> SitioAsync(Sitio sit, bool isUpdate = false);
-        Task<(Results result, object sit)> LoadSitio(string code);
+        Task<(Results result, object sit)> LoadSitio(string code, int row = 0, string search = "");
         Task<(Results result, object brgy)> LoadBrgy(BarangayList reques);
         Task<(Results result, object brgy)> LoadBrgyPerTown(string strmun);
         Task<(Results result, object sit)> LoadSitioPerBarangay(string strcode);
@@ -62,7 +62,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             return (Results.Null, null, null);
         }
 
-        public async Task<(Results result, object sit)> LoadSitio(string code)
+        public async Task<(Results result, object sit)> LoadSitio(string code, int row = 0, string search = "")
         {
             //var result = _repo.DQuery<dynamic>($"dbo.spfn_LLL0B");
             //if (result != null)
@@ -74,6 +74,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
             var result = _repo.DSpQuery<dynamic>($"dbo.spfn_LLL0B", new Dictionary<string, object>()
             {
                 {"parmcode",code },
+                {"parmrownum",row },
+                {"parmsrch",search },
             });
             if (result != null)
                 return (Results.Success, result);

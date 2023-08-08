@@ -49,9 +49,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         {
             var result = await _repo.SMSINNotification(req);
             if (result.result == Results.Success)
-                return Ok(new { Status = "ok", sender = result.resident });
+                return Ok(new { Status = "ok", totalunreadinbox = result.totalunreadinbox, sender = result.resident });
             if (result.result == Results.Failed)
-                return Ok(new { Status = "error", sender = result.resident });
+                return Ok(new { Status = "error", totalunreadinbox = result.totalunreadinbox, sender = result.resident });
             return NotFound();
         }
         [HttpPost]

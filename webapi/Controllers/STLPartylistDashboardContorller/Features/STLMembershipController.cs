@@ -74,6 +74,58 @@ namespace webapi.Controllers.STLPartylistMembership.Features
 
 
         [HttpPost]
+        [Route("deathcertificate/export")]
+        public async Task<IActionResult> Task0a1([FromBody] DOD request)
+        {
+            var valresult = await validity_exportdocument(request);
+            if (valresult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult.result != Results.Success)
+                return NotFound();
+
+            var result = await _repo.Generate_DeathCertificate(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("deathcertificate/release")]
+        public async Task<IActionResult> Death_Certificate([FromBody] DOD request)
+        {
+            var result = await _repo.Release_DeathCertificateAsync(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message, Release = result.release });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
+        private async Task<(Results result, string message)> validityReport_DeathCertificate(DOD request)
+        {
+            if (request == null)
+                return (Results.Null, null);
+            if (request.ExportedDocument.IsEmpty())
+                return (Results.Success, null);
+            byte[] bytes = Convert.FromBase64String(request.ExportedDocument.Str());
+            if (bytes.Length == 0)
+                return (Results.Failed, "Make sure you have internet connection.");
+            var res = await ReportService.SendAsync(bytes, $"deathcertificate_{request.PLID}{request.PGRPID}{request.DeathCertificateNo}");
+            bytes.Clear();
+            if (res == null)
+                return (Results.Failed, "Please contact to admin.");
+            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+            if (json["status"].Str() != "error")
+            {
+                //request.URLDocument = json["url"].Str();
+                request.URLDocument = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
+                return (Results.Success, null);
+            }
+            return (Results.Null, "Make sure you have internet connection.");
+        }
+
+        [HttpPost]
         [Route("logout")]
         public async Task<IActionResult> Log_out()
         {
@@ -382,18 +434,27 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             if (request.Signature.IsEmpty())
                 //return (Results.Failed, "Please select an Signature.");
                 return (Results.Success, "Please select an Signature.");
-            byte[] bytes = Convert.FromBase64String(request.Signature.Str());
-            if (bytes.Length == 0)
-                return (Results.Failed, "Make sure selected image is invalid.");
-            var res = await ImgService.SendAsync(bytes);
-            bytes.Clear();
-            if (res == null)
-                return (Results.Failed, "Please contact to admin.");
-            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
-            if (json["status"].Str() != "error")
+            if (request.Signature.StartsWith("http"))
             {
-                request.SignatureURL = json["url"].Str();
+                request.SignatureURL = request.Signature;
                 return (Results.Success, null);
+            }
+            else
+            {
+                byte[] bytes = Convert.FromBase64String(request.Signature.Str());
+                if (bytes.Length == 0)
+                    return (Results.Failed, "Make sure selected image is invalid.");
+                var res = await ImgService.SendAsync(bytes);
+                bytes.Clear();
+                if (res == null)
+                    return (Results.Failed, "Please contact to admin.");
+                var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                if (json["status"].Str() != "error")
+                {
+                    //request.SignatureURL = json["url"].Str();
+                    request.SignatureURL = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
+                    return (Results.Success, null);
+                }
             }
             return (Results.Null, "Make sure selected image is invalid");
         }
@@ -409,25 +470,57 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 request.ImageUrl = "";
                 return (Results.Success, null);
             }
-                
-            byte[] bytes = Convert.FromBase64String(request.Img.Str());
-            if (bytes.Length == 0)
+            if (request.Img.StartsWith("http"))
             {
-                request.ImageUrl = "";
+                request.ImageUrl = request.Img;
+
                 return (Results.Success, null);
             }
-                
-            var res = await ImgService.SendAsync(bytes);
+            else
+            {
+                byte[] bytes = Convert.FromBase64String(request.Img.Str());
+                if (bytes.Length == 0)
+                {
+                    request.ImageUrl = "";
+                    return (Results.Success, null);
+                }
+
+                var res = await ImgService.SendAsync(bytes);
+                bytes.Clear();
+                if (res == null)
+                    return (Results.Failed, "Please contact to admin.");
+                var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                if (json["status"].Str() != "error")
+                {
+                    //request.ImageUrl = json["url"].Str();
+                    request.ImageUrl = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
+                    return (Results.Success, null);
+                }
+            }
+            return (Results.Null, "Make sure selected image is invalid");
+        }
+
+        private async Task<(Results result, string message)> validity_exportdocument(DOD request)
+        {
+            if (request == null)
+                return (Results.Null, null);
+            if (request.ExportedDocument.IsEmpty())
+                return (Results.Success, null);
+            byte[] bytes = Convert.FromBase64String(request.ExportedDocument.Str());
+            if (bytes.Length == 0)
+                return (Results.Failed, "Make sure you have internet connection.");
+            var res = await ReportService.SendAsync(bytes, $"deathcertificate_{request.PLID}{request.PGRPID}{request.DeathCertificateNo}");
             bytes.Clear();
             if (res == null)
                 return (Results.Failed, "Please contact to admin.");
             var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
             if (json["status"].Str() != "error")
             {
-                request.ImageUrl = json["url"].Str();
+                //request.URLDocument = json["url"].Str();
+                request.URLDocument = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
                 return (Results.Success, null);
             }
-            return (Results.Null, "Make sure selected image is invalid");
+            return (Results.Null, "Make sure you have internet connection.");
         }
 
         private async Task<(Results result, string message)> validityReport(STLMembership request)
@@ -444,16 +537,25 @@ namespace webapi.Controllers.STLPartylistMembership.Features
             {
                 if (item.Image != null)
                 {
-                    bytes = Convert.FromBase64String(item.Image);
-                    if (bytes.Length == 0)
-                        return (Results.Failed, "Make sure selected document path is invalid.");
-                    var res = await ImgService.SendAsync(bytes);
-                    bytes.Clear();
-                    if (res == null)
-                        return (Results.Failed, "Please contact to admin.");
-                    var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
-                    if (json["status"].Str() != "error")
-                        dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
+                    if (item.Image.StartsWith("http"))
+                    {
+                        dictionary.Add(item.Index, item.Image.Replace("www.", ""));
+                    }
+                    else
+                    {
+                        bytes = Convert.FromBase64String(item.Image);
+                        if (bytes.Length == 0)
+                            return (Results.Failed, "Make sure selected document path is invalid.");
+                        var res = await ImgService.SendAsync(bytes);
+                        bytes.Clear();
+                        if (res == null)
+                            return (Results.Failed, "Please contact to admin.");
+                        var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                        if (json["status"].Str() != "error")
+                            //dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
+                            dictionary.Add(item.Index, json["url"].Str().Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str()));
+                    }
+                    
                 }
                 else
                     dictionary.Add(item.Index, null);
@@ -489,7 +591,8 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                     if (json["status"].Str() != "error")
                     {
                         //dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
-                        string url = json["url"].Str();
+                        //string url = json["url"].Str();
+                        string url = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
                         sb.Append($"<governemntid GOVVAL_ID=\"{item.govvalid}\" GOVVAL_ID_NO=\"{item.govvalid_no}\" ATTACHMENT=\"{url}\" />");
                         //request.GovIDList[i] = url;
                     }
@@ -696,5 +799,7 @@ namespace webapi.Controllers.STLPartylistMembership.Features
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
         }
+
+        
     }
 }

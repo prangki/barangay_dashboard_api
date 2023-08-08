@@ -45,6 +45,8 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object skl)> Load_Skills(string search);
         Task<(Results result, String message)> AssigendSkin(string skin);
         Task<(Results result, String message)> ResidenceDODAsyn(DOD req, bool isUpdate = false);
+        Task<(Results result, String message)> Generate_DeathCertificate(DOD req);
+
 
         Task<(Results result, object household)> ProfileGet();
         Task<(Results result, object household)> ProfileGetSubscriberProfile();
@@ -62,6 +64,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
         Task<(Results result, object message)> SystemUserDelete(string userid);
         Task<(Results result, object message)> SystemUserDelete02(string plid, string pgrpid, string userid);
         Task<(Results result, string message)> LogOutAsyn();
+        Task<(Results result, string message, object release)> Release_DeathCertificateAsync(DOD req);
     }
     public class STLMembershipRepository : ISTLMembershipRepository
     {
@@ -534,6 +537,7 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 {"parmctcno",req.CTCNo },
                 {"parmctcissuedat",req.CTCIssuedAt },
                 {"parmctcissuedon",req.CTCIssuedOn },
+                {"parmtagline",req.iTagline },
                 {"parmoptrid",account.USR_ID }
             }).ReadSingleOrDefault();
             if (results != null)
@@ -550,12 +554,12 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                         req.VerifiedBy = row["VERIFIEDBY"].Str();
                         req.CertifiedBy = row["CERTIFIEDBY"].Str();
                     }
-                    return (Results.Success, "Clearance succesfully saved!");
+                    return (Results.Success, "Death Certificate succesfully saved!");
                 }
                 else if (ResultCode == "0")
                     return (Results.Failed, "Check your Data, Please try again!");
                 else if (ResultCode == "2")
-                    return (Results.Failed, "This Account was In-Active!");
+                    return (Results.Failed, "Death Certificate already Exist");
             }
             return (Results.Null, null);
         }
@@ -936,6 +940,54 @@ namespace webapi.App.Aggregates.STLPartylistDashboard.Features
                 else if (ResultCode == "2")
                     return (Results.Failed, "Please try again!");
                 return (Results.Failed, "Somethings wrong in your data. Please try again!");
+            }
+            return (Results.Null, null);
+        }
+
+        public async Task<(Results result, string message, object release)> Release_DeathCertificateAsync(DOD req)
+        {
+            var results = _repo.DSpQueryMultiple($"dbo.spfn_BIMSDCREL0A", new Dictionary<string, object>()
+            {
+                {"parmplid",account.PL_ID },
+                {"parmpgrpid",account.PGRP_ID },
+                {"parmdcid", req.DCID },
+                {"parmcontrolno", req.ControlNo },
+                {"parmoptrid",account.USR_ID }
+            }).ReadSingleOrDefault();
+            if (results != null)
+            {
+                var row = ((IDictionary<string, object>)results);
+                string ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                {
+                    return (Results.Success, "Death Certificate succesfully released!", results);
+                }
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check your Data, Please try again!", null);
+            }
+            return (Results.Null, null, null);
+        }
+
+        public async Task<(Results result, string message)> Generate_DeathCertificate(DOD req)
+        {
+            var result = _repo.DSpQuery<dynamic>($"spfn_BIMSDC0C", new Dictionary<string, object>()
+            {
+                {"parmplid",req.PLID },
+                {"parmpgrpid",req.PGRPID },
+                {"parmdcid", req.DeathCertificateNo },
+                {"parmreqdocurlpath", req.URLDocument },
+                {"parmoptrid",account.USR_ID },
+            }).FirstOrDefault();
+            if (result != null)
+            {
+                var row = ((IDictionary<string, object>)result);
+                var ResultCode = row["RESULT"].Str();
+                if (ResultCode == "1")
+                    return (Results.Success, "Successfully saved!");
+                else if (ResultCode == "0")
+                    return (Results.Failed, "Check Details, Please try again!");
+                else if (ResultCode == "3")
+                    return (Results.Failed, "Already Generated, Please try again!");
             }
             return (Results.Null, null);
         }

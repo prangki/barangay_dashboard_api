@@ -8,6 +8,9 @@ using webapi.App.Aggregates.Common;
 using webapi.App.Aggregates.STLPartylistDashboard.Features;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using webapi.App.RequestModel.AppRecruiter;
+using Comm.Commons.Extensions;
+using Newtonsoft.Json;
+using webapi.App.Features.UserFeature;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -38,6 +41,12 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("apk/new")]
         public async Task<IActionResult> Task0a([FromBody] APK request)
         {
+            var valresult = await validityAPKt(request);
+            if (valresult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult.result != Results.Success)
+                return NotFound();
+
             var result = await _repo.APKAsync(request);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message, trn=result.TRNNo });
@@ -66,6 +75,25 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             if (result.result == Results.Failed)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
+        }
+
+        private async Task<(Results result, string message)> validityAPKt(APK request)
+        {
+            if (request == null)
+                return (Results.Null, null);
+            if (request.APK_File.Str().IsEmpty())
+                return (Results.Success, null);
+
+            var resApp = ApkUploader.SendAsync("app", request.APKVerno, request.APK_File).Result;
+            var data = JsonConvert.DeserializeObject<dynamic>(resApp);
+            if(data.status == "success")
+            {
+                request.APKPathCBA = data.url;
+
+                request.APKPath = data.url_version;
+                return (Results.Success, null);
+            }
+            return (Results.Null, "Make sure you have internet connection.");
         }
     }
 }

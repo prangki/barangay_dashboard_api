@@ -4,12 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Comm.Commons.Extensions;
 using webapi.App.Aggregates.Common;
 using webapi.App.Aggregates.STLPartylistDashboard.Features;
 using webapi.App.Aggregates.SubscriberAppAggregate.Common;
 using webapi.App.RequestModel.AppRecruiter;
 using webapi.App.RequestModel.Common;
 using webapi.App.STLDashboardModel;
+using webapi.App.Features.UserFeature;
+using Newtonsoft.Json;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -152,6 +155,23 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+        [HttpPost]
+        [Route("businessclearance/export")]
+        public async Task<IActionResult> Task0k1([FromBody] BrgyBusinessClearance request)
+        {
+            var valresult = await validityReport(request);
+            if (valresult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valresult.message });
+            if (valresult.result != Results.Success)
+                return NotFound();
+
+            var result = await _repo.Generate_BrgyBizClearance(request);
+            if (result.result == Results.Success)
+                return Ok(new { Status = "ok", Message = result.message });
+            if (result.result == Results.Failed)
+                return Ok(new { Status = "error", Message = result.message });
+            return NotFound();
+        }
 
         [HttpPost]
         [Route("businessclearance/release")]
@@ -197,6 +217,29 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             if (result.result == Results.Failed)
                 return Ok(new { Status = "error", Message = result.message });
             return NotFound();
+        }
+
+        private async Task<(Results result, string message)> validityReport(BrgyBusinessClearance request)
+        {
+            if (request == null)
+                return (Results.Null, null);
+            if (request.ExportedDocument.IsEmpty())
+                return (Results.Success, null);
+            byte[] bytes = Convert.FromBase64String(request.ExportedDocument.Str());
+            if (bytes.Length == 0)
+                return (Results.Failed, "Make sure you have internet connection.");
+            var res = await ReportService.SendAsync(bytes, $"businessclearance_{request.PLID}{request.PGRPID}{request.BusinessClearanceID}");
+            bytes.Clear();
+            if (res == null)
+                return (Results.Failed, "Please contact to admin.");
+            var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+            if (json["status"].Str() != "error")
+            {
+                //request.URLDocument = json["url"].Str();
+                request.URLDocument = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
+                return (Results.Success, null);
+            }
+            return (Results.Null, "Make sure you have internet connection.");
         }
     }
 }

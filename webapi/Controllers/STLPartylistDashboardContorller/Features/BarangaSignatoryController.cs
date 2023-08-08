@@ -38,6 +38,17 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
+
+        [HttpPost]
+        [Route("signatorya")]
+        public async Task<IActionResult> Signatuory()
+        {
+            var result = await _repo.LoadSignatoryA();
+            if (result.result == Results.Success)
+                return Ok(result.signatory);
+            return NotFound();
+        }
+
         [HttpPost]
         [Route("barangaysignatory")]
         public async Task<IActionResult> execute0a([FromBody] BarangaySignatory req)
@@ -111,7 +122,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
                     if (json["status"].Str() != "error")
                     {
                         //dictionary.Add(item.Index, json["url"].Str().Replace("www.", ""));
-                        string url = json["url"].Str();
+                        //string url = json["url"].Str();
+                        string url = (json["url"].Str()).Replace(_config["Portforwarding:LOCAL"].Str(), _config["Portforwarding:URL"].Str());
+
                         sb.Append($"<item OFFICIAL_ID=\"{item.ELECTED_OFFICIAL_ID}\" BRGY_POSITION=\"{item.BRGY_POSITION}\" ELECTED_OFFICIAL=\"{item.ELECTED_OFFICIAL}\" COMMITTEE=\"{item.COMMITTEE}\" SIGNATURE_URL=\"{url}\"/>");
                         //request.GovIDList[i] = url;
                     }

@@ -13,6 +13,7 @@ using System;
 using webapi.App.Features.UserFeature;
 using System.Collections.Generic;
 using webapi.App.RequestModel.Common;
+using System.Text;
 
 namespace webapi.Controllers.STLPartylistDashboardContorller.Features
 {
@@ -36,11 +37,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("blotter/save")]
         public async Task<IActionResult> SaveBlotter([FromBody] Blotter info)
         {
-            //var valResult = await validityReport(info);
-            //if (valResult.result == Results.Failed)
-            //    return Ok(new { Status = "error", Message = valResult.message });
-            //if (valResult.result != Results.Success)
-            //    return NotFound();
+            var valResult = await validityReport(info);
+            if (valResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valResult.message });
+            if (valResult.result != Results.Success)
+                return NotFound();
 
             var result = await _repo.SaveBlotterV2(info);
             if (result.result == Results.Success)
@@ -52,11 +53,11 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
         [Route("blotter/update")]
         public async Task<IActionResult> UpdateBlotter([FromBody] Blotter info)
         {
-            //var valResult = await validityReport(info);
-            //if (valResult.result == Results.Failed)
-            //    return Ok(new { Status = "error", Message = valResult.message });
-            //if (valResult.result != Results.Success)
-            //    return NotFound();
+            var valResult = await validityReport(info);
+            if (valResult.result == Results.Failed)
+                return Ok(new { Status = "error", Message = valResult.message });
+            if (valResult.result != Results.Success)
+                return NotFound();
 
             //var result = await _repo.UpdateBlotter(info);
             //if (result.result == Results.Success)
@@ -64,6 +65,15 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             //return NotFound();
 
             var result = await _repo.UpdateBlotterV2(info);
+            if (result.result == Results.Success)
+                return Ok(new { result = result.result, message = result.message });
+            return NotFound();
+        }
+        [HttpPost]
+        [Route("blotter/received")]
+        public async Task<IActionResult> ReceivedBlotter([FromBody] Blotter info)
+        {
+            var result = await _repo.BlotterReceivedAsync(info);
             if (result.result == Results.Success)
                 return Ok(new { result = result.result, message = result.message });
             return NotFound();
@@ -223,8 +233,9 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             return NotFound();
         }
 
-        private async Task<(Results result, object attachments)> validityReport(Blotter request)
+        private async Task<(Results result, String message)> validityReport(Blotter request)
         {
+            /*
             List<string> tempList = new List<string>();
             if (request == null)
                 return (Results.Null, null);
@@ -247,6 +258,48 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             request.Attachments = null;
             request.Attachments = tempList;
             return (Results.Success, request.Attachments);
+            */
+            //Robert
+            if (request == null)
+                return (Results.Null, null);
+            if (request.Attachments == null || request.Attachments.Count < 1)
+                return (Results.Success, null);
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i <request.Attachments.Count; i++)
+            {
+                var attachment = request.Attachments[i];
+                if (attachment.IsEmpty()) continue;
+                if (attachment.StartsWith("http"))
+                {
+                    sb.Append($"<item LNK_URL=\"{ attachment }\" />");
+                }
+                else
+                {
+                    byte[] bytes = Convert.FromBase64String(attachment.Str());
+                    if (bytes.Length == 0)
+                        return (Results.Failed, "Make sure selected image is valid.");
+
+                    var res = await ImgService.SendAsync(bytes);
+                    bytes.Clear();
+                    if (res == null)
+                        return (Results.Failed, "Please contact to admin.");
+
+                    var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+                    if (json["status"].Str() != "error")
+                    {
+                        string url = json["url"].Str();
+                        sb.Append($"<item LNK_URL=\"{ url }\" />");
+                        request.Attachments[i] = url;
+                    }
+                    else return (Results.Failed, "Make sure selected image is valid.");
+                }
+            }
+            if (sb.Length > 0)
+            {
+                request.iAttachments = sb.ToString();
+                return (Results.Success, null);
+            }
+            return (Results.Failed, "Make sure uploaded image is valid.");
 
             //if (request == null)
             //    return (Results.Null, null);
@@ -327,7 +380,8 @@ namespace webapi.Controllers.STLPartylistDashboardContorller.Features
             if (valResult.result != Results.Success)
                 return NotFound();
 
-            return Ok(valResult.attachments);
+            //return Ok(valResult.attachments);
+            return Ok(null);
         }
 
         [HttpPost]
